@@ -1,0 +1,25 @@
+
+
+  
+Elements
+
+x Unit  unit1.png unit2.png unit3.png
+x DataBank databank1.png databank2.png  databank3.png
+x Gyro  gyro1.png gyro2.png
+x Core   core1.png  core2.png
+x Emitter emitter1.png emitter2.png
+x Receipter receiver.png receiver2.png
+x Door (open/closed)   door1.png  door2.png  door_open.png
+x Light (open/closed)   light1.png   light2.png   light_open.png     *Note:  La lampe sur l'image est horizontal, mais peut aussi être vertical (ca serait préférable)*
+x Toggle Button (open/closed)   togglebutton.png togglebutton_off.png
+x Navigator    navigator.png navigator2.png
+x Container container1.png  container2.png container3_version2.png
+x Landing gear (open/closed)  landing_gear1_on.png landing_gear2_on.png landing_gear2_off.png 
+x Resurection pod  rezurection_pod1.png  rezurection_pod2.png
+- ForceFieldUnit (open/closed)
+- Engine?
+
+
+* logo entreprise? (plus tard)
+- Icone de joueur (plus tard)
+- Header site web (plus tard)

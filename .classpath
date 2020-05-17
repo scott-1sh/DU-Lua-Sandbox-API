@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="pictures/|Sources/" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/DU Offline editor/src/offlineEditor"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing-SWT.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing-SWTDemo.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-jme-3.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-jse-3.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-sources-3.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/swt.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/H2/bin/h2-1.4.197.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/jogamp-all-platforms/jar/jogl-all.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

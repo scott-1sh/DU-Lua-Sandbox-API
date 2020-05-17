@@ -1,0 +1,8 @@
+
+Conçu par Stéphane Boivin aka Nmare418 (DevGeek studio)
+
+DJNativeSwing par Christopher Deckers -  http://djproject.sourceforge.net/ns/index.html
+LuaJ par James Roseborough, Ian Farmer - luaj.org 
+H2  par    Thomas Mueller, HSQLDB Group - www.h2database.com
+json-simple  par  Yidong Fang - https://github.com/fangyidong/json-simple
+json.lua par rxi - https://github.com/rxi/json.lua

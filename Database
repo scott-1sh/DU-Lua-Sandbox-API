@@ -1,0 +1,24 @@
+
+iDatabase = {id, 'Library'}
+function iDatabase:new(o)
+  o = o or {}  
+  setmetatable(o, self)
+  self.__index = self
+
+  if _verboseLUA == 1 then print("[LUA] database loaded") end
+    
+  return o
+end
+
+function iDatabase:getPlayer(id)
+   print('test getplayer')
+   return JavaLibrary:get({"database.getPlayer", id})    
+end
+
+function iDatabase:getConstruct(id)
+   return JavaLibrary:get({"database.getConstruct", id})    
+end
+
+database = iDatabase:new{0, 'database'}
+database.getPlayer = function(id) return iDatabase:getPlayer(id) end
+database.getConstruct(id) = function(id) return iDatabase:getConstruct(id) end
