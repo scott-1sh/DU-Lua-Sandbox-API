@@ -3,7 +3,7 @@
 
 <img src=".\DOC\LogoDUAPI_PNG.png" width="250">
   
-#DU Offline Sandbox API 
+#DU Offline Sandbox API# 
   
 Ce document est un tutoriel pour l'outil de dévelopement DU offline sandbox API.  
 
@@ -34,7 +34,7 @@ L'objectif à long terme est que son utilisation soit un incontournable pour la c
 Et possiblement, un outil pour les theorycrafters.
 
 ---
-####Installation
+####Installation####
 
 Décompressez le contenu du fichier DUOfflineSandbox.zip à l'emplacement de votre choix.   
 
@@ -48,7 +48,7 @@ Il arrive parfois qu'il y ai des problèmes avec le PATH de java.  Plusieurs tuto
  
  
 ---
-#Utilisation dans Eclispe LDT (mode interpreteur)
+#Utilisation dans Eclispe LDT (mode interpreteur)#
 
 La sandbox peut être utilisé comme interpreteur LUA. 
 
