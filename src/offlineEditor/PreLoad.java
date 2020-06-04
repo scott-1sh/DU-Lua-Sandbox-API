@@ -127,7 +127,6 @@ public class PreLoad {
           chunk.call();
 		} catch (Exception e) {
 			System.out.println("\nPRELOAD LUA ERROR: \n"+e.getMessage());
-			System.exit(-1);
 		}
 	}
 

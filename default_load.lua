@@ -19,8 +19,9 @@
 ]]
 
 -- Tips: use dofile function to start a script as a default load file
--- dofile('emitter_load.lua')
+dofile('splitscreenx4_load.lua')
 
+--[[
 -- json lib included (https://github.com/rxi/json.lua)
 
 -- start on screen [0-1]
@@ -78,12 +79,12 @@ obj = DataBankUnit('db1')
 obj = ContainerUnit('Box1')
 obj = GyroUnit('gyro')
 
+]]
+
 --[[
 for i, constr in ipairs( constructList) do
     print(i.." -"..constr['name'])
 end
 die('dead')
 ]]
-
-
 

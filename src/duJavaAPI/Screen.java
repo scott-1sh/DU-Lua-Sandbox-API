@@ -43,7 +43,7 @@ public class Screen extends BaseElement {
     String baseHtml = "<!DOCTYPE html>\r\n" + 
     		"<html>\r\n" + 
     		"<head>\r\n" + 
-    		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n" + 
+    		"<meta name=\"viewport\" content=\"width=1024, height=612, initial-scale=1\">\r\n" + 
     		"<style>\r\n" + 
     		"#overlay {\r\n" + 
     		"  position: fixed;" + 

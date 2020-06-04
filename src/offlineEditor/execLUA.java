@@ -220,8 +220,7 @@ public class execLUA {
 			LuaValue chunk =  globals.load(script);	    
 			chunk.call();
 		} catch (Exception e) {
-			// System.out.println("LUA ERROR: "+Source+"\n"+e.getMessage());
-			System.out.println("\nLUA ERROR: "+Source+"\n"+e.getMessage().substring(e.getMessage().lastIndexOf("\n")));
+			System.out.println("\nLUA ERROR: "+Source+"\n"+e.getMessage());
 			timer.stop();
 			eWindow.frame.setTitle(eWindow.frame.getTitle()+" - dead!");
 

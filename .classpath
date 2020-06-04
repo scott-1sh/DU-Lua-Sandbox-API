@@ -6,7 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/DU Offline editor/src/offlineEditor"/>
 	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing-SWT.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing-SWTDemo.jar"/>
