@@ -19,8 +19,7 @@ function SplitScreen4:new(o)
   o.screen2 = screen2 
   o.screen3 = screen3 
   o.screen4 = screen4 
--- img = "<img src='data:image/svg+xml;utf8,%s' width=\"306\" height=\"153\">"
--- viewbox1 = [[<svg width="306" height="153" viewBox="0 0 306 153"><g transform="scale(2) translate(0 -100)"> 
+
   o.viewbox1 = '<svg width="'..screenX..'" height="'..screenY..'" viewBox="0 0 '..screenX..' '..screenY..'"><g transform="scale('..scale..')">' 
   o.viewbox2 = '<svg width="'..screenX..'" height="'..screenY..'" viewBox="'..screenX..' 0 '..screenX..' '..screenY..'"><g transform="scale('..scale..')">'
   o.viewbox3 = '<svg width="'..screenX..'" height="'..screenY..'" viewBox="0 '..screenY..' '..screenX..' '..screenY..'"><g transform="scale('..scale..')">'
@@ -68,4 +67,5 @@ ss4:Display(picture)
 
 
 -- timer
-self.setTimer('loop', .23)
+-- notice: in case of errors or lag, increase the timer delays. 
+self.setTimer('loop', .1)
