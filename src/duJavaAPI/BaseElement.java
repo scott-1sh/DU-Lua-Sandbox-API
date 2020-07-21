@@ -19,10 +19,13 @@
 */
 package duJavaAPI;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import offlineEditor.execLUA;
 import offlineEditor.execTimer;
@@ -46,7 +49,23 @@ public class BaseElement {
     public HashMap<String, String>  Script = new HashMap<String, String>();
     execWindow execWin = null;    
 	boolean verboseJava = true;		
-    
+	
+	public void CreateHeader(int sizeX, int labelY) {
+		// label
+		JLabel  lblname = new JLabel(name);
+		lblname.setForeground(Color.white);
+		lblname.setBounds(8, 2, sizeX-18, labelY);		
+		panel.add(lblname, 1, 0);		
+		
+		// expand/close icons
+	 	JLabel lblPic = new JLabel();		
+		lblPic.setBounds(sizeX-18,1,16,16);
+		lblPic.setIcon(new ImageIcon("src/close_caption.png")); 
+		panel.add(lblPic, 1, 0);		
+		
+	}
+	
+	
     public void actionListener(ActionEvent e) {
     	// override me!
     }

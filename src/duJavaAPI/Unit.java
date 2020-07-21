@@ -42,6 +42,7 @@ public class Unit extends BaseElement {
     public String html = "";
     int sizeX = 134;
     int sizeY = 106;   
+    int labelY = 16;
     int timerId = 0;
     
 	public Unit(int pid, int px, int py, String pname, String pluaScriptStart, String pluaScriptStop, boolean pverboseJava) {
@@ -60,11 +61,7 @@ public class Unit extends BaseElement {
 		panel.setBorder(LineBorder.createBlackLineBorder());
 		panel.setBackground(Color.black);
 
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		panel.add(lblname, 1, 0);		
+		CreateHeader(sizeX, labelY);
 
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
