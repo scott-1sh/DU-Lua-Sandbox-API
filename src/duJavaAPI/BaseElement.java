@@ -20,10 +20,13 @@
 package duJavaAPI;
 
 import java.awt.Color;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,9 +51,25 @@ public class BaseElement {
     public int mouseY = 0;
     public HashMap<String, String>  Script = new HashMap<String, String>();
     execWindow execWin = null;    
-	boolean verboseJava = true;		
+	boolean verboseJava = true;
 	
-	public void CreateHeader(int sizeX, int labelY) {
+	// caption header (tools)
+    int labelY = 16;
+	public boolean maximized = true;
+	private JButton captionIcon;
+	
+	
+	public void setMaximized(int sizeX, int sizeY) {
+		captionIcon.setIcon(new ImageIcon("src/pictures/close_caption.png")); 		
+		panel.setBounds(x, y, sizeX, sizeY+labelY);
+	}
+	
+	public void setClosedCaption(int sizeX, int labelY) {
+		captionIcon.setIcon(new ImageIcon("src/pictures/open_caption.png"));		
+		panel.setBounds(x, y, sizeX, labelY);		
+	}	
+	
+	public void createHeader(int sizeX, int sizeY) {
 		// label
 		JLabel  lblname = new JLabel(name);
 		lblname.setForeground(Color.white);
@@ -58,11 +77,52 @@ public class BaseElement {
 		panel.add(lblname, 1, 0);		
 		
 		// expand/close icons
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(sizeX-18,1,16,16);
-		lblPic.setIcon(new ImageIcon("src/close_caption.png")); 
-		panel.add(lblPic, 1, 0);		
+		captionIcon = new JButton();  
+		captionIcon.setBounds(sizeX-18, 2, 16, 16);
+		if(maximized) { 
+			captionIcon.setIcon(new ImageIcon("src/pictures/close_caption.png")); 		
+		} else {
+			captionIcon.setIcon(new ImageIcon("src/pictures/open_caption.png")); 		
+		}
+		captionIcon.setPressedIcon(new ImageIcon("src/pictures/pressed_button.png"));
+		captionIcon.setBackground(null);
+        captionIcon.setMargin(new Insets(0, 0, 0, 0));
+        captionIcon.setBorder(null);
 		
+        captionIcon.addActionListener(new ActionListener() { 
+            @Override
+			public void actionPerformed(ActionEvent e) {
+                maximized = !maximized;
+        		if(maximized) { 
+            		setMaximized(sizeX, sizeY);
+        		} else {
+            		setClosedCaption(sizeX, sizeY);
+        		}
+        		
+            } 
+         });
+        
+        panel.add(captionIcon, 1, 0);
+
+		/*
+	 	JLabel lblPic = new JLabel("test");		
+		lblPic.setBounds(sizeX-18, 2, 16, 16);
+		
+		if(maximized) { 
+			lblPic.setIcon(new ImageIcon("src/pictures/close_caption.png")); 		
+		} else {
+			lblPic.setIcon(new ImageIcon("src/pictures/open_caption.png")); 		
+		}
+		panel.add(lblPic, 1, 0);
+		*/
+/*		
+		// quit addon icon
+	 	JLabel lblClose = new JLabel();		
+	 	lblClose.setBounds(sizeX-34, 2, 16, 16);
+		lblClose.setIcon(new ImageIcon("src/pictures/quit_addon.png")); 		
+		panel.add(lblClose, 1, 0);
+*/
+				
 	}
 	
 	

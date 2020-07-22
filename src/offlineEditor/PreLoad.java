@@ -227,7 +227,7 @@ public class PreLoad {
     }
     
     // search the next free xy position (insert)
-    private int[] findNextPos(int elementId) {
+    public int[] findNextPos(int elementId) {
     	int[] pos = new int[2];
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -42,9 +42,8 @@ public class Unit extends BaseElement {
     public String html = "";
     int sizeX = 134;
     int sizeY = 106;   
-    int labelY = 16;
     int timerId = 0;
-    
+   
 	public Unit(int pid, int px, int py, String pname, String pluaScriptStart, String pluaScriptStop, boolean pverboseJava) {
 	    luaScriptStart = pluaScriptStart;
 	    luaScriptStop = pluaScriptStop;	    
@@ -54,14 +53,18 @@ public class Unit extends BaseElement {
 		
 		verboseJava = pverboseJava;			
 		
+		// create panel
 		panel = new JPanel();		
 		panel.setLayout(null);
-		// panel.setVisible(false);
-		panel.setBounds(px, py, sizeX, sizeY+16);
 		panel.setBorder(LineBorder.createBlackLineBorder());
 		panel.setBackground(Color.black);
+		createHeader(sizeX, sizeY);
 
-		CreateHeader(sizeX, labelY);
+		if(maximized) { 
+    		setMaximized(sizeX, sizeY);
+		} else {
+    		setClosedCaption(sizeX, sizeY);
+		}
 
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
