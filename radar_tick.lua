@@ -1,6 +1,6 @@
 --[[    
     radar_tick.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -15,7 +15,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.	
 ]]
 
 screen1.clear()

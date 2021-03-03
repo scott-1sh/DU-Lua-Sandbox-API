@@ -1,6 +1,6 @@
 /*    
 Navigator.java 
-Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
 
 This file is part of "DU offline sandbox API".
 
@@ -30,14 +30,14 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import offlineEditor.DUElement;
-import offlineEditor.execTimer;
+import sandbox.DUElement;
+import sandbox.execTimer;
 
 public class Navigator extends BaseElement {
 public JWebBrowser web = null;
 public String html = "";
-int sizeX = 106;
-int sizeY = 134;   
+int sizeX = 200;
+int sizeY = 100;   
 int timerId = 0;
 int isRemoteControlled = 0;
 
@@ -48,31 +48,31 @@ public Navigator(int pid, int px, int py, boolean pverboseJava) {
 	
 	verboseJava = pverboseJava;
 
+	// create panel
 	panel = new JPanel();		
 	panel.setLayout(null);
-	// panel.setVisible(false);
-	panel.setBounds(px, py, sizeX, sizeY+16);
 	panel.setBorder(LineBorder.createBlackLineBorder());
-	panel.setBackground(Color.black);
-
-	// label
-	JLabel  lblname = new JLabel(name);
-	lblname.setForeground(Color.white);
-	lblname.setBounds(8, 2, sizeX, 16);	
-	panel.add(lblname, 1, 0);		
-
+	panel.setBackground(Color.black);		
+	panel.setBounds(x, y, sizeX, sizeY);
+	
 	// white frame
 	JPanel lblPicWhite = new JPanel();		
- 	lblPicWhite.setBounds(1,22,104,127);
+ 	lblPicWhite.setBounds(1, 1, sizeX-3, sizeY-3);
  	lblPicWhite.setBackground(Color.white);
 	panel.add(lblPicWhite, 1, 0);
 
- 	// picture
- 	JLabel lblPic = new JLabel();		
-	lblPic.setBounds(2,22,100,130);
-	lblPic.setIcon(new ImageIcon("src/pictures/elements/Navigator.png")); 
+	// picture
+ 	JLabel lblPic = new JLabel();
+ 	setPicture(lblPic, "src/pictures/elements/Navigator.png", 9, 5, 55, 71);
 	panel.add(lblPic, 1, 0);
 
+	// stats
+	CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+	AddtoStatPanel("Remote: ", Integer.toString(isRemoteControlled));
+	AddtoStatPanel("Gravity: ", ".9");
+	
+	panel.add(stats, 1, 0);
+	
 	// lua require and interface 
 	urlAPI = "src/duElementAPI/navigator.lua";
     luaCall = name+" = createInterfaceNavigator(\""+pid+"\", \""+name+"\")";		

@@ -1,6 +1,6 @@
 --[[    
     toggleUnit.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -70,19 +70,18 @@ function ToggleUnit:new(o)
   setmetatable(o, self)
   self.__index = self
   o.State = 0;
+  
   if _verboseLUA == 1 then print("[LUA] "..o.type.." ["..o.name.."] created with the id ["..o.id.."]") end  
   return o
 end
 
 function ToggleUnit:activate()
   self.State = 1;
-  if _verboseLUA == 1 then print("[LUA] "..self.type.." ["..self.name.."] opened") end
   JavaWindow:setState(self.id, {self.State,self.name})    
 end
 
 function ToggleUnit:deactivate()
   self.State = 0;
-  if _verboseLUA == 1 then print("[LUA] "..self.type.." ["..self.name.."] closed") end
   JavaWindow:setState(self.id, {self.State,self.name})    
 end
 

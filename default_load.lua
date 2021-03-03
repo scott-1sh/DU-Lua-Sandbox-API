@@ -1,27 +1,15 @@
---[[    
-    default_load.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
-    
-    This file is part of "DU offline sandbox API".
 
-    "DU offline sandbox API" is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+-- Tips, use dofile to load a specific script as default 
+-- dofile('visitor_load.lua')
+dofile('buttonManager_load.lua')
+-- dofile('flymartFuelStation_load.lua')
+-- dofile('splitscreenx4_load.lua')
+--[[ 
 
-    "DU offline sandbox API" is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+-- dofile('databank_load.lua')
+-- dofile('buttonManager_load.lua')
 
-    You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
-]]
 
--- Tips: use dofile function to start a script as a default load file
-dofile('splitscreenx4_load.lua')
-
---[[
 -- json lib included (https://github.com/rxi/json.lua)
 
 -- start on screen [0-1]
@@ -63,8 +51,8 @@ constructList[10] = {id = 10, owner = 0, name = 'Base 6', ctype='static',  pos =
 setupDatabase(playerList, constructList, 2)
 
 -- radar
-local scriptEnter = "print('Construct '..id..' ['..self.getConstructName(id)..'] entered the zone')"
-local scriptExit = "print('Construct '..id..' ['..self.getConstructName(id)..'] left the zone')"
+local scriptEnter = " "
+local scriptExit = " "
 obj = RadarUnit('radar1', 10000, scriptEnter, scriptExit)
 
 -- screen
@@ -77,8 +65,22 @@ obj = Core(16, 'dynamic', 7.3, 1)
 obj = DataBankUnit('db1')
 
 obj = ContainerUnit('Box1')
+
 obj = GyroUnit('gyro')
 
+
+obj = LightUnit('Light1')
+obj = DoorUnit('Door3')
+obj = ForceFieldUnit('Forcefield1')  
+obj = SwitchUnit('Button1')
+-- obj = LandingGearUnit('landing1')
+obj = ButtonUnit('button1', 'toggle', "Light1.toggle() Door3.toggle() Forcefield1.toggle() Button1.toggle()")
+-- obj = ReceiverUnit('receiver1')
+-- addChannel(obj,'channel1', "print('hello')")
+-- addChannel(obj,'channel2', "print('hello')")
+-- addChannel(obj,'channel2', "print('hello')")
+-- obj = EmitterUnit('emitter1') 
+-- obj = Navigator()
 ]]
 
 --[[

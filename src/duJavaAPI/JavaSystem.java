@@ -1,6 +1,6 @@
 /*    
     JavaSystem.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -21,17 +21,20 @@ package duJavaAPI;
 
 import java.awt.MouseInfo;
 
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
-import offlineEditor.execWindow;
+import sandbox.execWindow;
 
 public class JavaSystem {
    static execWindow eWindow;
+   private boolean verboseJava = true;
    
    public JavaSystem(boolean pverboseJava, execWindow peWindow) {
 	 eWindow = peWindow;
-	 if(pverboseJava) System.out.println("[JAVA] System created");
+	 verboseJava = pverboseJava;
+	 if(verboseJava) System.out.println("[JAVA] System created");
    }
 
    public void print(String txt) {
@@ -39,85 +42,99 @@ public class JavaSystem {
    }   
    
    public Object get(String[] param) {
-		String pcommand = param[0];
-	    LuaTable result = new LuaTable();
+	   String pcommand = param[0];
+	   LuaTable result = new LuaTable();
 
-	    switch (pcommand) {
-			case "getActionKeyName": // todo
-		        return param[1];
-			case "showScreen": // todo
-				// param[1] = bool
-		        return "";
-			case "setScreen": // todo
-				// param[1] = content
-		        return "";
-			case "createWidgetPanel": // todo
-				// param[1] = label
-		        return "";
-			case "destroyWidgetPanel": // todo
-				// param[1] = panelId
-		        return "";
-			case "createWidget": // todo
-				// param[1] = panelId
-				// param[2] = type
-		        return "";
-			case "destroyWidget": // todo
-				// param[1] = widgetId
-		        return "";		        
-			case "createData": // todo
-				// param[1] = dataJson
-		        return 1;		        
-			case "destroyData": // todo
-				// param[1] = dataId
-		        return 1;    
-			case "updateData": // todo
-				// param[1] = dataId
-				// param[2] = dataJson
-		        return 1;    
-			case "addDataToWidget": // todo
-				// param[1] = dataId
-				// param[2] = widgetId
-		        return 1;    
-			case "removeDataFromWidget": // todo
-				// param[1] = dataId
-				// param[2] = widgetId
-		        return 1;    
-			case "getMouseWheel": 
-		        return eWindow.mouseWheel;
-			case "getMouseDeltaX":
-				MouseInfo.getPointerInfo().getLocation().getX();
-		        return MouseInfo.getPointerInfo().getLocation().getX();
-			case "getMouseDeltaY": 
-		        return MouseInfo.getPointerInfo().getLocation().getY();
-			case "getMousePosX": 
-		        return MouseInfo.getPointerInfo().getLocation().getX();
-			case "getMousePosY": 
-		        return MouseInfo.getPointerInfo().getLocation().getY();
-			case "lockView":
-				eWindow.lockedView = !eWindow.lockedView; 
-		        return null;
-			case "isViewLocked": 
-		        return eWindow.lockedView;
-			case "freeze": 
-				if(param[1].equals("1")) {
-				   eWindow.frozen = true;
-				} else {
-				   eWindow.frozen = false;
-				}
-		        return null;
-			case "isFrozen": 
-		        return eWindow.frozen;
-			case "getTime": 
-		        return System.currentTimeMillis()/1000;
-			case "getPlayerName": 
-		        return eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).name;
-			case "getPlayerWorldPos": 
-				result.set(1, CoerceJavaToLua.coerce(eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).worldPos[0]));
-				result.set(2, CoerceJavaToLua.coerce(eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).worldPos[1]));
-				result.set(3, CoerceJavaToLua.coerce(eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).worldPos[2]));
-		        return result;
-		}
-
+	   try {
+		    switch (pcommand) {
+				case "getActionKeyName": // todo
+			        return param[1];
+				case "showScreen": // todo
+					// param[1] = bool
+			        return "";
+				case "setScreen": // todo
+					// param[1] = content
+			        return "";
+				case "createWidgetPanel": // todo
+					// param[1] = label
+			        return "";
+				case "destroyWidgetPanel": // todo
+					// param[1] = panelId
+			        return "";
+				case "createWidget": // todo
+					// param[1] = panelId
+					// param[2] = type
+			        return "";
+				case "destroyWidget": // todo
+					// param[1] = widgetId
+			        return "";		        
+				case "createData": // todo
+					// param[1] = dataJson
+			        return 1;		        
+				case "destroyData": // todo
+					// param[1] = dataId
+			        return 1;    
+				case "updateData": // todo
+					// param[1] = dataId
+					// param[2] = dataJson
+			        return 1;    
+				case "addDataToWidget": // todo
+					// param[1] = dataId
+					// param[2] = widgetId
+			        return 1;    
+				case "removeDataFromWidget": // todo
+					// param[1] = dataId
+					// param[2] = widgetId
+			        return 1;    
+				case "getMouseWheel": 
+			        return eWindow.mouseWheel;
+				case "getMouseDeltaX":
+					MouseInfo.getPointerInfo().getLocation().getX();
+			        return MouseInfo.getPointerInfo().getLocation().getX();
+				case "getMouseDeltaY": 
+			        return MouseInfo.getPointerInfo().getLocation().getY();
+				case "getMousePosX": 
+			        return MouseInfo.getPointerInfo().getLocation().getX();
+				case "getMousePosY": 
+			        return MouseInfo.getPointerInfo().getLocation().getY();
+				case "lockView":
+					eWindow.lockedView = !eWindow.lockedView; 
+			        return null;
+				case "isViewLocked": 
+			        return eWindow.lockedView;
+				case "freeze": 
+					if(param[1].equals("1")) {
+					   eWindow.frozen = true;
+					} else {
+					   eWindow.frozen = false;
+					}
+			        return null;
+				case "isFrozen": 
+			        return eWindow.frozen;
+				case "getTime": 
+			        return System.currentTimeMillis()/1000;
+				case "getPlayerName":
+					try {
+						if(verboseJava && param[1] == null) System.out.println("[JAVA] Warning getPlayerName: null parameter");
+						String name = eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])-1).name;
+	
+						return name;
+					} catch (Exception e) { // not found
+						return "unreachable";
+					}
+			        
+				case "getPlayerWorldPos": 
+					result.set(1, CoerceJavaToLua.coerce(eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).worldPos[0]));
+					result.set(2, CoerceJavaToLua.coerce(eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).worldPos[1]));
+					result.set(3, CoerceJavaToLua.coerce(eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).worldPos[2]));
+			        return result;
+			}
+	    } catch(Exception e){
+	    	// pcommand
+	    	if(verboseJava) System.out.println("[JAVA] Error in commande:"+pcommand);
+	    	 throw new LuaError(e);
+	    }
+	    
 		return "";
    }
 }

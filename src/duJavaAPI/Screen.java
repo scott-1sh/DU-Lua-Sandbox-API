@@ -1,6 +1,6 @@
 /*    
     Screen.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -23,12 +23,15 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import chrriis.dj.nativeswing.NSComponentOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import offlineEditor.execWindow;
+import sandbox.execWindow;
 
 
 public class Screen extends BaseElement {
@@ -43,21 +46,21 @@ public class Screen extends BaseElement {
     String baseHtml = "<!DOCTYPE html>\r\n" + 
     		"<html>\r\n" + 
     		"<head>\r\n" + 
-    		"<meta name=\"viewport\" content=\"width=1024, height=612, initial-scale=1\">\r\n" + 
+    		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n" + 
     		"<style>\r\n" + 
     		"#overlay {\r\n" + 
     		"  position: fixed;" + 
     		"  display: block;" + 
-    		"  width: 100%;" + 
-    		"  height: 100%;" + 
+    		"  width: 100%%;" + 
+    		"  height: 100%%;" + 
     		"  top: 0;" + 
     		"  left: 0;" + 
     		"  right: 0;" + 
     		"  bottom: 0;" + 
-    		"  background-color: rgba(0,0,0,0);" +  //     		"  background-color: rgba(0,0,0,0.5);\r\n" + 
+    		"  background-color: rgba(0,0,0,0);" + 
     		"  z-index: 2;" + 
-    		"}" + 
-    		"</style></head><body></body></html>\r\n";
+    		"}\r\n" + 
+    		"</style>\r\n</head><body></body></html>\r\n";
     		
     // public Screen(int pid, String pname, int px, int py, String phtml) {this(pid, pname, px, py, 1014, 620, phtml);}    
 	public Screen(int pid, String pname, int px, int py, int psizeX, int psizeY, boolean pverboseJava) {
@@ -67,24 +70,19 @@ public class Screen extends BaseElement {
 		y = py;
 		sizeX = psizeX;
 		sizeY = psizeY;
+		id = pid;
 
 		verboseJava = pverboseJava;
 		
-		html = baseHtml;
+		// set the size
+		// baseHtml = String.format(baseHtml, sizeX, sizeY);
 		
 		panel = new JPanel();		
 		panel.setLayout(null);
 		// panel.setVisible(false);
-		panel.setBounds(px, py, psizeX+4, psizeY+22);
+		panel.setBounds(px, py, psizeX+6, psizeY+25);
 		panel.setBorder(LineBorder.createBlackLineBorder());
 		panel.setBackground(Color.black);
-
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		// add mouse events to the panel
-		panel.add(lblname, 1, 0);
 
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/screen.lua";
@@ -97,11 +95,12 @@ public class Screen extends BaseElement {
 	// Initialize a screen
 	@Override
     public void LoadScreen(String phtml) {		
-		web = new JWebBrowser();
+		 web = new JWebBrowser(JWebBrowser.destroyOnFinalization());
+		// NSComponentOptions.constrainVisibility(),NSComponentOptions.destroyOnFinalization()
         web.setStatusBarVisible(false);
 		web.setMenuBarVisible(false);
 		// web.setBorder(null);		
-		web.setBounds(2, 20, sizeX, sizeY);
+		web.setBounds(1, 0, sizeX, sizeY);
 		web.setButtonBarVisible(false);
 		web.setBarsVisible(false);
 		web.setAutoscrolls(false);
@@ -128,19 +127,15 @@ public class Screen extends BaseElement {
 		panel.add(web, 1, 0);
 		panel.setVisible(true);
 		web.setHTMLContent(baseHtml);
-		// System.out.println("[JAVA] LOADSCREEN " + name); 
     }
-    
+
 	@Override
     public void update(String[] param) {
-		String pname = param[2];
+//		String pname = param[2];
 		String phtml = param[1];
 		String pcommand = param[0];
 		 
-	    if(pcommand.equals("addContent")) {
-	    	// html += "<div id=\"overlay\">"+phtml+"</div>";
-
-//			web.setHTMLContent(baseHtml);
+	    if(pcommand.equals("setSVG")) {
 
 	    	// create an overlay
 	    	html = "<div id=\"overlay\">"+phtml+"</div>";
@@ -151,17 +146,39 @@ public class Screen extends BaseElement {
 	    	
 	    	web.executeJavascript(html);
             // System.out.println("test:"+html);
-	    	// web.executeJavascript("document.getElementsByTagName(\"BODY\")[0].innerHTML = \"hello wolrd\"; ");
 			
 	    }	
-	    if(pcommand.equals("clear")) {
-	    	// web.executeJavascript("document.write(\""+baseHtml+"\");");
-			// web.setHTMLContent(baseHtml);
-	    	web.executeJavascript("document.getElementsByTagName(\"BODY\")[0].innerHTML = \"\";");
+	    if(pcommand.equals("setCenteredText")) {
+            
+	    	String centerhtml = "<div style=\"color: #FFFFFF; font-size: 5VW; background-color: #000; width: 100%; height: 100%; text-align: center; line-height: 100VH;\">"+phtml+"</div>";	    
+	   
+	    	// create an overlay
+	    	html = "<div id=\"overlay\">"+centerhtml+"</div>";
+	    	html = html.replace("\"", "\\\"");
+	    	html = "document.getElementsByTagName(\"BODY\")[0].innerHTML = document.getElementsByTagName(\"BODY\")[0].innerHTML + \""+html+"\";";	    	
+	    	html = html.replace( "\r", "");
+	    	html = html.replace( "\n", "");	    	
+	    	
+	    	web.executeJavascript(html);
+            // System.out.println("test:"+html);
+			
+	    }	
+	    if(pcommand.equals("addContent")) {
 
+	    	// create an overlay
+	    	html = "<div id=\"overlay\">"+phtml+"</div>";
+	    	html = html.replace("\"", "\\\"");
+	    	html = "document.getElementsByTagName(\"BODY\")[0].innerHTML = document.getElementsByTagName(\"BODY\")[0].innerHTML + \""+html+"\";";	    	
+	    	html = html.replace( "\r", "");
+	    	html = html.replace( "\n", "");	    	
+	    	
+	    	web.executeJavascript(html);
+            // System.out.println("test:"+html);
+	    }	
+	    if(pcommand.equals("clear")) {
+	    	web.executeJavascript("document.getElementsByTagName(\"BODY\")[0].innerHTML = \"\";");
 	    }	
    		
-		// System.out.println("[JAVA] Screen " + param[2] + " " + param[0]); 
 	}
 
 

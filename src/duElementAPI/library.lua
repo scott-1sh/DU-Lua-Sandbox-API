@@ -1,6 +1,6 @@
 --[[    
     library.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -36,7 +36,7 @@ function ilibrary:systemResolution2(vec_c1, vec_c2, vec_c0)
    return JavaLibrary:get({"systemResolution2", vec_c1, vec_c2, vec_c0})    
 end
 
-Library = ilibrary:new{0, 'Library'}
-Library.systemResolution3 = function(vec_c1, vec_c2, vec_c3, vec_c0) return ilibrary:systemResolution3(vec_c1, vec_c2, vec_c3, vec_c0) end
-Library.systemResolution2 = function(vec_c1, vec_c2, vec_c0) return ilibrary:systemResolution2(vec_c1, vec_c2, vec_c0) end
+library = ilibrary:new{0, 'library'}
+library.systemResolution3 = function(vec_c1, vec_c2, vec_c3, vec_c0) return ilibrary:systemResolution3(vec_c1, vec_c2, vec_c3, vec_c0) end
+library.systemResolution2 = function(vec_c1, vec_c2, vec_c0) return ilibrary:systemResolution2(vec_c1, vec_c2, vec_c0) end
 

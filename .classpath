@@ -6,14 +6,14 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing-SWT.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/DJNativeSwing-SWTDemo.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-jme-3.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-jse-3.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-sources-3.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/swt.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/H2/bin/h2-1.4.197.jar"/>
-	<classpathentry kind="lib" path="D:/eclipse-workspace/Lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-jme-3.0.1.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-jse-3.0.1.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/luaj-3.0.1/lib/luaj-sources-3.0.1.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/H2/bin/h2-1.4.197.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/DJNativeSwing.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/DJNativeSwing-SWT.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/swt.jar"/>
+	<classpathentry kind="lib" path="F:/eclipse-workspace/Lib/jna-master/lib/native/win32-x86-64.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

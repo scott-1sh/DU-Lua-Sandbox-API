@@ -1,6 +1,6 @@
 /*    
     Unit.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -20,28 +20,32 @@
 package duJavaAPI;
 
 import java.awt.Color;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import org.eclipse.swt.custom.StyleRange;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import offlineEditor.execTimer;
-import offlineEditor.execWindow;
+import sandbox.DUElement;
+import sandbox.execTimer;
+import sandbox.execWindow;
 
 public class Unit extends BaseElement {
     public JWebBrowser web = null;
     public String html = "";
-    int sizeX = 134;
-    int sizeY = 106;   
+    int sizeX = 200;
+    int sizeY = 100;   
     int timerId = 0;
    
 	public Unit(int pid, int px, int py, String pname, String pluaScriptStart, String pluaScriptStop, boolean pverboseJava) {
@@ -50,33 +54,32 @@ public class Unit extends BaseElement {
 		name = pname;
 		x = px;
 		y = py;		
+		id = pid;
 		
 		verboseJava = pverboseJava;			
-		
+			 
 		// create panel
 		panel = new JPanel();		
 		panel.setLayout(null);
 		panel.setBorder(LineBorder.createBlackLineBorder());
-		panel.setBackground(Color.black);
-		createHeader(sizeX, sizeY);
-
-		if(maximized) { 
-    		setMaximized(sizeX, sizeY);
-		} else {
-    		setClosedCaption(sizeX, sizeY);
-		}
-
+		panel.setBackground(Color.black);		
+		panel.setBounds(x, y, sizeX, sizeY);
+		
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(2,22,130,98);
+	 	lblPicWhite.setBounds(1, 1, sizeX-3, sizeY-3);
 	 	lblPicWhite.setBackground(Color.white);
 		panel.add(lblPicWhite, 1, 0);
 
-	 	// picture
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,22,130,100);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Unit_02.png")); 
+		// picture
+	 	JLabel lblPic = new JLabel();
+	 	setPicture(lblPic, "src/pictures/elements/Unit_02.png", 2, 2, 100, 80);
 		panel.add(lblPic, 1, 0);
+		
+		// stats panel
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		panel.add(stats, 1, 0);
+		
 		
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/unit.lua";
@@ -88,52 +91,44 @@ public class Unit extends BaseElement {
 	@Override
 	public void CreateTimer(Unit punit, String ptimerName, String pluaScript /*, JFrame srcframe */) {
 		Tick[timerId] = new execTimer(timerId, punit, ptimerName, pluaScript, verboseJava);
+		AddtoStatPanel("Timer "+timerId+": ", ptimerName);
 		timerId++;
 	}
-
-	// Export all scripts related to this element to text
+	
+	// Export all scripts related to this element
+	// used for text and json export
 	@Override
-	public String export() {
-      String script = "";
-
-       // start and stop
-	   script += "-----------------------------------------\n";
-	   script += "-- Element name: "+this.name+"\n";
-	   script += "-- Element: Unit\n";
-	   script += "-- Event: Start()\n";
-	   script += "-----------------------------------------\n";
-	   script += luaScriptStart+"\n";
-	   script += "\n\n\n\n";
-	   script += "-----------------------------------------+\n";
-	   script += "-- Element name: "+this.name+"\n";
-	   script += "-- Element: Unit\n";
-	   script += "-- Event: Stop()\n";
-	   script += "-----------------------------------------\n";
-	   script += luaScriptStop+"\n";
-       script += "\n\n\n\n";
-	   // timers
-	   // add to script
-
-/*      
-		   script += "-----------------------------------------";
-		   script += "-- Element name: "+this.name;
-		   script += "-- Element: Unit";
-		   script += "-- Event: receive()";
-		   script += "-----------------------------------------";
-*/
+	public ArrayList<String[]> export() {
+       
+       ArrayList<String[]> listScript = new ArrayList<String[]>();
+       
+       // start()
+       String sign = "start()";
+       String args = "[]";
+       String slotKey = "-1";
+       listScript.add(new String[]{luaScriptStart, args, sign, slotKey}); 
+       
+       // stop()
+	   if(luaScriptStop.length()>0) {
+	       sign = "stop()";
+	       args = "[]";
+	       slotKey = "-1";
+	       listScript.add(new String[]{luaScriptStop, args, sign, slotKey }); 
+	   }
 	   
+       // timers
 	   for (execTimer t : Tick ) {
  	       if(t == null) continue;
-		   script += "-----------------------------------------\n";
-		   script += "-- Element: Unit\n";
-		   script += "-- Event: timer("+t.name+")\n";
-		   script += "-----------------------------------------\n";
-		   script += t.luaScript+"\n";
-		   script += "\n\n\n\n";
+ 	       
+	       sign = "stop()";
+	       args = "[{\"value\":\""+t.name+"\"}]";
+	       slotKey = "-1";
+	       listScript.add(new String[]{t.luaScript, args, sign, slotKey }); 
 	   }	   
 	   
-	   return script;
+	   return listScript;
 	}
+	
 	
 	// find and start a timer
 	public void startTimer(String pname, Float psec) {
@@ -157,7 +152,9 @@ public class Unit extends BaseElement {
 	    }				
 		if(pcommand.equals("exit")) {
 	        if(verboseJava) System.out.println("[JAVA] closing the unit");
-	    	System.exit(0);	    	
+	        execWindow.StopServices(execWindow.sandbox.elements);
+	        execWindow.frame.setTitle(execWindow.frame.getTitle()+" - dead (unit.exit)");
+	        // System.exit(0);	    	
 	    }	
 	}
 

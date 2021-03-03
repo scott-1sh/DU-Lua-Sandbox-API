@@ -1,6 +1,6 @@
 --[[    
     buttonManager_tick.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2021 Stephane Boivin aka Nmare418 (Discord: Nmare418#639)
     
     This file is part of "DU offline sandbox API".
 
@@ -27,12 +27,12 @@ local htmlMouseInfo = screen1.getMouseX().."/"..screen1.getMouseY()..":"..screen
 local content = ''
 
 -- buttons events
-if bmLight:OnClick('light1') == 1 then print('light1 clicked') Light1.toggle() end
-if bmLight:OnClick('light2') == 1 then print('light2 clicked') Light2.toggle() end
-if bmLight:OnClick('light3') == 1 then print('light3 clicked') Light3.toggle() end
-if bmDoor:OnClick('door1') == 1 then print('door1 clicked') Door1.toggle() end
-if bmDoor:OnClick('door2') == 1 then print('door2 clicked') Door2.toggle() end
-if bmDoor:OnClick('door3') == 1 then print('door3 clicked') Door3.toggle() end
+if bmLight:OnClick('light1') == 1 then Light1.toggle() end
+if bmLight:OnClick('light2') == 1 then Light2.toggle() end
+if bmLight:OnClick('light3') == 1 then Light3.toggle() end
+if bmDoor:OnClick('door1') == 1 then Door1.toggle() end
+if bmDoor:OnClick('door2') == 1 then Door2.toggle() end
+if bmDoor:OnClick('door3') == 1 then Door3.toggle() end
 
 -- display tabbs buttons
 content = content..bm:Display(screen1.getMouseX(),screen1.getMouseY(),screen1.getMouseState())
@@ -40,12 +40,12 @@ content = content..bm:Display(screen1.getMouseX(),screen1.getMouseY(),screen1.ge
 -- Tabbs
 if bm:IsToggled('door_tab') then 
   content = content..string.format(svgPanel,'door')
-  -- buttons
+  -- display door buttons
   content = content..bmDoor:Display(screen1.getMouseX(),screen1.getMouseY(),screen1.getMouseState())
 end
 if bm:IsToggled('light_tab') then
   content = content..string.format(svgPanel,'light')
-  -- buttons
+  -- display light buttons
   content = content..bmLight:Display(screen1.getMouseX(),screen1.getMouseY(),screen1.getMouseState())
 end
 

@@ -1,6 +1,6 @@
 --[[    
     container.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -69,7 +69,7 @@ function Container:new(o)
   setmetatable(o, self)
   self.__index = self
 
-  o.itemMass = 1000
+  o.itemMass = 0
   
   if _verboseLUA == 1 then print("[LUA] Container ["..o.name.."] created with the id ["..o.id.."]") end
 
@@ -82,6 +82,7 @@ end
 
 function Container:setItemsMass(mass)
   self.itemMass = mass
+  JavaWindow:setState(self.id, {mass})
 end
 
 function Container:getSelfMass()

@@ -1,6 +1,6 @@
 --[[    
     radar_load.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -31,7 +31,7 @@ obj = Unit(UnitStart, UnitStop)
 -- setup a timer/tick event
 setupTimer(obj, 'loop', UnitTick)
 
-playerList = {} -- also used as owners list
+playerList = {} -- also used for owners list
 playerList[1] = {id = 0, name = 'unreachable', worldPos = {0,0,0}}
 playerList[2] = {id = 1, name = 'Nmare418', worldPos = {131,-33,36}}
 playerList[3] = {id = 2, name = 'Roger', worldPos = {123,-23,64}}
@@ -40,6 +40,7 @@ playerList[5] = {id = 4, name = 'Marie', worldPos = {114,-633,56}}
 playerList[6] = {id = 5, name = 'Claude', worldPos = {124,-63,26}}
 playerList[7] = {id = 6, name = 'Sandra', worldPos = {125,-33,66}} 
 playerList[8] = {id = 7, name = 'Albert', worldPos = {125,-33,66}} 
+local owner = 2
 
 constructList = {}
 constructList[1] = {id = 1, owner = 7, name = 'Base 1', ctype='static',  pos = {133,-6233,66}, size = {115,134,122}, speed = {0,0,0}, mass = 2101.323 }
@@ -55,7 +56,7 @@ constructList[9] = {id = 9, owner = 0, name = 'Base 5', ctype='static',  pos = {
 constructList[10] = {id = 10, owner = 0, name = 'Base 6', ctype='static',  pos = {4000,-400,0}, size = {44,34,45}, speed = {0,0,0}, mass = 2101.323 }
 
 -- playerlist, constructlist, main player
-setupDatabase(playerList, constructList, 2)
+setupDatabase(playerList, constructList, owner)
 
 local scriptEnter = "print('Construct '..id..' ['..self.getConstructName(id)..'] entered the zone')"
 local scriptExit = "print('Construct '..id..' ['..self.getConstructName(id)..'] left the zone')"

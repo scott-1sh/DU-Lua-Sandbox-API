@@ -1,4 +1,22 @@
+--[[    
+    splitscreenx4_tick.lua 
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+    
+    This file is part of "DU offline sandbox API".
 
+    "DU offline sandbox API" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    "DU offline sandbox API" is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+]]
 svgBalls = ''
 
 -- Moving balls
@@ -13,19 +31,11 @@ for i,v in ipairs(x) do
 	x[i] = x[i] + (dirx[i]*speed)
 	y[i] = y[i] + (diry[i]*speed)
 	
-	svgBalls = svgBalls..htmlBall(x[i], y[i], ballRayon)
+	svgBalls = svgBalls..svgBall(x[i], y[i], ballRayon)
 end
 
 
 ss4:Clear()
 
 ss4:Display(picture..svgBalls)
-
--- identify screen
---[[ text = '<svg x="0" y="0" width="200" height="100"><text x="15" y="23" fill="black" font-family="arial" font-size="16">%s</text></svg>'
-screen1.addContent(0,0, string.format(text,'screen1'))
-screen2.addContent(0,0, string.format(text,'screen2'))
-screen3.addContent(0,0, string.format(text,'screen3'))
-screen4.addContent(0,0, string.format(text,'screen4'))
-]]
 

@@ -1,6 +1,6 @@
 --[[    
     emitter_load.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -19,7 +19,7 @@
 ]]
 showOnScreen(1) 
 verboseLua(1)
-verboseJava(1)
+verboseJava(0)
 
 -- Unit
 UnitStart = loadScript('emitter_start.lua')
@@ -45,7 +45,8 @@ obj = EmitterUnit('emitter1')
 
 -- screen1
 obj = ScreenUnit('screen1', 1024, 612)
-moveElement(obj, 200, 5)
+moveElement(obj, 205, 5)
 
 obj = ButtonUnit('btnChannel1', 'test', 'emitter1.send("channel1", "Hello world!")')
 obj = ButtonUnit('btnChannel2', 'test', 'emitter1.send("channel2", "Bonjour le monde!")')
+

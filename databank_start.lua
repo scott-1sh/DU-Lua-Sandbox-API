@@ -1,6 +1,6 @@
 --[[    
     databank_start.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -52,7 +52,7 @@ text = text..'<br/> Inserting String'
 db1.setStringValue('teststring', 'Hello world!') 
 
 text = text..'<br/> Inserting Int'
-db1.setIntValue('testint', 50000) 
+db1.setIntValue('testint', 5442) 
 
 text = text..'<br/> Inserting Float'
 db1.setFloatValue('testfloat', 500.453366) 

@@ -1,6 +1,6 @@
 --[[    
     PRELOAD.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -20,35 +20,30 @@
 
 _verboseLua = 0
 
+function setHUD(sizeX, sizeY, updateScript)
+  JavaLoader:set('setHUD', {sizeX, sizeY,  updateScript})
+end
+
 function showOnScreen(screen) 
-
   JavaLoader:set("showOnScreen", {screen})    
-
 end
 
 function verboseJava(mode)
-  
   JavaLoader:set("verboseJava", {mode}) 
-
 end
 
 function verboseLua(mode)
-  
   _verboseLua = mode  
   JavaLoader:set("verboseLua", {mode}) 
-
 end
 
 function pause(time)
   -- pause in ms
   JavaLoader:set("pause", {time}) 
-
 end
 
 function loadScript(file)
-
   return JavaLoader:get("loadScript", {file}) 
-
 end
 
 function setupDatabase(player, construct, MasterPlayerId)

@@ -1,6 +1,6 @@
 /*    
     Database.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -32,10 +32,6 @@ public class Database {
       
 	  construct = pConstruct;
       player = pPlayer;	   
-	  
-      double[] pos = {0,0,0};
-      unreachable.add(new Player(-1, "unreachable", pos));  
-      
 	  if(pverboseJava) System.out.println("[JAVA] Database created");
 
   }

@@ -1,6 +1,6 @@
 /*    
     Radar.java
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -30,11 +30,13 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import offlineEditor.execWindow;
+import sandbox.execTimer;
+import sandbox.execWindow;
 
 public class Radar extends BaseElement {
 //	public static List<Construct> construct = new ArrayList<>();    
@@ -43,8 +45,8 @@ public class Radar extends BaseElement {
     public String scriptEnter = "";
     public String scriptExit = "";
     int range = 10000;
- 	int sizeX = 400;
-    int sizeY = 400;
+ 	int sizeX = 200;
+    int sizeY = 200;
 	Timer timer = null;    
     String baseHtml = "<!DOCTYPE html>\r\n" + 
     		"<html>\r\n" + 
@@ -63,7 +65,8 @@ public class Radar extends BaseElement {
     		"  background-color: rgba(0,0,0,0);" +  //  background-color: rgba(0,0,0,0.5);\r\n" + 
     		"  z-index: 2;" + 
     		"} </style></head><body style=\"overflow-y:hidden;overflow-x:hidden; background-color: rgba(0,190,0,1);\"></body></html>";
-    private String radarSVG = "<svg x=\"0px\" y=\"0px\" width=\"400px\" height=\"400px\" style=\"background-color: rgba(0,190,0,1);\">\r\n" +
+/* version 400px
+ *     private String radarSVG = "<svg x=\"0px\" y=\"0px\" width=\"400px\" height=\"400px\" style=\"background-color: rgba(0,190,0,1);\">\r\n" +
     		"<g x=\"0px\" y=\"0px\" width=\"400px\" height=\"400px\" >\r\n" +
     		"   <line x1=\"0\"  y1=\"188\" x2=\"376\" y2=\"188\" stroke-dasharray=\"1, 1\" stroke=\"#000000\"  />" +
     		"   <line x1=\"188\"  y1=\"0\" x2=\"188\"   y2=\"376\" stroke-dasharray=\"1, 1\" stroke=\"#000000\" />" +
@@ -77,7 +80,23 @@ public class Radar extends BaseElement {
     		"   <text x=\"189\" y=\"14\" font-family=\"Verdana\" font-size=\"15\">y</text>" +
     		"   <text x=\"5\" y=\"14\" font-family=\"Verdana\" font-size=\"13\">Map view</text>" +
     		String.format("   <text x=\"295\" y=\"385\" font-family=\"Verdana\" font-size=\"10\">Range: %skm</text>",(range/1000)) +
+    	    "</g>%s</svg>"; */
+    private String radarSVG = "<svg x=\"0px\" y=\"0px\" width=\"200px\" height=\"200px\" style=\"background-color: rgba(0,190,0,1);\">\r\n" +
+    		"<g x=\"0px\" y=\"0px\" width=\"100px\" height=\"200px\" >\r\n" +
+    		"   <line x1=\"0\"  y1=\"94\" x2=\"188\" y2=\"94\" stroke-dasharray=\"1, 1\" stroke=\"#000000\"  />" +
+    		"   <line x1=\"94\"  y1=\"0\" x2=\"94\"   y2=\"188\" stroke-dasharray=\"1, 1\" stroke=\"#000000\" />" +
+    		"	<circle fill=\"none\" stroke=\"#000000\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"2\"/>\r\n" + 
+    		"	<circle fill=\"none\" stroke=\"#000000\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"22\"/>\r\n" + 
+    		"	<circle fill=\"none\" stroke=\"#000000\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"42\"/>\r\n" + 
+    		"	<circle fill=\"none\" stroke=\"#000000\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"62\"/>\r\n" + 
+    		"	<circle fill=\"none\" stroke=\"#000000\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"82\"/>\r\n" + 
+    		"	<circle fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"93\"/>\r\n" +
+    		"   <text x=\"180\" y=\"93\" font-family=\"Verdana\" font-size=\"9\">x</text>" +
+    		"   <text x=\"94\" y=\"7\" font-family=\"Verdana\" font-size=\"9\">y</text>" +
+    		"   <text x=\"2\" y=\"7\" font-family=\"Verdana\" font-size=\"9\">Map view</text>" +
+    		String.format("   <text x=\"118\" y=\"188\" font-family=\"Arial\" font-size=\"9\">Range: %skm</text>",(range/1000)) +
     	    "</g>%s</svg>";
+
     
 	public Radar(int pid, String pname, int px, int py, int prange, String pscriptEnter, String pscriptExit, boolean pverboseJava )  {
 
@@ -87,6 +106,7 @@ public class Radar extends BaseElement {
 //		construct = pconstruct;
 		scriptEnter = pscriptEnter;
 		scriptExit = pscriptExit;
+		id = pid;
 
 		range = prange;
 
@@ -94,16 +114,16 @@ public class Radar extends BaseElement {
 
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px, py, sizeX+4, sizeY+24);
+		panel.setBounds(px, py, sizeX+6, sizeY+24);
 		panel.setBorder(LineBorder.createBlackLineBorder());		
 		panel.setBackground(Color.black);
-
+/*
 		// label
 		JLabel  lblname = new JLabel(name);
 		lblname.setForeground(Color.white);
 		lblname.setBounds(8, 2, sizeX, 16);	
 		panel.add(lblname, 1, 0);		
-    
+  */  
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/radar.lua";
         luaCall = name+" = createInterfaceRadar(\""+pid+"\", \""+name+"\")";		
@@ -116,7 +136,7 @@ public class Radar extends BaseElement {
         web.setStatusBarVisible(false);
 		web.setMenuBarVisible(false);
 		// web.setBorder(null);		
-		web.setBounds(2, 22, sizeX, sizeY);
+		web.setBounds(1, 1, sizeX, sizeY);
 		web.setButtonBarVisible(false);
 		web.setBarsVisible(false);
 		web.setAutoscrolls(false);
@@ -190,10 +210,14 @@ public class Radar extends BaseElement {
         	 // System.out.println("construct:"+b.name+"  owner-> "+b.owner );
         	 String color = "#FFFFFF";
      		 double xx = 0, yy = 0; 
-        	 int centerX = 188;
-        	 int centerY = 188;
-        	 xx = ((b.pos[0] * 188) / range);
-        	 yy = ((b.pos[1] * 188) / range);        	 
+        	 int centerX = 94;
+        	 int centerY = 94;
+        	 xx = ((b.pos[0] * 94) / range);
+        	 yy = ((b.pos[1] * 94) / range);        	 
+        	 // int centerX = 188;
+        	 // int centerY = 188;
+        	 // xx = ((b.pos[0] * 188) / range);
+        	 // yy = ((b.pos[1] * 188) / range);        	 
         	 if(b.owner <= 0) {  // .equals("unreachable") 
         		color = "#808080";
         	 };
@@ -206,12 +230,12 @@ public class Radar extends BaseElement {
         	 
         	 // display dots
         	 if(b.ctype.equals("static")) {
-        		 svgPoint = svgPoint+" <rect x=\""+(centerX+xx-2)+"\" y=\""+(centerY-yy-2)+"\" rx=\"1\" rx=\"1\" width=\"9\" height=\"9\" stroke=\"black\" stroke-width=\"1\" fill=\""+color+"\" "+opacity+"/>";
+        		 svgPoint = svgPoint+" <rect x=\""+(centerX+xx-2)+"\" y=\""+(centerY-yy-2)+"\" rx=\"1\" rx=\"1\" width=\"5\" height=\"5\" stroke=\"black\" stroke-width=\"1\" fill=\""+color+"\" "+opacity+"/>";
         	 } else { 
-        		 svgPoint = svgPoint+" <circle cx=\""+(centerX+xx-2)+"\" cy=\""+(centerY-yy-2)+"\" r=\"4\" stroke=\"black\" stroke-width=\"1\" fill=\""+color+"\" "+opacity+"/>"; 
+        		 svgPoint = svgPoint+" <circle cx=\""+(centerX+xx-2)+"\" cy=\""+(centerY-yy-2)+"\" r=\"2\" stroke=\"black\" stroke-width=\"1\" fill=\""+color+"\" "+opacity+"/>"; 
         	 }
 
-        	 svgPoint = svgPoint + String.format("<text x=\""+(centerX+5+xx)+"\" y=\""+(centerY-yy)+"\" fill=\"black\" font-family=\"Arial\" font-size=\"11\" "+opacity+">%s - %s</text>",b.id,b.name); 
+        	 svgPoint = svgPoint + String.format("<text x=\""+(centerX+5+xx)+"\" y=\""+(centerY-yy)+"\" fill=\"black\" font-family=\"Arial\" font-size=\"9\" "+opacity+">%s - %s</text>",b.id,b.name); 
         }
 		
 		// create an overlay         
@@ -224,29 +248,38 @@ public class Radar extends BaseElement {
 
 	}
 
-	// Export all scripts related to this element to text
 	@Override
-	public String export() {
-	  String script = "";	
-		// timers
-	  script += "-----------------------------------------\n";
-	  script += "-- Element name: "+this.name+"\n";
-	  script += "-- Element: Radar\n";
-	  script += "-- Event: enter(id)\n";
-	  script += "-----------------------------------------\n";
-	  script += scriptEnter+"\n\n";
-      script += "\n\n\n\n";
-	  
-	  script += "-----------------------------------------\n";
-	  script += "-- Element name: "+this.name+"\n";
-	  script += "-- Element: Radar\n";
-	  script += "-- Event: leave(id)\n";
-	  script += "-----------------------------------------\n";
-	  script += scriptExit+"\n";
-      script += "\n\n\n\n";
-	  
-      
-	  return script;
+	public ArrayList<String[]> export() {	       
+	   ArrayList<String[]> listScript = new ArrayList<String[]>();
+	   String sign;
+	   String args;
+	   String slotKey;
+	   
+	   // start()
+	   if(luaScriptStart.length()>0) {
+		   sign = "start()";
+		   args = "[]";
+		   slotKey = Integer.toString(id);
+		   listScript.add(new String[]{luaScriptStart, args, sign, slotKey}); 
+	   }
+	   
+	   // enter
+	   if(scriptEnter.length()>0) {
+	       sign = "stop()";
+	       args = "[{\"value\":\"a\"}]";
+	       slotKey = Integer.toString(id);;
+	       listScript.add(new String[]{scriptEnter, args, sign, slotKey }); 
+	   }
+	   
+	   // leave
+	   if(scriptEnter.length()>0) {
+	       sign = "stop()";
+	       args = "[{\"value\":\"a\"}]";
+	       slotKey = Integer.toString(id);
+	       listScript.add(new String[]{scriptExit, args, sign, slotKey }); 
+	   }
+	   	   
+	   return listScript;
 	}
 	
 	@Override	
@@ -254,57 +287,62 @@ public class Radar extends BaseElement {
 		String pcommand = param[0];
 		int id = 0;
 		
-		switch (pcommand) {
-			case "getRange":					
-		         return range;
-			case "getEntries":
-				 LuaTable result = new LuaTable();
-		   	     double distance = 0;
-		   	     int iCnt = 0;
-				 for(int i = 0; i < sandbox.worldConstruct.size(); i++) {
-				   // System.out.println(i+" id = "+construct.get(i).id ) ;
- 	        	   distance = Math.sqrt((Math.pow(0 - sandbox.worldConstruct.get(i).pos[0],2) + Math.pow(0 - sandbox.worldConstruct.get(i).pos[1],2) + Math.pow(0 - sandbox.worldConstruct.get(i).pos[2],2))) ;                     
-				   if(distance <= range) {
- 				     iCnt++;
-				     result.set(iCnt, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(i).id));					   
-				   }
-				 }
-				 
-				 return result;
-			case "getConstructName":
-  				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).name;
-			case "getConstructOwner":
- 				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).owner;
-			case "getConstructSize":
- 				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).size;				
-			case "getConstructType":
- 				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).ctype;				
-			case "getConstructWorldPos":
- 				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).pos;
-			case "getConstructWorldVelocity":
-				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).speed;
-			case "getConstructWorldAcceleration":
-				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).speed;
-			case "getConstructPos":
-				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).pos;
-			case "getConstructVelocity":
-				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).speed;
-			case "getConstructAcceleration":
-				 id = Integer.valueOf(param[1])-1;
-			     return sandbox.worldConstruct.get(id).speed;			
-			}
-
-		return "";
-    }
+		try {
+			switch (pcommand) {
+				case "getRange":					
+			         return range;
+				case "getEntries":
+					 LuaTable result = new LuaTable();
+			   	     double distance = 0;
+			   	     int iCnt = 0;
+					 for(int i = 0; i < sandbox.worldConstruct.size(); i++) {
+					   // System.out.println(i+" id = "+construct.get(i).id ) ;
+	 	        	   distance = Math.sqrt((Math.pow(0 - sandbox.worldConstruct.get(i).pos[0],2) + Math.pow(0 - sandbox.worldConstruct.get(i).pos[1],2) + Math.pow(0 - sandbox.worldConstruct.get(i).pos[2],2))) ;                     
+					   if(distance <= range) {
+	 				     iCnt++;
+					     result.set(iCnt, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(i).id));					   
+					   }
+					 }
+					 
+					 return result;
+				case "getConstructName":
+	  				 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).name;
+				case "getConstructOwner":
+	 				 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).owner;
+				case "getConstructSize":
+	 				 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).size;				
+				case "getConstructType":
+	 				 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).ctype;				
+				case "getConstructWorldPos":
+	 				 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).pos;
+				case "getConstructWorldVelocity":
+					 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).speed;
+				case "getConstructWorldAcceleration":
+					 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).speed;
+				case "getConstructPos":
+					 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).pos;
+				case "getConstructVelocity":
+					 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).speed;
+				case "getConstructAcceleration":
+					 id = Integer.valueOf(param[1])-1;
+				     return sandbox.worldConstruct.get(id).speed;			
+				}
 	
+			return "";	    
+	    } catch(Exception e){
+	    	if(verboseJava) System.out.println("[JAVA] Error in commande:"+pcommand);
+	    	 throw new LuaError(e);
+	    }
+		
+	}
 
 }

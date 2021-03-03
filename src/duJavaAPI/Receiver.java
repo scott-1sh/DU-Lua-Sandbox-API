@@ -1,6 +1,6 @@
 /*    
     Receiver.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -20,53 +20,54 @@
 package duJavaAPI;
 
 import java.awt.Color;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import offlineEditor.execWindow;
+import sandbox.execWindow;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
 public class Receiver extends BaseElement {
-    int sizeX = 104;
-    int sizeY = 130;
+    int sizeX = 200;
+    int sizeY = 100;
 	public int status = 0;
-	public int id = 0;
+	private int range;
 
-	public Receiver(int pid, String pname, int px, int py, boolean pverboseJava) {
+	public Receiver(int pid, String pname, int px, int py, int prange, boolean pverboseJava) {
 		
 		name = pname;
 		x = px;
 		y = py;
 		id = pid;
-
+        range = prange;
+		
 		verboseJava = pverboseJava;		
 		
+		// create panel
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px, py, sizeX, sizeY+22);
 		panel.setBorder(LineBorder.createBlackLineBorder());
-		panel.setBackground(Color.black);
-		
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		panel.add(lblname, 1, 0);		
+		panel.setBackground(Color.black);		
+		panel.setBounds(x, y, sizeX, sizeY);
 		
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(1,22,102,129);
+	 	lblPicWhite.setBounds(1, 1, sizeX-3, sizeY-3);
 	 	lblPicWhite.setBackground(Color.white);
 		panel.add(lblPicWhite, 1, 0);
-		
+
 		// picture
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,20,100,130);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Receiver.png")); 
+	 	JLabel lblPic = new JLabel();
+	 	setPicture(lblPic, "src/pictures/elements/Receiver.png", 8, 5, 55, 71);
 		panel.add(lblPic, 1, 0);
 		
+		// stats
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		AddtoStatPanel("Range:", range+"m");
+		panel.add(stats, 1, 0);
 		
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/receiver.lua";
@@ -75,25 +76,22 @@ public class Receiver extends BaseElement {
         if(verboseJava) System.out.println("[JAVA] Door "+pid+".name="+pname+" created");	 		
 	}
 
-	// Export all scripts related to this element to text
 	@Override
-	public String export() {
-		String script = "";
+	public ArrayList<String[]> export() {	       
+	   ArrayList<String[]> listScript = new ArrayList<String[]>();
+	   String sign;
+	   String args;
+	   String slotKey;
+
 		for(String channel : Script.keySet()) {
-			   if(Script.get(channel) == null) continue;
-			   
-			   // add to script
-			   script += "-----------------------------------------\n";
-			   script += "-- Element name: "+this.name+"\n";
-			   script += "-- Element: Receiver\n";
-			   script += "-- Event: receive(channel,message)\n";
-			   script += "-----------------------------------------";
-			   script += Script.get(channel)+"\n";	
-		       script += "\n\n\n\n";
-			   
-		   }		
-		
-		return script;
+		      if(Script.get(channel) == null) continue;
+		      sign = "receive(channel,message)";
+		      args = "[{\"value\":\"channel\"},{\"value\":\"message\"}]";
+		      slotKey = Integer.toString(id);
+		      listScript.add(new String[]{Script.get(channel), args, sign, slotKey}); 			
+	   }		
+	   	   	   
+	   return listScript;
 	}
 	
 	@Override

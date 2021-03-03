@@ -38,49 +38,59 @@ import javax.swing.border.LineBorder;
 import org.h2.jdbcx.JdbcDataSource;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import offlineEditor.execWindow;
+import sandbox.execWindow;
 
 public class Container extends BaseElement {
     public String html = "";
-    int sizeX = 104;
+    int sizeX = 200;
     int sizeY = 100;
     
 	public Container(int pid, String pname, int px, int py, boolean pverboseJava) {
 		name = pname;
 		x = px;
 		y = py;		
-		
+		id = pid;
+
 		verboseJava = pverboseJava;		
 
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px, py, sizeX, sizeY+24);
+		panel.setBounds(px, py, sizeX, sizeY);
 		panel.setBorder(LineBorder.createBlackLineBorder());
 		panel.setBackground(Color.black);
 
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		panel.add(lblname, 1, 0);		
-		
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(2,22,100,100);
+	 	lblPicWhite.setBounds(1,1, sizeX, sizeY);
 	 	lblPicWhite.setBackground(Color.white);
 		panel.add(lblPicWhite, 1, 0);
 
 	 	// picture
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,22,100,100);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Storage.png")); 
+	 	JLabel lblPic = new JLabel();	
+	 	setPicture(lblPic, "src/pictures/elements/Storage.png", 5, 5, 60, 70);
 		panel.add(lblPic, 1, 0);
 		
+		// stats panel
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		panel.add(stats, 1, 0);		
+		AddtoStatPanel("Content mass:", "0.0Kg");
+		// AddtoStatPanel("Type:", coreType);		
 			    
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/container.lua";
         luaCall = name+" = createInterfaceContainer(\""+pid+"\", \""+name+"\")";		
         if(verboseJava) System.out.println("[JAVA] Container ["+name+"] created");	 		
+	}
+
+	@Override	
+    public void update(String[] param) {
+		Float weight = Float.valueOf(param[0]);
+        
+		// update stats
+		panel.remove(stats);
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		AddtoStatPanel("Cargo:", String.format("%.2fKg", weight));
+		panel.add(stats, 1, 0);
 	}
 
 }

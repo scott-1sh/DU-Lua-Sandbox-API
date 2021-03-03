@@ -28,8 +28,8 @@ import javax.swing.border.LineBorder;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
-import offlineEditor.DUElement;
-import offlineEditor.execLUA;
+import sandbox.DUElement;
+import sandbox.execLUA;
 
 public class Core extends BaseElement {
  	private JLabel lblPic = new JLabel();
@@ -46,7 +46,7 @@ public class Core extends BaseElement {
 	public float roll = 0;
 	public float yaw = 0;
 	private int constructId;
-    private int sizeX = 104;
+    private int sizeX = 200;
     private int sizeY = 100;
     private String coreType = "";
     private int coreSize = 16;
@@ -67,28 +67,29 @@ public class Core extends BaseElement {
 			
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px, py, sizeX, sizeY+24);
+		panel.setBounds(px, py, sizeX, sizeY);
 		panel.setBorder(LineBorder.createBlackLineBorder());
 		panel.setBackground(Color.black);
 
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		panel.add(lblname, 1, 0);		
-
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(2,22,100,100);
+	 	lblPicWhite.setBounds(1, 1, sizeX, sizeY);
 	 	lblPicWhite.setBackground(Color.white);
 		panel.add(lblPicWhite, 1, 0);
 
 	 	// picture
 	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,22,100,100);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Core.png"));
+	 	setPicture(lblPic, "src/pictures/elements/Core.png", 5, 0, 80, 80);
 		panel.add(lblPic, 1, 0);
 
+		// stats panel
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		panel.add(stats, 1, 0);
+		AddtoStatPanel("size:", Integer.toString(coreSize));
+		AddtoStatPanel("Type:", coreType);
+		// AddtoStatPanel("Elements:", Integer.toString(GetElementsCount()));
+		
+		
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/core.lua";
         luaCall = "core = createInterfaceCore(\""+pid+"\", \"core\")";
@@ -96,6 +97,16 @@ public class Core extends BaseElement {
         if(verboseJava) System.out.println("[JAVA] Core created");	 		
 	}
 
+	private int GetElementsCount() {
+		int count = 0;
+		for (DUElement elem : execWin.  sandbox.elements ) {
+			   if(elem == null) continue;
+			   count++;
+			 }		
+		return count;
+	}
+	
+	
 	@Override
 	public void update(String[] param) {
 		// {State,name}		

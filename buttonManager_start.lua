@@ -30,7 +30,7 @@ htmlContent = [[
 <html>                                                                                                                                                                                 
 <head>                                                                                                                                                                                 
 <style>                                                                                                                                                                                
-  .btn { border-radius:1.7vh 0 1.7vh 0;                                                                                                                                                
+  .pan { border-radius:1.7vh 0 1.7vh 0;                                                                                                                                                
             background: #000055;                                                                                                                                                       
             border:none;                                                                                                                                                               
             color:#AAAAFF;                                                                                                                                                             
@@ -40,18 +40,28 @@ htmlContent = [[
             text-align: center;                                                                                                                                                        
             box-shadow: .4vh .4vw .4vh rgba(0, 0, 0, 0.35);                                                                                                                            
             }                                                                                                                                                                          
-  .btnHover { border-radius:1.7vh 0 1.7vh 0;                                                                                                                                           
-            background: #000055;                                                                                                                                                       
+  .panActif { border-radius:1.7vh 0 1.7vh 0;                                                                                                                                           
+            background: #000021;                                                                                                                                                       
             border:none;                                                                                                                                                               
             color:#FFFFFF;                                                                                                                                                             
             font: normal 3vh Verdana;                                                                                                                                                  
             padding:.2vw 0 .2vw 0;                                                                                                                                                     
-            border: .6vw solid #4444FF;                                                                                                                                                
+            border: .6vw solid #000000;                                                                                                                                                
+            text-align: center;                                                                                                                                                        
+            box-shadow: .2vh .2vw .2vh rgba(0, 0, 0, 0.35);                                                                                                                            
+           }                                                                                                                                                                                                                                                                                                                                                       
+  .btn { border-radius:1.7vh 0 1.7vh 0;                                                                                                                                                
+            background: #5555FF;                                                                                                                                                       
+            border:none;                                                                                                                                                               
+            color:#AAAAFF;                                                                                                                                                             
+            font: normal 3vh Verdana;                                                                                                                                                  
+            padding:.2vw 0 .2vw 0;                                                                                                                                                     
+            border: .6vw solid #000044;                                                                                                                                                
             text-align: center;                                                                                                                                                        
             box-shadow: .4vh .4vw .4vh rgba(0, 0, 0, 0.35);                                                                                                                            
-           }                                                                                                                                                                           
+            }                                                                                                                                                                          
   .btnActif { border-radius:1.7vh 0 1.7vh 0;                                                                                                                                           
-            background: #000021;                                                                                                                                                       
+            background: #111155;                                                                                                                                                       
             border:none;                                                                                                                                                               
             color:#FFFFFF;                                                                                                                                                             
             font: normal 3vh Verdana;                                                                                                                                                  
@@ -78,13 +88,14 @@ svgPanel = [[
 </svg>                                                                                                                                                                                 
 ]]                                                                                                                                                                                     
 
-buttonManager = {name, toggle,  x={}, y={}, width={}, height={}, label={}, toggled={}, clicked={}, cssbutton, cssHover, cssActive}                                               
+buttonManager = {toggle=0, timerClick=1, x={}, y={}, width={}, height={}, label={}, toggled={}, clicked={}, cssbutton, cssActive}                                               
 
 function buttonManager:new(o)
   o = o or {}
   setmetatable(o, self)
   self.__index = self
 
+  o.timerClick = 1
   o.x={}
   o.y={}
   o.width={}
@@ -93,14 +104,10 @@ function buttonManager:new(o)
   o.toggled={}
   o.clicked={}
   
-  -- o.name = name
-  print("buttonmanager created name ["..o.name.."]")                                                                                                                              
-  
   return o
 end
 
 function buttonManager:AddButton(id, x, y, width, height, label)                                                                                                                       
-  print('bouton '..id..'ajouté a '..self.name)
   self.x[id] = x                                                                                                                                                                       
   self.y[id] = y                                                                                                                                                                       
   self.label[id] = label                                                                                                                                                               
@@ -123,11 +130,14 @@ function buttonManager:ResetAll()
   end                                                                                                                                                                                  
 end                                                                                                                                                                                    
 
-function buttonManager:OnClick(id)                                                                                                                                                     
-  if self.clicked[id] == 1 then                                                                                                                                                              
-      self.clicked[id] = 0 -- consume the onclick action
-     return 1                                                                                                                                                                          
-  end                                                                                                                                                                                  
+function buttonManager:OnClick(id)
+  if system.getTime()-self.timerClick > 1 then                                                                                                                                                         
+    if self.clicked[id] == 1 then
+        self.timerClick = system.getTime()  
+        self.clicked[id] = 0 -- consume the onclick action
+       return 1                                                                                                                                                                          
+    end                                           
+  end   
 end                                                                                                                                                                                    
 
 function buttonManager:IsToggled(id)                                                                                                                                                   
@@ -143,12 +153,10 @@ function buttonManager:Display(mouseX, mouseY, mouseState)
     if self.toggle == 1 then                                                                                                                                                           
       -- toggle mode                                                                                                                                                                   
       if self:IsHover(k, mouseX, mouseY) == 1  then                                                                                                                                    
-         if mouseState == 1 then                                                                                                                                                       
+         if mouseState == 1 then                                                                                                                                                       		
            self:ResetAll()                                                                                                                                                             
            self.clicked[k] = 1                                                                                                                                                         
            btncss = self.cssActive                                                                                                                                                     
-         else                                                                                                                                                                          
-           btncss = self.cssHover                                                                                                                                                      
          end                                                                                                                                                                           
       else                                                                                                                                                                             
         if self.clicked[k] == 1 then                                                                                                                                                   
@@ -158,14 +166,10 @@ function buttonManager:Display(mouseX, mouseY, mouseState)
         end                                                                                                                                                                            
       end                                                                                                                                                                              
   else                                                                                                                                                                                 
-    -- click mode                                                                                                                                                                      
-    self.clicked[k] = 0                                                                                                                                                                
     if self:IsHover(k, mouseX, mouseY) == 1 then                                                                                                                                       
       if mouseState == 1 then                                                                                                                                                          
-        self.clicked[k] = 1                                                                                                                                                            
+        self.clicked[k] = 1   
         btncss = self.cssActive                                                                                                                                                        
-      else                                                                                                                                                                             
-           btncss = self.cssHover                                                                                                                                                      
       end                                                                                                                                                                              
     end                                                                                                                                                                                
   end                                                                                                                                                                                  
@@ -177,18 +181,18 @@ function buttonManager:Display(mouseX, mouseY, mouseState)
 end                                                                                                                                                                                    
 
 
--- tabs or toggle button (toggle=1)                                                                                                                        
-bm = buttonManager:new{name = 'tabb', toggle=1, cssbutton='btn', cssHover='btnHover', cssActive='btnActif'}                                                                                   
+-- tabs use toggle buttons (toggle=1)                                                                                                                        
+bm = buttonManager:new{toggle=1, cssbutton='pan', cssActive='panActif'}                                                                                   
 bm:AddButton('door_tab', 10, 10, 140, 40, 'Doors')                                                                                                                                     
 bm:AddButton('light_tab', 170, 10, 140, 40, 'Lights')                                                                                                                                  
 
 -- normal buttons (toggle=0)
-bmLight = buttonManager:new{name = 'light', toggle=0, cssbutton='btn', cssHover='btnHover', cssActive='btnActif'}                                                                             
+bmLight = buttonManager:new{cssbutton='btn', cssActive='btnActif'}                                                                             
 bmLight:AddButton('light1', 200, 300, 140, 40, 'Light 1')                                                                                                                             
 bmLight:AddButton('light2', 400, 300, 140, 40, 'Light 2')                                                                                                                             
 bmLight:AddButton('light3', 600, 300, 140, 40, 'Light 3')                                                                                                                             
 
-bmDoor = buttonManager:new{name = 'door', toggle=0, cssbutton='btn', cssHover='btnHover', cssActive='btnActif'}                                                                             
+bmDoor = buttonManager:new{cssbutton='btn', cssActive='btnActif'}                                                                             
 bmDoor:AddButton('door1', 200, 300, 140, 40, 'Door 1')       
 bmDoor:AddButton('door2', 400, 300, 140, 40, 'Door 2')
 bmDoor:AddButton('door3', 600, 300, 140, 40, 'Door 3')

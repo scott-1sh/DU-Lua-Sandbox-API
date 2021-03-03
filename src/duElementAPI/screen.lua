@@ -1,6 +1,6 @@
 --[[    
     screen.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -48,7 +48,9 @@ function createInterfaceScreen(id, name)
   obj.getMouseX = function() return obj.screen:getMouseX() end  
   obj.getMouseY = function() return obj.screen:getMouseY() end  
   obj.getMouseState = function() return obj.screen:getMouseState() end
-  
+  obj.setCenteredText = function(text) obj.screen:setCenteredText(text) end
+  obj.setSVG = function(svg) obj.screen:setSVG(svg) end
+
   obj.hide = function() obj.generic:hide() end
   obj.show = function() obj.generic:show() end
   obj.getData = function() obj.generic:getData() end
@@ -79,7 +81,13 @@ function Screen:new(o)
 end
 
 function Screen:setSVG(svg)
+  self:clear()
+  JavaWindow:setState(self.id, {"setSVG", svg})
+end
 
+function Screen:setCenteredText(text)
+  self:clear()
+  JavaWindow:setState(self.id, {"setCenteredText", text})
 end
 
 function Screen:activate()
@@ -109,7 +117,6 @@ end
 function Screen:getMouseState()
   return JavaWindow:getMouseState(self.id)
 end
-
 
 function Screen:clear()
   self.html = "";

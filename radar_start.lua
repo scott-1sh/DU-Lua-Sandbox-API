@@ -1,6 +1,6 @@
 --[[
     radar_start.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -64,5 +64,5 @@ htmlTable = [[
 
 screen1.addContent(0,0,htmlBackground1)
 
--- timer
-self.setTimer("loop", 0.25)
+-- setup a timer/tick event
+self.setTimer('loop', 0.06)

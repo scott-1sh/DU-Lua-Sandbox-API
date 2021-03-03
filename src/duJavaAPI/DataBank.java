@@ -1,6 +1,6 @@
 /*    
-    DataBank.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+a    DataBank.java 
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -20,13 +20,11 @@
 package duJavaAPI;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -37,16 +35,16 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.Server;
+import org.luaj.vm2.LuaError;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import offlineEditor.execWindow;
+import sandbox.execWindow;
 
 public class DataBank extends BaseElement {
     public JWebBrowser web = null;
     public String html = "";
  	private JButton button = new JButton();
-    int sizeX = 104;
+    int sizeX = 200;
     int sizeY = 100;
 	JdbcDataSource ds = new JdbcDataSource();
     
@@ -54,42 +52,38 @@ public class DataBank extends BaseElement {
 		name = pname;
 		x = px;
 		y = py;		
+		id = pid;
         
 		verboseJava = pverboseJava;		
 	
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px, py, sizeX, sizeY+43);
+		panel.setBounds(px, py, sizeX, sizeY);
 		panel.setBorder(LineBorder.createBlackLineBorder());
 		panel.setBackground(Color.black);
 
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		panel.add(lblname, 1, 0);		
-
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(2,22,100,98);
+	 	lblPicWhite.setBounds(1, 1, sizeX-4, sizeY-4);
 	 	lblPicWhite.setBackground(Color.white);
 		panel.add(lblPicWhite, 1, 0);
 
 	 	// picture
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,22,100,100);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Databank.png")); 
+	 	JLabel lblPic = new JLabel();
+	 	setPicture(lblPic, "src/pictures/elements/Databank.png", 6, 0, 55, 60);
 		panel.add(lblPic, 1, 0);
-		
-	  	// button 		
-		button.setText("console sql");
-		button.setBounds(1,sizeY+22,sizeX-2,20);
+		 	
+		// button 		
+		button.setText("sql");
+		button.setBounds(5,sizeY-46,(int)(sizeX*.3),20);
+		button.setBackground(new Color(59, 59, 59));
+		button.setForeground(Color.WHITE);
+		button.setFocusPainted(false);
+		button.setFont(new Font("Arial", Font.BOLD, 12));
 		panel.add(button, 1, 0);		
 		
 		// Activate a H2 embeded database
-		//jdbc:h2:tcp://localhost/C:\Database\Data\production;
 		ds.setURL("jdbc:h2:./DataBank.db;AUTO_SERVER=TRUE");
-		// ds.setURL("jdbc:h2:tcp://localhost/d:\\DataBank.db;AUTO_SERVER=TRUE");
  	    ds.setUser("sa");
 		ds.setPassword("sa");
 		// create table if not exist
@@ -113,19 +107,23 @@ public class DataBank extends BaseElement {
 					public void actionPerformed(ActionEvent e) {
           			 
                	       try { 
-       	    	   		//org.h2.tools.Server.openBrowser("jdbc:h2:./src/pictures/DataBank.db;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE");
-           	    	   	org.h2.tools.Console.main("-browser");
+           	    	   	org.h2.tools.Console.main("-browser", "-url", "jdbc:h2:./DataBank.db;AUTO_SERVER=TRUE", "-user", "sa", "-password", "sa" );      	    	   	    
             		   } catch (Exception err) {
             			  System.out.println("Error in DataBank "+name+" while calling H2 server");
             			  System.out.println("error code: " +err.getMessage());
             		   } finally {
-            			  if(verboseJava) System.out.println("H2 server openned in your browser.");
+            			  	 System.out.println("H2 server openned in your browser.");
             		   }
 
                     } 
 	                });
             } 
          });		
+	
+		// stats panel
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		panel.add(stats, 1, 0);
+		UpdateStats();
 		
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/databank.lua";
@@ -134,32 +132,96 @@ public class DataBank extends BaseElement {
 	}
 
 
-	@Override	
-    public Object get(String[] param) {    	
-		String pcommand = param[0];
+	private void ThrowDatabankError(SQLException e, String location, String command) {
+
+		System.out.println("[JAVA] Error in DataBank"+name+" ("+location+") command: "+command);
+		System.out.println("[JAVA] error code:"+e.getErrorCode()+" : " +e.getMessage());
+
+		String gmsg = "\nDATABASE ERROR:\n";
+		if(e.getMessage().length() > 500) {
+			gmsg += e.getMessage().substring(e.getMessage().length()-500);  
+		} else {
+			gmsg += e.getMessage();
+		}
+		System.out.println(gmsg);
+		execWindow.StopServices(sandbox.elements);
+		execWindow.frame.setTitle(execWindow.frame.getTitle()+" - dead!");
+
+	}
+	
+	
+	// update panel stats
+	private void UpdateStats() {
 		
 		try {
 			Connection db = ds.getConnection();				
 			Statement st = db.createStatement();
+			ResultSet rs = null;
+		
+			// databank size
+			rs = st.executeQuery("SELECT sum(length(string)) + sum(nvl2(int, 4,  0)) + sum(nvl2(float, 4, 0)) FROM "+name);
+			rs.first();
+			AddtoStatPanel("data size: ", rs.getString(1) + " Bytes" );
+			
+			// memory used
+			rs = st.executeQuery("call MEMORY_USED()");
+			rs.first();
+			AddtoStatPanel("Internal: ", rs.getString(1) + " Bytes");
+			
+			// records
+            rs = st.executeQuery("select count(key) from "+name);
+            rs.first();
+            AddtoStatPanel("Records: ", rs.getString(1));
+
+			
+		} catch (SQLException e) {
+			ThrowDatabankError(e, "UpdateStats", "N/A"); 
+		}
+		
+		
+	}
+	
+
+	
+	@Override	
+    public Object get(String[] param) {    	
+		String pcommand = param[0];
+		String pkey; 
+		ResultSet rs = null;
+		
+		// lua return null for empty keys
+		if(param.length == 1) {
+			pkey = "";
+		    // if(verboseJava && nullkeyError) System.out.println("[JAVA]["+name+"]["+pcommand+"] Warning: key parameter is null."); 
+        } else {
+			pkey = param[1];
+        }
+       		
+		try {
+			Connection db = ds.getConnection();				
+			Statement st = db.createStatement();
 			switch (pcommand) {
-				case "hasKey":					
- 	                var rs = st.executeQuery("select count(key) from "+name+" where key ='"+ param[1].replace( "'", "''") +"'");
-		             rs.first();
-		             return rs.getInt(1);
+				case "hasKey":
+					// if(param.length == 1 && verboseJava) System.out.println("[JAVA]["+name+"] \"hasKey\" Warning: key parameter is null."); 
+ 	                rs = st.executeQuery("select count(key) from "+name+" where key ='"+ pkey.replace( "'", "''") +"'");
+		            rs.first();
+		            if(rs.getInt(1) > 0) return true;
+		            return false;
+		            // return rs.getInt(1);
 				case "getNbKeys":
 		             rs = st.executeQuery("select count(key) from "+name);
 		             rs.first();
 		             return rs.getInt(1);
 				case "getStringValue":
-		             rs = st.executeQuery("select string from "+name+" where key = '"+ param[1].replace( "'", "''") +"'");
+		             rs = st.executeQuery("select string from "+name+" where key = '"+ pkey.replace( "'", "''") +"'");
 		             if(!rs.first()) return null;		             
 		             return rs.getString(1);
 				case "getIntValue":
-		             rs = st.executeQuery("select int from "+name+" where key = '"+ param[1].replace( "'", "''") +"'");
+		             rs = st.executeQuery("select int from "+name+" where key = '"+ pkey.replace( "'", "''") +"'");
 		             rs.first();
 		             return rs.getInt(1);
 				case "getFloatValue":
-		             rs = st.executeQuery("select float from "+name+" where key = '"+ param[1].replace( "'", "''") +"'");
+		             rs = st.executeQuery("select float from "+name+" where key = '"+ pkey.replace( "'", "''") +"'");
 		             rs.first();
 		             return rs.getFloat(1);
 				case "getKeys":
@@ -174,10 +236,7 @@ public class DataBank extends BaseElement {
 	 				return json;					
 			}
 		} catch (SQLException e) {
-			System.out.println("Error in DataBank "+name+" (get) command: "+pcommand);		
-			System.out.println("error code:"+e.getErrorCode()+" : " +e.getMessage());
-			// e.printStackTrace();
-			System.exit(0);
+			ThrowDatabankError(e, "get", pcommand); 
 		}
 
 		return "";
@@ -186,6 +245,8 @@ public class DataBank extends BaseElement {
 	@Override	
     public void update(String[] param) {
 		String pcommand = param[0];
+		ResultSet rs = null;
+		
 		// System.out.println("[JAVA] DataBank update (" + param[0] + ", " + param[1] + ", " + param[2] + ")"); 
 		try {
 			Connection db = ds.getConnection();				
@@ -205,17 +266,23 @@ public class DataBank extends BaseElement {
 				    st.executeUpdate("MERGE INTO "+name+" KEY(key) VALUES ('"+param[1].replace( "'", "''")+"' , NULL, NULL, "+param[2]+");");					
 					break;
 				case "closeDB":
-				    ds.getConnection().close();   //  executeUpdate("MERGE INTO "+name+" KEY(key) VALUES ('"+param[1].replace( "'", "''")+"' , NULL, NULL, "+param[2]+");");					
+				    ds.getConnection().close();					
 					break;
 			}
+			
+			// update stats
+			panel.remove(stats);
+			CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+			panel.add(stats, 1, 0);
+			UpdateStats();
+			
+			// closdedb
 	        db.close();
 
  		} catch (SQLException e) {
-			System.out.println("Error in DataBank"+name+" (update) command: "+pcommand);
-			System.out.println("error code:"+e.getErrorCode()+" : " +e.getMessage());
-			// e.printStackTrace();
-			System.exit(0);
+			ThrowDatabankError(e, "update", pcommand); 
 		}
+		
 		
     }
 }

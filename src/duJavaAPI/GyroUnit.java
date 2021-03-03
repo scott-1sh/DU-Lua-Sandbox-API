@@ -1,6 +1,6 @@
 /*    
     GyroUnit.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -29,12 +29,11 @@ import javax.swing.border.LineBorder;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
-import offlineEditor.execTimer;
+import sandbox.execTimer;
 
 public class GyroUnit extends BaseElement {
  	private JLabel lblPic = new JLabel();
 	public int status = 0;
-	public int id = 0;
 	public int[] localUp = {0,0,0};
 	public int[] localForward = {0,0,0};
 	public int[] localRight = {0,0,0};
@@ -44,7 +43,9 @@ public class GyroUnit extends BaseElement {
 	public float pitch = 0;
 	public float roll = 0;
 	public float yaw = 0;
-	
+    int sizeX = 200;
+    int sizeY = 100;
+    
 	public GyroUnit(int pid, String pname, int px, int py, boolean pverboseJava) {
 		
 		name = pname;
@@ -54,36 +55,32 @@ public class GyroUnit extends BaseElement {
 
 		verboseJava = pverboseJava;
 			
+		// create panel
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px,py,104,154);
-//		panel.setBackground(Color.white );
-		panel.setBorder(LineBorder.createGrayLineBorder());
-		panel.setBackground(Color.black);
-		
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, 105, 16);	
-		panel.add(lblname, 1, 0);		
-		
-		// picture
-		// lblPic.setBounds(3,21,94,75);
-		// lblPic.setIcon(new ImageIcon("src/pictures/elements/Gyro.png")); 			
-		// panel.add(lblPic);
+		panel.setBorder(LineBorder.createBlackLineBorder());
+		panel.setBackground(Color.black);	
+		panel.setBounds(x, y, sizeX, sizeY);
 		
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(2,22,100,130);
+	 	lblPicWhite.setBounds(1, 1, sizeX-3, sizeY-3);
 	 	lblPicWhite.setBackground(Color.white);
-		panel.add(lblPicWhite, 1, 0); 
+		panel.add(lblPicWhite, 1, 0);
 
 	 	// picture
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,22,100,130);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Gyro.png")); 
+	 	JLabel lblPic = new JLabel();
+	 	setPicture(lblPic, "src/pictures/elements/Gyro.png", 7, 7, 55, 65);
 		panel.add(lblPic, 1, 0);
-		
+
+		// stats panel
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		panel.add(stats, 1, 0);
+		AddtoStatPanel("Local up:", "0, 0, 0");
+		AddtoStatPanel("World up:", "0, 0, 0");
+		AddtoStatPanel("p/r/y:", "0/0/0 deg");
+		// AddtoStatPanel("Elements:", Integer.toString(GetElementsCount()));
+				
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/gyro.lua";		                    
         luaCall = pname+" = createInterfaceGyro(\""+pid+"\", \""+pname+"\")";

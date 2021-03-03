@@ -1,6 +1,6 @@
 /*    
     Emitter.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -25,51 +25,52 @@ import java.awt.Image;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import offlineEditor.DUElement;
-import offlineEditor.execWindow;
+import sandbox.DUElement;
+import sandbox.execWindow;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
 public class Emitter extends BaseElement {
-    int sizeX = 104;
-    int sizeY = 130;
+    int sizeX = 200;
+    int sizeY = 100;
 	public int status = 0;
-	public int id = 0;
+	private int range;
 	
-	public Emitter(int pid, String pname, int px, int py, boolean pverboseJava) {
+	
+	public Emitter(int pid, String pname, int px, int py, int prange, boolean pverboseJava) {
 		
 		name = pname;
 		x = px;
 		y = py;
 		id = pid;
+		range = prange;
 		
 		verboseJava = pverboseJava;
 	
+		// create panel
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px, py, sizeX, sizeY+22);
 		panel.setBorder(LineBorder.createBlackLineBorder());
-		panel.setBackground(Color.black);
-		
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, sizeX, 16);	
-		panel.add(lblname, 1, 0);		
+		panel.setBackground(Color.black);		
+		panel.setBounds(x, y, sizeX, sizeY);
 		
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(1,22,102,129);
+	 	lblPicWhite.setBounds(1, 1, sizeX-3, sizeY-3);
 	 	lblPicWhite.setBackground(Color.white);
 		panel.add(lblPicWhite, 1, 0);
 
-	 	// picture
-	 	JLabel lblPic = new JLabel();		
-		lblPic.setBounds(2,20,100,130);
-		lblPic.setIcon(new ImageIcon("src/pictures/elements/Emitter.png")); 
+		// picture
+	 	JLabel lblPic = new JLabel();
+	 	setPicture(lblPic, "src/pictures/elements/Emitter.png", 9, 5, 55, 71);
 		panel.add(lblPic, 1, 0);
-
+		
+		// stats
+		CreateStatPanel(name+" ("+id+")", sizeX, sizeY);		
+		AddtoStatPanel("Range:", range+"m");
+		panel.add(stats, 1, 0);
+		
 		// lua require and interface 
 		urlAPI = "src/duElementAPI/emitter.lua";
         luaCall = pname+" = createInterfaceEmitter(\""+pid+"\", \""+pname+"\")";

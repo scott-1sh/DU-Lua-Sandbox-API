@@ -1,5 +1,5 @@
 --[[
-    mapview_tick.lua by Stephane Boivin (aka Nmare418), 2019
+    mapview_tick.lua by Stephane Boivin (Discord: Nmare418#6397), 2019
     
     This file is part of "DU offline sandbox API".
 

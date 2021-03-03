@@ -1,6 +1,6 @@
 --[[    
     helloworld_load.lua 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -51,8 +51,8 @@ obj = Unit(UnitStart, UnitStop)
 -- You can use smaller/bigger screen if you use virtual width/height annotation (vw and vh) 
 obj = ScreenUnit('screen1', 1024, 612)
 
--- move the screen widget at 300, 5
-moveElement(obj, 300, 5)
+-- move the screen widget at 235, 5
+moveElement(obj, 235, 5)
 
 
 -- You sandbox will be created with a unit and a screen (named screen1) at the end of this script.

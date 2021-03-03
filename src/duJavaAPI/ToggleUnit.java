@@ -1,6 +1,6 @@
 /*    
     ToggleUnit.java 
-    Copyright (C) 2020 Stephane Boivin (Devgeek studio enr.)
+    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
 
@@ -30,6 +30,8 @@ package duJavaAPI;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -45,9 +47,14 @@ public class ToggleUnit extends BaseElement {
     private String activePicture = "src/pictures/porte1.png";
  	private JLabel lblPic = new JLabel();
 	public int status = 0;
-	public int id = 0;
 	public String type = "";
-
+    int sizeX = 100;
+    int sizeY = 100;
+    private int picX = 2;
+    private int picY = 2;
+    private int picSizeX = 93;
+    private int picSizeY = 75;
+    
 	// types:  Door, ForceField, LandingGear, Switch, Light 
 	public ToggleUnit(int pid, String ptype, String pname, int px, int py, boolean pverboseJava) {
 		
@@ -56,7 +63,6 @@ public class ToggleUnit extends BaseElement {
 		y = py;
 		id = pid;
 		type = ptype;
-
 		verboseJava = pverboseJava;
 		
 		switch (ptype) {
@@ -72,7 +78,7 @@ public class ToggleUnit extends BaseElement {
 		    disabledPicture = "src/pictures/elements/LandingGear_Off.png";
 		    activePicture = "src/pictures/elements/LandingGear_On.png";
 		    break;
-		  case "Switch":					
+		  case "Switch":
 		    disabledPicture = "src/pictures/elements/ToggleButton_Off.png";
 		    activePicture = "src/pictures/elements/ToggleButton_On.png";
 		    break;
@@ -81,52 +87,42 @@ public class ToggleUnit extends BaseElement {
 		    activePicture = "src/pictures/elements/Light_On.png";
 		}
 		
+		// create panel
 		panel = new JPanel();		
 		panel.setLayout(null);
-		panel.setBounds(px,py,104,124);
-//		panel.setBackground(Color.white );
-		panel.setBorder(LineBorder.createGrayLineBorder());
-		panel.setBackground(Color.black);
+		panel.setBorder(LineBorder.createBlackLineBorder());
+		panel.setBackground(Color.black);				
+		panel.setBounds(x, y, sizeX, sizeY);
 		
-		// label
-		JLabel  lblname = new JLabel(name);
-		lblname.setForeground(Color.white);
-		lblname.setBounds(8, 2, 95, 16);	
-		panel.add(lblname, 1, 0);		
-
 		// white frame
 		JPanel lblPicWhite = new JPanel();		
-	 	lblPicWhite.setBounds(2,22,100,100);
+	 	lblPicWhite.setBounds(1, 1, sizeX-3, sizeY-3);
 	 	lblPicWhite.setBackground(Color.white);
-	 	panel.add(lblPicWhite, 1, 0);
-		
+		panel.add(lblPicWhite, 1, 0);
+	
 		// picture
-	 	ImageIcon icon = null;
-	 	
-		lblPic.setBounds(3,22,100,100);
+	 	JLabel lblPic = new JLabel();
 		if(status == 0) {
-		   setPictures(this.disabledPicture);
-		   // lblPic.setIcon(new ImageIcon(disabledPicture).getImage().getScaledInstance(97, 97, java.awt.Image.SCALE_SMOOTH)); 			
+	 	    setPicture(lblPic, disabledPicture, picX, picY, picSizeX, picSizeY);
 		} else {
-		   setPictures(this.activePicture);
-		   // lblPic.setIcon(new ImageIcon(activePicture)); 			
+	 	    setPicture(lblPic, activePicture, picX, picY, picSizeX, picSizeY);
 		}
+	    lblPic.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	sandbox.RUN(name+".toggle()", name+":Manual activation");
+            }
+
+        });		
 		panel.add(lblPic, 1, 0);
 		
 		// lua require and interface 
-		urlAPI = "src/duElementAPI/toggleUnit.lua";		                    
+		urlAPI = "src/duElementAPI/toggleUnit.lua";
         luaCall = pname+" = createInterfaceToggleUnit(\""+pid+"\", \""+pname+"\", \""+ptype+"\")";
 		
         if(verboseJava) System.out.println("[JAVA] "+type+" ["+pname+"] created");	 		
 	}
 
-	public void setPictures(String picture) {				  
-		ImageIcon icon = null;
-		icon = new ImageIcon(picture);
-		Image image = icon.getImage();
-		Image newimage = image.getScaledInstance(97, 98, java.awt.Image.SCALE_SMOOTH);
-		lblPic.setIcon(new ImageIcon(newimage));			
-	}	
 
 	@Override	
     public Object get(String[] param) {    	
@@ -139,28 +135,28 @@ public class ToggleUnit extends BaseElement {
 	    }		
 		return -1;
     }
-
 	@Override
 	public void update(String[] param) {
 		// {State,name}
-	 	ImageIcon icon = null;
+		panel.remove(lblPic);
+		JLabel lblPic = new JLabel();
 		if(Integer.valueOf(param[0]) == 0) {
 			   status = 0;
-			   setPictures(this.disabledPicture);
-/*			   icon = new ImageIcon(this.disabledPicture);
-			   Image image = icon.getImage();
-			   Image newimage = image.getScaledInstance(97, 97, java.awt.Image.SCALE_SMOOTH);
-			   lblPic.setIcon(new ImageIcon(newimage));
-*/			   
+			   setPicture(lblPic, disabledPicture, picX, picY, picSizeX, picSizeY);
 		} else {
 			   status = 1;
-			   setPictures(this.activePicture);
-/*			   icon = new ImageIcon(this.activePicture);
-			   Image image = icon.getImage();
-			   Image newimage = image.getScaledInstance(97, 97, java.awt.Image.SCALE_SMOOTH);
-			   lblPic.setIcon(new ImageIcon(newimage)); */
+			   setPicture(lblPic, activePicture, picX, picY, picSizeX, picSizeY);
 		}
-		lblPic.setVisible(true);
+	    lblPic.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	sandbox.RUN(name+".toggle()", name+":Manual activation");
+            }
+
+        });			
+		panel.add(lblPic, 1, 0);
+		panel.revalidate();
+	    panel.repaint(); 
 		if(verboseJava) System.out.println("[JAVA] "+type+" " + param[1] + " state set to  " + param[0]); 
 	}
 }

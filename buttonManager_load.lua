@@ -32,7 +32,7 @@ obj = Unit(UnitStart, UnitStop)
 setupTimer(obj, 'loop', UnitTick)
 
 obj = ScreenUnit('screen1', 1024, 612)
-moveElement(obj, 200, 5)
+moveElement(obj, 210, 5)
 
 obj = LightUnit('Light1')
 obj = LightUnit('Light2')
