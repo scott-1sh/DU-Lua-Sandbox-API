@@ -40,7 +40,7 @@ function isystem:showScreen(bool)
    return JavaSystem:get({"showScreen", bool})    
 end
 
-function isystem:showScreen(content)
+function isystem:setScreen(content)
    return JavaSystem:get({"setScreen", content})
 end
 

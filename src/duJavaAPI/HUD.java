@@ -163,7 +163,7 @@ public void StartUpdateTimer(String updateScript) {
 		  @Override
 		  public void actionPerformed(ActionEvent ae) {
 
-			  // run script
+			  // run script/
 		  
 		  
 		       }     			  
