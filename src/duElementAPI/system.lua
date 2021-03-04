@@ -32,7 +32,7 @@ function isystem:new(o)
 end
 
 function isystem:getActionKeyName(actionName)
-   return 'test'
+   return ' '
    -- return JavaSystem:get({"getActionKeyName", actionName})    
 end
 
