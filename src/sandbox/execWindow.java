@@ -65,6 +65,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import duJavaAPI.Construct;
+import duJavaAPI.HUD;
 import duJavaAPI.Player;
 
 public class execWindow extends JFrame {
@@ -83,7 +84,8 @@ public class execWindow extends JFrame {
 	public static boolean lockedView = false;
 	public static boolean frozen = false;
 	private static JComboBox runToolBox;
-	public static List<String> editableScriptList = new ArrayList<String>();  
+	public static List<String> editableScriptList = new ArrayList<String>();
+	public static HUD hud;
 
 	public static void StopServices(DUElement[] elements) {
 	   		
@@ -113,7 +115,8 @@ public class execWindow extends JFrame {
 			   elem.element.update(cmd1);
 		   }
 	      
-	      desktop.setBackground(Color.BLACK);
+	      // dead status
+	      // desktop.setBackground(Color.BLACK);
 		}
 
 	}
@@ -148,11 +151,10 @@ public class execWindow extends JFrame {
 	    pre = new PreLoad(preload);                               	
 	    
 	    try {
-			MAIN.execWin = new execWindow(pre.elements, pre.worldConstruct, pre.worldPlayer, pre.MasterPlayerId, PreLoad.showOnScreen, PreLoad.verboseLua, PreLoad.verboseJava, MAIN.wConsole, PreLoad.editableScriptList, preload);
+			MAIN.execWin = new execWindow(pre, MAIN.wConsole, preload);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-
+		}    
 	}
 	
 	
@@ -382,14 +384,13 @@ public class execWindow extends JFrame {
   }
    
    
-  public execWindow(DUElement[] elements, List<Construct> worldConstruct, List<Player> worldPlayer,int pMasterPlayerId, int pshowOnScreen, boolean pverboseLua, boolean pverboseJava, winConsole pConsole, List<String> peditableScriptList, String ppreloadFile) throws IOException  {
+  public execWindow(PreLoad preload, winConsole pConsole, String ppreloadFile) throws IOException  {
 
-	  
 	execWindow.preloadFile = ppreloadFile;
-	verboseLua = pverboseLua;
-	verboseJava = pverboseJava;
-	screenId = pshowOnScreen; 
-	editableScriptList = peditableScriptList;
+	verboseLua = preload.verboseLua;
+	verboseJava =preload.verboseJava;
+	screenId = preload.showOnScreen; 
+	editableScriptList = preload.editableScriptList;
 	
 	desktop = new JDesktopPane();
 	desktop.setBackground(Color.gray);
@@ -402,7 +403,6 @@ public class execWindow extends JFrame {
 	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);  
 	frame.getContentPane().addMouseWheelListener(new wMouseWheelListener(this)); 
 	
-		
 	frame.getContentPane().setBackground(Color.gray);
 	frame.getContentPane().setFocusable(true);
 	frame.setContentPane(desktop);
@@ -412,21 +412,27 @@ public class execWindow extends JFrame {
 	frame.addWindowListener(new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
-           StopApplication(elements);
+           StopApplication(preload.elements);
         }	
     });
-       
+    
+	
 	pConsole.buildFrame(frame.getBounds());
 	desktop.add(pConsole.frame);
 
+	// Show HUD	
+	hud = new HUD(preload.hudParam.Script, preload.hudParam.x, preload.hudParam.y, preload.hudParam.sizeX, preload.hudParam.sizeY, verboseJava);
+    hud.buildFrame(frame.getBounds());
+	desktop.add(hud.frame);
+	
 	// setup a new LUA environment 
-	sandbox = new execLUA(this, elements, worldConstruct, worldPlayer, pMasterPlayerId, verboseLua);
+	sandbox = new execLUA(this, preload.elements, preload.worldConstruct, preload.worldPlayer, preload.MasterPlayerId, verboseLua);
 
 	// create the menu bar (require a valid sandbox instance)
 	createMenuBar();
 
 	// insert elements in the lua and java environment
-    for (DUElement elem : elements ) {
+    for (DUElement elem : preload.elements ) {
 	   if(elem == null) continue;	   
 		   // System.out.println("ELEMENT: "+elem.GetType());
 		   
@@ -451,14 +457,14 @@ public class execWindow extends JFrame {
 		   // setup Units
 		   if(elem.GetType().equals("duJavaAPI.Unit")) {
 			   // add stats
-               int scriptSize = sandbox.luaScriptToText(elements).length();	
+               int scriptSize = sandbox.luaScriptToText(preload.elements).length();	
                elem.element.AddtoStatPanel("memory:", scriptSize+"/20000");
                // stats for masterplayer
                if(sandbox.worldPlayer.size() > 0) {
-            	   elem.element.AddtoStatPanel("Master: ", pMasterPlayerId+"-"+ sandbox.worldPlayer.get(pMasterPlayerId).name);
+            	   elem.element.AddtoStatPanel("Master: ", preload.MasterPlayerId+"-"+ sandbox.worldPlayer.get(preload.MasterPlayerId).name);
                } else {
-            	   pMasterPlayerId = 0;
-            	   elem.element.AddtoStatPanel("Master: ", "0 - Default");
+            	   preload.MasterPlayerId = 0;
+            	   elem.element.AddtoStatPanel("Master: ", "0 - N/A");
             	   if(verboseJava) System.out.println("[JAVA] <i>Warning! No internal database for players and constructs.  Use setupDatabase in the PRELOAD phase to setup an iternal database.</i> ");
                }
                
@@ -474,7 +480,7 @@ public class execWindow extends JFrame {
 	frame.getContentPane().setVisible(true); 
 	
 	// Run all Start() scripts 
-	for (DUElement elem : elements ) {
+	for (DUElement elem : preload.elements ) {
 		if(elem == null) continue;
 		if(elem.GetType().equals("duJavaAPI.Unit")) {
 			if(elem.element.luaScriptStart != null) sandbox.RUN("self="+elem.element.name+" "+elem.element.luaScriptStart, elem.name+":start()" );		    

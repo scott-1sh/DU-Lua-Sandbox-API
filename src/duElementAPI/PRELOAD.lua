@@ -20,8 +20,8 @@
 
 _verboseLua = 0
 
-function setHUD(sizeX, sizeY, updateScript)
-  JavaLoader:set('setHUD', {sizeX, sizeY,  updateScript})
+function setHUD(updateScript, x, y, sizeX, sizeY)
+  JavaLoader:set('setHUD', {updateScript, x or 0, y or 0, sizeX or 0, sizeY or 0})
 end
 
 function showOnScreen(screen) 

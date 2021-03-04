@@ -49,8 +49,8 @@ public class winConsole extends OutputStream {
         frame = new JInternalFrame ("System.out", true, true, false, true);
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);       
         
-        frame.setBounds(deskSize.width-615, 1, 600, deskSize.height-50);
-        frame.setPreferredSize(new Dimension(600, deskSize.height-50));
+        frame.setBounds(deskSize.width-605, (deskSize.height/2)-50, 600, deskSize.height/2);
+        frame.setPreferredSize(new Dimension(600, deskSize.height/2));
         Container contentPane = frame.getContentPane ();
         contentPane.setLayout (new BorderLayout ());
         contentPane.add (
@@ -67,6 +67,7 @@ public class winConsole extends OutputStream {
         
 	}
 
+	@SuppressWarnings("unused")
 	private void scrolldown() {
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 		// try {

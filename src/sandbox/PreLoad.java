@@ -79,7 +79,20 @@ public class PreLoad {
 	public List<Construct> worldConstruct = null;
 	public List<Player> worldPlayer = (List<Player>) new ArrayList<Player>();
 	public int MasterPlayerId = 0;
-	public static List<String> editableScriptList = new ArrayList<String>(); 
+	public static List<String> editableScriptList = new ArrayList<String>();
+	public HudPreload hudParam = new HudPreload();
+	
+	// hud	
+	class HudPreload {
+		public HudPreload() { 
+			defaulthud = true; } 
+		public boolean defaulthud = true;
+		public String Script = "";
+		public int x;
+		public int y;
+		public int sizeX;
+		public int sizeY;
+	}
 	
 	private static String loadScript(String scriptFile) {	
 		
@@ -253,11 +266,11 @@ public class PreLoad {
 		Insets taskBarSize = Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());
 		
         // screenSize.width, screenSize.height
-		int margin = 4;
+		int margin = 5;
 		int x = margin, y = margin;
 		
 		// get element size 
-		int sizeX = elements[elementId].element.panel.getWidth()+6;
+		int sizeX = elements[elementId].element.panel.getWidth()+5;
 		int sizeY = elements[elementId].element.panel.getHeight()+18;
 		
 		// find the next xy position
@@ -391,8 +404,13 @@ public class PreLoad {
 
 			switch (command) {
 			case "setHUD": // crée un écran nomé HUD
-			             
-				return "";
+				hudParam.Script = param[0];
+				hudParam.defaulthud = false; 
+				hudParam.x = Integer.valueOf(param[1]);
+				hudParam.y = Integer.valueOf(param[2]);
+				hudParam.sizeX = Integer.valueOf(param[3]);
+				hudParam.sizeY = Integer.valueOf(param[4]);
+			     return "";
 			case "setupTimer":
                 //    return JavaLoader:set('setupTimer', {elementId, timerName, script})
                  elements[Integer.valueOf(param[0])].element.CreateTimer((Unit)elements[Integer.valueOf(param[0])].element , param[1], param[2]);

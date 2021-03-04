@@ -36,14 +36,14 @@
           color: blue;
           width: 260px;
           height: 30 0;}
-  .titleframe { background-image: url("./DOC/header.jpg"); 
+  .titleframe { 
    opacity: 0.97;
               position: absolute; 
               left: 0px;  
               top: 3px; 
               color: white; 
               font-size: 86px;
-              padding: 35px;
+              padding: 10px;
               width: 1245px; 
               border-bottom: 1px solid WHITE; 			  }
   .helpframe { 
@@ -187,7 +187,6 @@ compatible Windows 7-10<br>
 
   <a class="btn" href="#samples">Examples</a>
   <a class="btn" href="#export">Exporter un script</a>
-  <a class="btn" href="#addon">Module addons</a>
   <a class="btn" href="#construct">Dummy constructs</a>
   <a class="btn" href="#h2">BD SQL interne (H2)</a>
   <a class="btn" href="#todo">A faire (todo)</a>
@@ -1286,15 +1285,19 @@ Des examples de code source sont disponnible dans le répertoire de l'application
 <ul>
   <li>helloworld_load.lua: Un simpe helloworld.</li>
   <li>helloworld2_load.lua: Un simpe helloworld. un peu plus complexe.</li>
-  <li>ball_load.lua: Un test d'animation utilisant du svg.</li>
+  <li>bouncingball_load.lua: Un test d'animation utilisant du svg.</li>
   <li>buttonManager_load.lua: un button manager simple d'utilisation.</li>
   <li>databank_load.lua: utilisation d'une databank.</li>
   <li>debug_load.lua: quelques fonctions de debuguage.</li>
   <li>emitter_load.lua: utilisation d'un emitter.</li>
-  <li>helloworld_load.lua: Un simpe helloworld.</li>
   <li>mapview_load.lua: Radar de typee mapview (vue de haut)</li>
-  <li>radar_load.lua: Utilisation d'un radar.</li>
+  <li>flymart2_load.lua: Un exemple de calculateur d'inventaire.</li>
+  <li>visitor_load.lua: Un log de visiteur.  A activer avec un detector.</li>
+  <li>splitscreenx4_load.lua: Un test d'animation sur un affichage à 4 écran.</li>
+  <li>tricks_and_goodies.lua: Des trucs utile, trouvé un peu partout..</li>
+  
 </ul>
+
 <br/>
 <a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
 <br>
@@ -1311,16 +1314,12 @@ La fonction d'exports de l'api permet d'accéder au code source de l'API LUA.   I
 peut permettre de comprendre le fonctionnement interne de l'API.<br>
 <br>
 <br>
+Vous pouvez aussi exporter en JSON. L'implémentation n'est pas encore complète (C'est dans le haut de la liste de prioritée).  
+Bientôt, vous pourrez copier directement, la string JSON dans Dual universe.  (C'est déjà possible avec plusieurs des examples fourni (incluant visitor_load et flymart2).)  
+
+<br>
 <a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
 <br>
-<br>
-<br>
-<a name="addon"></a>
-<h1>Module addons</h1><br/>
-<br>
-La version final de la sandbox aura un système d'addon.  La création d'addon sera facilement réalisable grace au lua, à des outils faciles et à l'accèes à la mémoire de la sandbox.<br>
-<br>
-L'implémentation des modules d'Addon n'est pas encore fait, mais restes dans mes objectifs à long terme.<br>
 <br>
 <br>
 <a class="top" style="float: right;" href="#top">retourner à l'index</a><br>

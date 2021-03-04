@@ -67,7 +67,7 @@ public class MAIN {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					execWin = new execWindow(pre.elements, pre.worldConstruct, pre.worldPlayer, pre.MasterPlayerId, pre.showOnScreen, pre.verboseLua, pre.verboseJava, wConsole,  pre.editableScriptList, preloadFile);
+					execWin = new execWindow(pre, wConsole, preloadFile);
 					pre = null;
 				} catch (Exception e) { e.printStackTrace(); }
 			}
