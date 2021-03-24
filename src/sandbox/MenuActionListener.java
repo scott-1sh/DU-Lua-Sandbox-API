@@ -147,6 +147,8 @@ class MenuActionListener implements ActionListener {
 		}
 	  
 	  // export to json
+	  // call the export method for each elements
+	  // exports return an array {luaScriptStart, args, sign, slotKey}
 	  private void JsonExport(DUElement[] elements)
 	  {
 		 String strSlots = "";
@@ -167,8 +169,8 @@ class MenuActionListener implements ActionListener {
 			  strSlots += String.format("\"%d\":{\"name\":\"%s\",\"type\":{\"events\":[],\"methods\":[]}},", i, "slot"+(i+1) );			  
 		  }
 		  strSlots += "\"-1\":{\"name\":\"unit\",\"type\":{\"events\":[],\"methods\":[]}},"
-		  		    +"\"-2\":{\"name\":\"system\",\"type\":{\"events\":[],\"methods\":[]}},"
-		  		    +"\"-3\":{\"name\":\"library\",\"type\":{\"events\":[],\"methods\":[]}}";
+		  		    + "\"-2\":{\"name\":\"system\",\"type\":{\"events\":[],\"methods\":[]}},"
+		  		    + "\"-3\":{\"name\":\"library\",\"type\":{\"events\":[],\"methods\":[]}}";
 		
 		 // handlers (and scripts) 
 		 String strHandlers = "", strFilter;
@@ -185,6 +187,17 @@ class MenuActionListener implements ActionListener {
             	  iKey++; 
               }
 		  }
+		  		  
+		  // if hud is set, add it
+		  if(eWindow.hud != null) {
+			  if(eWindow.hud.updateScript != null) {
+				  String[] sHandler = eWindow.hud.export().get(0);
+				  strFilter = String.format(fFilter, sHandler[1], sHandler[2], sHandler[3] );
+				  strHandlers += String.format(fHandler, escape(sHandler[0].stripTrailing()), strFilter,  iKey );			  
+				  iKey++; 
+			  }
+		  }
+		  
 		  strHandlers = strHandlers.substring(0,strHandlers.length()-1); // remove last virgul
 		  
 		  luaExport(String.format(strJSON, strSlots, strHandlers), "JSON", ".txt");
@@ -201,7 +214,7 @@ class MenuActionListener implements ActionListener {
 			Files.writeString(Paths.get(fileName), luaSource);
 		  } catch (IOException e) { e.printStackTrace();}
 
-		  System.out.println("API exported to  "+fileName ); 
+		  System.out.println("Script exported to  "+fileName ); 
 		  openfile(fileName);
 	  }  
 	  

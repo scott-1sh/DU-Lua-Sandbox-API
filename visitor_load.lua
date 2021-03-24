@@ -64,7 +64,7 @@ playerList[19] = {id = 19, name = 'Line', worldPos = {125,-33,66}}
 playerList[20] = {id = 20, name = 'Maude', worldPos = {125,-33,66}} 
 playerList[21] = {id = 21, name = 'Bart', worldPos = {125,-33,66}} 
 playerList[22] = {id = 22, name = 'Lisa', worldPos = {125,-33,66}} 
-owner = 12
+
 
 constructList = {}
 constructList[1] = {id = 1, owner = 7, name = 'Base 1', ctype='static',  pos = {133,-6233,66}, size = {115,134,122}, speed = {0,0,0}, mass = 2101.323 }
@@ -79,5 +79,6 @@ constructList[8] = {id = 8, owner = 6, name = 'Base 4', ctype='static',  pos = {
 constructList[9] = {id = 9, owner = 0, name = 'Base 5', ctype='static',  pos = {2300,4000,0}, size = {44,34,45}, speed = {0,0,0}, mass = 2101.323 }
 constructList[10] = {id = 10, owner = 0, name = 'Base 6', ctype='static',  pos = {4000,-400,0}, size = {44,34,45}, speed = {0,0,0}, mass = 2101.323 }
 
+owner = 8
 setupDatabase(playerList, constructList, owner)
 

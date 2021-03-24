@@ -65,7 +65,6 @@ function createInterfaceCore(id, name)
   obj.getWorldVertical = function() return obj.core:getWorldVertical() end
   obj.getAngularVelocity = function() return obj.core:getAngularVelocity()  end
   obj.getWorldAngularVelocity = function() return obj.core:getWorldAngularVelocity() end
-  obj.getConstructMass = function() return obj.core:getConstructMass() end
   obj.getWorldAngularAcceleration = function() return obj.core:getWorldAngularAcceleration()  end
   obj.getVelocity = function() return obj.core:getVelocity() end
   obj.getWorldVelocity = function() return obj.core:getWorldVelocity() end

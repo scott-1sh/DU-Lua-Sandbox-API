@@ -52,7 +52,7 @@ public class execLUA {
 	public int Z = 10;
 	public DUElement[] elements;
 	public static List<Construct> worldConstruct = null;
-	public List<Player> worldPlayer = null;
+	public static List<Player> worldPlayer = null;
 	public int MasterPlayerId = 1;
 	private static Database database = null;
 	static execWindow eWindow;
@@ -70,6 +70,19 @@ public class execLUA {
 		return script;
     }	
 
+	
+	// Calculate the size of all user scripts using element.export()
+	public int scriptMemoryUsed(DUElement[] elements) {
+		int total = 0;
+ 		  for (DUElement elem : elements ) {
+			  if(elem == null || elem.element.export() == null) continue;
+              for(String[] exportTable : elem.element.export()) {
+            	  total  += exportTable[0].length();	
+              }
+		  }
+		return total;		
+	}
+	
 	private String LoadAPI(String apiFile) {	
 		String data = ""; 
 		
@@ -151,6 +164,8 @@ public class execLUA {
         
 	    // Start timers for world constructs
 		if(worldConstruct != null) startTimer((float).3); 	    
+
+		if(execWindow.verboseLua) System.out.println("[LUA] Lua Session Started");
 	}
 
 	// Timer for world constructs actions
@@ -241,7 +256,6 @@ public class execLUA {
 	}
 
 	
-	@SuppressWarnings("static-access")
 	public void RUN(String script, String Source) {
 		String pattern = "[:](.*)$";
 		Pattern r = Pattern.compile(pattern);
@@ -253,11 +267,12 @@ public class execLUA {
 			catch (Exception e) {
 				String gmsg = "\nLUA ERROR: "+Source+"\n\n";
 			    
-				// message tail
-				Matcher m = r.matcher(e.getMessage());
+				// get last line of getMessage
+				Matcher m = r.matcher(e.getMessage().replace("\n", ""));
 			    if (m.find( )) {
 				  gmsg += "line "+m.group(1)+"\n\n";
 			    }
+			    
 			    System.out.println(gmsg);
 				execWindow.StopServices(elements);
 				execWindow.frame.setTitle(execWindow.frame.getTitle()+" - dead!");

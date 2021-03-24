@@ -1,2 +1,9 @@
 /bin/
 
+/flymart_load.lua
+/flymart_start.lua
+/flymart_start_bak.lua
+/flymartFuelStation_Scrap_start.lua
+/flymartFuelStation_load.lua
+/flymartFuelStation_start.lua
+/flymart_tick.lua

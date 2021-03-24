@@ -33,13 +33,13 @@ setupTimer(obj, 'loop', UnitTick)
 
 playerList = {} -- also used as owners list
 playerList[1] = {id = 0, name = 'unreachable', worldPos = {0,0,0}}
-playerList[2] = {id = 1, name = 'Nmare418', worldPos = {131,-33,36}}
-playerList[3] = {id = 2, name = 'Ecrevisse', worldPos = {123,-23,64}}
-playerList[4] = {id = 3, name = 'MikeBuke', worldPos = {113,-623,46}}
-playerList[5] = {id = 4, name = 'Knight-Sevy', worldPos = {114,-633,56}}
-playerList[6] = {id = 5, name = 'mendrakemaster', worldPos = {124,-63,26}}
-playerList[7] = {id = 6, name = 'Dynamo', worldPos = {125,-33,66}} 
-playerList[8] = {id = 7, name = 'Cronael', worldPos = {125,-33,66}} 
+playerList[2] = {id = 1, name = 'Player 1', worldPos = {131,-33,36}}
+playerList[3] = {id = 2, name = 'Player 2', worldPos = {123,-23,64}}
+playerList[4] = {id = 3, name = 'Player 3', worldPos = {113,-623,46}}
+playerList[5] = {id = 4, name = 'Player 4', worldPos = {114,-633,56}}
+playerList[6] = {id = 5, name = 'Player 5', worldPos = {124,-63,26}}
+playerList[7] = {id = 6, name = 'Player 6', worldPos = {125,-33,66}} 
+playerList[8] = {id = 7, name = 'Player 7', worldPos = {125,-33,66}} 
 
 constructList = {}
 constructList[1] = {id = 1, owner = 7, name = 'Base 1', ctype='static',  pos = {133,-6233,66}, size = {115,134,122}, speed = {0,0,0}, mass = 2101.323 }
@@ -63,4 +63,4 @@ obj = RadarUnit('radar1', 10000, constructList, scriptEnter, scriptExit)
 
 -- Screen
 obj = ScreenUnit('screen1', 1024, 612)
-moveElement(obj, 415, 5)
+moveElement(obj, 225, 5)

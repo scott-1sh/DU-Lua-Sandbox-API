@@ -1,5 +1,5 @@
 --[[    
-    databank_load.lua 
+    hud_tick.lua 
     Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU offline sandbox API".
@@ -17,19 +17,24 @@
     You should have received a copy of the GNU General Public License
     along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 ]]
+local svgBalls = ''
 
-showOnScreen(1) 
-verboseLua(1)
-verboseJava(1)
+-- Moving balls
+for i,v in ipairs(x) do 
+  -- bounce?
+	if x[i]+dirx[i]+ballRayon > screenX or x[i]+dirx[i]-ballRayon < 1 then
+    	dirx[i] = -dirx[i]
+	end  
+    if y[i]+diry[i]+ballRayon > screenY or y[i]+diry[i]-ballRayon < 1 then 
+  		diry[i] = -diry[i] 
+  	end 
+	x[i] = x[i] + (dirx[i]*speed)
+	y[i] = y[i] + (diry[i]*speed)
+	svgBalls = svgBalls..svgBall(x[i], y[i], ballRayon)
+end
+    
+screen1.clear()
 
--- Unit
-UnitStart = loadScript('databank_start.lua')
-UnitStop = "print('stopped')" 
-obj = Unit(UnitStart, UnitStop)
+screen1.addContent(0,0, string.format(htmlBackground, svgBalls))
 
--- Databank
-obj = DataBankUnit('db1')
 
--- Screen
-obj = ScreenUnit('screen1', 1024, 612)
-moveElement(obj, 210, 5)

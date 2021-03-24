@@ -26,17 +26,26 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.plaf.ColorUIResource;
+
+import duJavaAPI.BaseElement;
 
 public class execFrame   {
 	private JInternalFrame desktop;
-   
-	public execFrame(String name) {
-
+	private JPanel panel; // element's panel
+	BaseElement element; 
+	
+	public execFrame(String name, BaseElement pelement) {
+ 
+		element = pelement;
+		
 		desktop = new JInternalFrame(name ,  false, true, false, true);
 		desktop.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         /*
@@ -48,6 +57,9 @@ public class execFrame   {
 			e.printStackTrace();
 		}
 		*/
+		
+		
+		
 		// remove top left icon
 		// BasicInternalFrameUI ui = (BasicInternalFrameUI)desktop.getUI();
 		 javax.swing.plaf.basic.BasicInternalFrameUI ui = new javax.swing.plaf.basic.BasicInternalFrameUI(desktop); 
@@ -101,6 +113,25 @@ public class execFrame   {
 		north.validate();
 		north.repaint();
 		*/
+			/*
+desktop.addComponentListener(new ComponentAdapter() {
+ // componentShown(ComponentEvent e)
+ // componentResized(ComponentEvent e)
+ // componentHidden(ComponentEvent e)
+	public void componentMoved(ComponentEvent e){
+		
+		java.awt.Point loc =e.getComponent().getLocation();
+		panel.revalidate();
+		panel.repaint();
+		panel.getComponent(0).revalidate();
+		panel.getComponent(0).repaint();
+		System.out.println("[JAVA] !!!!!! moved! "+loc.x +" X " +loc.y);
+		desktop.getContentPane().getComponent(0).repaint();
+		desktop.getContentPane().getComponent(0).revalidate();
+	}
+});
+*/
+
 /*
  desktop.addInternalFrameListener(new InternalFrameListener() {
 			@Override
@@ -117,6 +148,10 @@ public class execFrame   {
 			}
 			@Override
 			public void internalFrameIconified(InternalFrameEvent e) {
+				// element.LoadScreen(null);
+				
+				element.web.revalidate();
+				 element.web.repaint();
 				System.out.println("[JAVA] !!!!!! iconified");
 				 return;
 			}
@@ -130,20 +165,10 @@ public class execFrame   {
 			}
 			@Override
 			public void internalFrameDeactivated(InternalFrameEvent e) {
-				System.out.println("[JAVA] !!!!!! deactivated");
+					System.out.println("[JAVA] !!!!!! deactivated");
 			}
         });
-		*/		
-		// javax.swing.plaf.basic.BasicInternalFrameUI ui = new javax.swing.plaf.basic.BasicInternalFrameUI(desktop); 
-		// W/DU-Offline-editor/src/pictures/icon.png
-		 // desktop.setFrameIcon(new ImageIcon("src/pictures/icon.png"));
-		  // URL url = new URL("./src/pictures/LogoDUAPI_PNG.png");
-//		  ImageIcon icon = new ImageIcon(url);
-		   // ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource(".\src\pictures\LogoDUAPI_PNG.png"));
-//		  jframe.setFrameIcon(icon);
-		  // jframe.setFrameIcon("src/pictures/LogoDUAPI_PNG.png");
-		  // jframe.setFrameIcon(icon);
-
+	*/	
 		
 	}
 

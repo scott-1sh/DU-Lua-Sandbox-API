@@ -30,6 +30,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -43,13 +47,17 @@ import javax.swing.text.DefaultCaret;
 
 import chrriis.dj.nativeswing.NSComponentOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import sandbox.execLUA;
+import sandbox.execTimer;
 import sandbox.execWindow;
 
 
 public class HUD {
 public int sizeX;
 public int sizeY;
-public JWebBrowser web = null;
+public int speed = 80;
+public String updateScript;
+private JWebBrowser web = null;
 public String html = "";
 private String cr = "\r\n";
 public int x = 0;
@@ -57,37 +65,53 @@ public int y = 0;
 public int id = 0;
 public JPanel panel = new JPanel();
 public JInternalFrame frame;
-Timer timer = null; 
+public static Timer timer = null; 
 //String baseHtml = "<html><head></head><body></body></html>\r\n";
-
-String baseHtml = "<!DOCTYPE html>\r\n" + 
-		"<html>\r\n" + 
+String hudBg;
+String baseHtml = "<html>\r\n" + 
 		"<head>\r\n" + 
-		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n" + 
-		"<style>\r\n" + 
-		"#overlay {\r\n" + 
-		"  position: fixed;" + 
-		"  display: block;" + 
-		"  width: 100%%;" + 
-		"  height: 100%%;" + 
-		"  top: 0;" + 
-		"  left: 0;" + 
-		"  right: 0;" + 
-		"  bottom: 0;" + 
-		"  background-color: rgba(0,0,0,0);" + 
-		"  z-index: 2;" + 
-		"}\r\n" + 
-		"</style>\r\n</head><body></body></html>\r\n";
+        "</head><body>" +
+		"</body></html>\r\n";
 		
 public HUD(String pupdateScript, int px, int py, int psizeX, int psizeY,  boolean pverboseJava) {
     x = px;
 	y = py;
 	sizeX = psizeX;
 	sizeY = psizeY;
-   
+	updateScript = pupdateScript;
+	
+	hudBg = "<div style=\"overflow-y:hidden;overflow-x:hidden; "
+                       + " background-attachment: fixed; "
+                       + " background-size: cover;"
+                       + "background-image: "+loadEncodedBG("./src/pictures/hudbg_enc64.txt")+"; "
+                       + "width: 100vw; height: 100vh;\">";
+    
+	baseHtml = "<html>\r\n" + 
+	           "<head>\r\n" + 
+               "</head>" +
+              "<style>" +
+	           "body {" +
+	               "height: 100%;" +
+	               "width: 100%;" +
+	               "margin: 0;" +
+	               "padding: 0;" +
+	           "}" +
+	           "</style>" +
+               "<body>"+hudBg+"</body></html>\r\n";
+	           
+	
+	
     if(pverboseJava) System.out.println("[JAVA] HUD created");	 		
 }
 
+private static String loadEncodedBG(String txtFile) {	
+	try {
+	  return new String(Files.readAllBytes(Paths.get(txtFile))); 
+	} catch (IOException e) 
+	{ return "(Encode64) bg file not found: "+txtFile; }
+
+}
+/*
 protected void setPicture(JLabel container, String picture, int x, int y, int width, int height) {				  
 	ImageIcon icon = null;
 	icon = new ImageIcon(picture);
@@ -98,14 +122,15 @@ protected void setPicture(JLabel container, String picture, int x, int y, int wi
 	container.revalidate();
 	container.repaint();
 }	
+*/
 
 public void buildFrame(Rectangle deskSize) {
 	// if sizeX or sizeY is null, set to default position
 	if(x+y+sizeX+sizeY == 0) {
 		x = deskSize.width-605;
-		y = 1;
+		y = 0;
 		sizeX = 600;
-		sizeY = (deskSize.height/2)-30;		
+		sizeY = (deskSize.height/2)-36;		
 	}
 
     panel = new JPanel();		
@@ -116,24 +141,45 @@ public void buildFrame(Rectangle deskSize) {
 	
 	panel.setBackground(Color.black);
 
+    LoadScreen();
+
 	frame = new JInternalFrame ("HUD", true, true, false, true);
     frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);       
     
     frame.setBounds(panel.getBounds());
-    frame.setPreferredSize(new Dimension(600, panel.getBounds().height));
+    frame.setPreferredSize(new Dimension(panel.getBounds().width, panel.getBounds().height));
     Container contentPane = frame.getContentPane ();
     contentPane.setLayout (new BorderLayout ());
     contentPane.add (
         new JScrollPane (
             panel, 
-            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
-            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
+            JScrollPane.VERTICAL_SCROLLBAR_NEVER , 
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),
         BorderLayout.CENTER);
     frame.pack();
     
-    LoadScreen();
-    
+
     frame.setVisible(true);
+}
+	
+
+public void update(String htmlDoc) {
+	// create an overlay
+	html = "<style>" +
+	           "body {" +
+            "height: 100%;" +
+            "width: 100%;" +
+            "margin: 0;" +
+            "padding: 0;" +
+        "}" +
+        "</style>"; 
+	html += hudBg+htmlDoc+"</div>";
+	html = html.replace("\"", "\\\"");
+	html = "document.getElementsByTagName(\"HTML\")[0].innerHTML =  \""+html+"\";";	    	
+	html = html.replace( "\r", "");
+	html = html.replace( "\n", "");
+	// System.out.println("HTML OUT: "+html.replaceAll("<[^>]*>", ""));	 	
+	web.executeJavascript(html);
 }
 
     
@@ -141,97 +187,54 @@ public void buildFrame(Rectangle deskSize) {
 public void LoadScreen() {		
 	 web = new JWebBrowser(JWebBrowser.destroyOnFinalization());
 	// NSComponentOptions.constrainVisibility(),NSComponentOptions.destroyOnFinalization()
-    web.setStatusBarVisible(false);
+	web.setStatusBarVisible(false);
 	web.setMenuBarVisible(false);
 	// web.setBorder(null);		
-	web.setBounds(0, 0, sizeX-13, sizeY-37);
+	web.setBounds(0, 0, sizeX-13, sizeY-36);
 	web.setButtonBarVisible(false);
 	web.setBarsVisible(false);
 	web.setAutoscrolls(false);
-	// web.setDoubleBuffered(true);
-	web.setBackground(Color.black);
+	 web.setDoubleBuffered(true);
+	// web.setBackground(Color.black);
 	web.setJavascriptEnabled(true);
-
+	// web.setHTMLContent(baseHtml);
+	web.setHTMLContent(baseHtml);
 	panel.add(web, 1, 0);
+	
 	panel.setVisible(true);
 	web.setHTMLContent(baseHtml);
-} 
 
-public void StartUpdateTimer(String updateScript) {
+	
+}
 
-	timer = new Timer(16, new ActionListener() { 
+
+public void StartUpdateTimer(String pupdateScript, execLUA sandbox) {
+	if(execWindow.verboseJava) System.out.println("[JAVA] Hud update events are now triggered every "+speed+"ms");
+	timer = new Timer(speed, new ActionListener() { 
 		  @Override
 		  public void actionPerformed(ActionEvent ae) {
-
-			  // run script/
-		  
-		  
+			 //  System.out.println("OUT:"+pupdateScript);
+			  sandbox.RUN(pupdateScript, "system:update()");
 		       }     			  
-		  }
-		   
-	   });	  
+		  });	  
+	 timer.start();
 
-	  timer.start();
 }
 
-	
-	
-	
-}
-
-
-/*
-@Override
-public void update(String[] param) {
-//	String pname = param[2];
-	String phtml = param[1];
-	String pcommand = param[0];
-	 
-    if(pcommand.equals("setSVG")) {
-
-    	// create an overlay
-    	html = "<div id=\"overlay\">"+phtml+"</div>";
-    	html = html.replace("\"", "\\\"");
-    	html = "document.getElementsByTagName(\"BODY\")[0].innerHTML = document.getElementsByTagName(\"BODY\")[0].innerHTML + \""+html+"\";";	    	
-    	html = html.replace( "\r", "");
-    	html = html.replace( "\n", "");	    	
-    	
-    	web.executeJavascript(html);
-        // System.out.println("test:"+html);
+// Export all scripts related to this element
+// used for text and json export
 		
-    }	
-    if(pcommand.equals("setCenteredText")) {
-        
-    	String centerhtml = "<div style=\"color: #FFFFFF; font-size: 5VW; background-color: #000; width: 100%; height: 100%; text-align: center; line-height: 100VH;\">"+phtml+"</div>";	    
+public ArrayList<String[]> export() {
+   ArrayList<String[]> listScript = new ArrayList<String[]>();
    
-    	// create an overlay
-    	html = "<div id=\"overlay\">"+centerhtml+"</div>";
-    	html = html.replace("\"", "\\\"");
-    	html = "document.getElementsByTagName(\"BODY\")[0].innerHTML = document.getElementsByTagName(\"BODY\")[0].innerHTML + \""+html+"\";";	    	
-    	html = html.replace( "\r", "");
-    	html = html.replace( "\n", "");	    	
-    	
-    	web.executeJavascript(html);
-        // System.out.println("test:"+html);
-		
-    }	
-    if(pcommand.equals("addContent")) {
-
-    	// create an overlay
-    	html = "<div id=\"overlay\">"+phtml+"</div>";
-    	html = html.replace("\"", "\\\"");
-    	html = "document.getElementsByTagName(\"BODY\")[0].innerHTML = document.getElementsByTagName(\"BODY\")[0].innerHTML + \""+html+"\";";	    	
-    	html = html.replace( "\r", "");
-    	html = html.replace( "\n", "");	    	
-    	
-    	web.executeJavascript(html);
-        // System.out.println("test:"+html);
-    }	
-    if(pcommand.equals("clear")) {
-    	web.executeJavascript("document.getElementsByTagName(\"BODY\")[0].innerHTML = \"\";");
-    }	
-		
+   if(updateScript != null) {
+	   // update
+	   String sign = "update()";
+	   String args = "[]";
+	   String slotKey = "-2";
+	   listScript.add(new String[]{updateScript, args, sign, slotKey}); 
+   }
+   return listScript;
 }
-
-*/
+	
 }

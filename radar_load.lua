@@ -65,7 +65,7 @@ obj = RadarUnit('radar1', 10000, scriptEnter, scriptExit)
 
 -- Screen
 obj = ScreenUnit('screen1', 1024, 612)
-moveElement(obj, 410, 5)
+moveElement(obj, 230, 5)
 
 -- A json lib is included in the PRELOAD session (https://github.com/rxi/json.lua)
 -- print(json.encode(constructList))

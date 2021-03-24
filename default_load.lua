@@ -1,14 +1,6 @@
 
 -- Tips, use dofile to load a specific script as default 
 -- dofile('visitor_load.lua')
-dofile('buttonManager_load.lua')
--- dofile('flymartFuelStation_load.lua')
--- dofile('splitscreenx4_load.lua')
---[[ 
-
--- dofile('databank_load.lua')
--- dofile('buttonManager_load.lua')
-
 
 -- json lib included (https://github.com/rxi/json.lua)
 
@@ -16,7 +8,8 @@ dofile('buttonManager_load.lua')
 showOnScreen(1)
  
 verboseLua(1)
-verboseJava(0)
+verboseJava(1)
+
 
 -- Unit
 UnitStart = loadScript('default_start.lua')
@@ -24,9 +17,12 @@ UnitStop = "print('stopped')"
 
 obj = Unit(UnitStart, UnitStop)
 
+
+setHUD()
+
 playerList = {} -- also used as owners list
 playerList[1] = {id = 0, name = 'unreachable', worldPos = {0,0,0}}
-playerList[2] = {id = 1, name = 'Nmare418', worldPos = {131,-33,36}}
+playerList[2] = {id = 1, name = 'Bob', worldPos = {131,-33,36}}
 playerList[3] = {id = 2, name = 'Roger', worldPos = {123,-23,64}}
 playerList[4] = {id = 3, name = 'Robert', worldPos = {113,-623,46}}
 playerList[5] = {id = 4, name = 'Marie', worldPos = {114,-633,56}}
@@ -53,11 +49,11 @@ setupDatabase(playerList, constructList, 2)
 -- radar
 local scriptEnter = " "
 local scriptExit = " "
-obj = RadarUnit('radar1', 10000, scriptEnter, scriptExit)
+-- obj = RadarUnit('radar1', 10000, scriptEnter, scriptExit)
 
 -- screen
 obj = ScreenUnit('screen1', 1024, 612)
-moveElement(obj, 500, 5)
+moveElement(obj, 220, 5)
 
 -- Construct id 2 related to the constructList table (used in setupDatabase) 
 obj = Core(16, 'dynamic', 7.3, 1)
@@ -81,7 +77,7 @@ obj = ButtonUnit('button1', 'toggle', "Light1.toggle() Door3.toggle() Forcefield
 -- addChannel(obj,'channel2', "print('hello')")
 -- obj = EmitterUnit('emitter1') 
 -- obj = Navigator()
-]]
+
 
 --[[
 for i, constr in ipairs( constructList) do

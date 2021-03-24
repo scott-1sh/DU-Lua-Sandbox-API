@@ -29,7 +29,9 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import sandbox.DUElement;
+import sandbox.PreLoad;
 import sandbox.execLUA;
+import sandbox.execWindow;
 
 public class Core extends BaseElement {
  	private JLabel lblPic = new JLabel();
@@ -53,7 +55,7 @@ public class Core extends BaseElement {
     public double g = 9;
     public float mass; 
 	
-	public Core(int pid, int pconstructId, int pcoreSize, String pcoreType, Double pg, int px, int py, boolean pverboseJava) {
+	public Core(PreLoad preload, int pid, int pconstructId, int pcoreSize, String pcoreType, Double pg, int px, int py, boolean pverboseJava) {
 		constructId = pconstructId;
 		name = "core";
 		x = px;
@@ -88,6 +90,8 @@ public class Core extends BaseElement {
 		AddtoStatPanel("size:", Integer.toString(coreSize));
 		AddtoStatPanel("Type:", coreType);
 		// AddtoStatPanel("Elements:", Integer.toString(GetElementsCount()));
+ 	   AddtoStatPanel("Construct: ", pconstructId +" - "+ preload.worldConstruct.get(pconstructId).name);
+
 		
 		
 		// lua require and interface 
@@ -99,7 +103,7 @@ public class Core extends BaseElement {
 
 	private int GetElementsCount() {
 		int count = 0;
-		for (DUElement elem : execWin.  sandbox.elements ) {
+		for (DUElement elem : execWindow.  sandbox.elements ) {
 			   if(elem == null) continue;
 			   count++;
 			 }		
@@ -120,8 +124,8 @@ public class Core extends BaseElement {
         LuaTable result = new LuaTable();
 
         switch (pcommand) {
-			case "ConstructMass": // to upgrade, actually, 
-		        return this.mass;
+			case "ConstructMass": // to upgrade,  
+		        return this.mass*coreSize;
 			case "ConstructIMass": // to upgrade
 		        return 100;
 			case "ConstructCrossSection": // to upgrade
@@ -132,10 +136,14 @@ public class Core extends BaseElement {
 				result.set(3, CoerceJavaToLua.coerce(1));
 				result.set(4, CoerceJavaToLua.coerce(1));
 		        return result;
-			case "ConstructWorldPos":				                
-				result.set(1, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).pos[0]));
-				result.set(2, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).pos[1]));
-				result.set(3, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).pos[2]));
+			case "ConstructWorldPos":
+				if(execLUA.worldConstruct == null) {
+					System.out.println("[JAVA] Critical error.  ConstructWorldPos need to setup world constructs. Use the SetupsetupDatabase function in the preload file. ");
+					return null;
+				}
+				result.set(1, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).pos[0]));
+				result.set(2, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).pos[1]));
+				result.set(3, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).pos[2]));
 				return result;
 			case "ConstructId":
 		        return constructId;
@@ -182,7 +190,7 @@ public class Core extends BaseElement {
 				objName = sandbox.elements[Integer.valueOf(param[1])].element.name;
 				return execLUA.globals.get(objName).get("mass").toString(); 
 			case "Altitude":
-				return sandbox.worldConstruct.get(constructId).pos[2];
+				return execLUA.worldConstruct.get(constructId).pos[2];
 			case "g":
 		        return this.g;
 			case "WorldGravity":
@@ -198,19 +206,31 @@ public class Core extends BaseElement {
 			case "WorldAngularAcceleration": // todo
 		        return this.g;
 			case "Velocity":
-				result.set(1, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[0]));
-				result.set(2, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[1]));
-				result.set(3, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[2]));
+				if(execLUA.worldConstruct == null) {
+					System.out.println("[JAVA] Critical error.  core.Velocity need to setup world constructs. Use the SetupsetupDatabase function in the preload file. ");
+					return null;
+				}				
+				result.set(1, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[0]));
+				result.set(2, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[1]));
+				result.set(3, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[2]));
 		        return result;
 			case "WorldVelocity":
-				result.set(1, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[0]));
-				result.set(2, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[1]));
-				result.set(3, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[2]));
+				if(execLUA.worldConstruct == null) {
+					System.out.println("[JAVA] Critical error.  core.worldConstruct need to setup world constructs. Use the SetupsetupDatabase function in the preload file. ");
+					return null;
+				}				
+				result.set(1, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[0]));
+				result.set(2, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[1]));
+				result.set(3, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[2]));
 		        return result;
 			case "WorldAcceleration":
-				result.set(1, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[0]));
-				result.set(2, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[1]));
-				result.set(3, CoerceJavaToLua.coerce(sandbox.worldConstruct.get(constructId).speed[2]));
+				if(execLUA.worldConstruct == null) {
+					System.out.println("[JAVA] Critical error.  core.worldAcceleration need to setup world constructs. Use the SetupsetupDatabase function in the preload file. ");
+					return null;
+				}						
+				result.set(1, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[0]));
+				result.set(2, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[1]));
+				result.set(3, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(constructId).speed[2]));
 		        return result;
 			case "ConstructOrientationUp":
 				result.set(1, CoerceJavaToLua.coerce(worldUp[0]));

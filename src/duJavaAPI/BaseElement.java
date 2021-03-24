@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import sandbox.PreLoad;
 import sandbox.execLUA;
 import sandbox.execTimer;
@@ -52,6 +53,7 @@ public class BaseElement {
 	public int id = 0;
 	public JPanel panel = new JPanel();
 	public JPanel stats = new JPanel();
+    public JWebBrowser web = null;
 	public String name = "commonName";
 	public String urlAPI= "";
     public String luaCall = "";

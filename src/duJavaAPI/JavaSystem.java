@@ -54,7 +54,7 @@ public class JavaSystem {
 			        return "";
 				case "setScreen": // todo
 					/* !!!!!!!!!!!!!!!! */
-					
+					eWindow.hud.update(param[1]);
 					// param[1] = content
 			        return "";
 				case "createWidgetPanel": // todo

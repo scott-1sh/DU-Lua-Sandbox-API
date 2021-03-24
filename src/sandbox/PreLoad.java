@@ -76,7 +76,7 @@ public class PreLoad {
 	public static boolean verboseJava = false;
 	public int countElements = 0;
 	public Database db = null; 
-	public List<Construct> worldConstruct = null;
+	public static List<Construct> worldConstruct = null;
 	public List<Player> worldPlayer = (List<Player>) new ArrayList<Player>();
 	public int MasterPlayerId = 0;
 	public static List<String> editableScriptList = new ArrayList<String>();
@@ -119,7 +119,7 @@ public class PreLoad {
 	}	
  
 	public PreLoad(String pscriptFile) {			
-
+		
 		JPanel contentPane;
 		frame = new JFrame();
 		contentPane = new JPanel();
@@ -128,7 +128,7 @@ public class PreLoad {
         globals.STDOUT = new PrintStream (MAIN.wConsole);
         
 	    // coerce javaloader functions
-		globals.set("JavaLoader", CoerceJavaToLua.coerce(new JavaLoader()));
+		globals.set("JavaLoader", CoerceJavaToLua.coerce(new JavaLoader(this)));
 
 		// lua tools
 		String scriptJSON = loadScript("src/duElementAPI/JSON.lua")+"\n";
@@ -309,7 +309,12 @@ public class PreLoad {
     
 	// Run Preload script		
 	private class JavaLoader {
-				
+		PreLoad preload;
+		
+		public JavaLoader(PreLoad preLoad) {
+			preload = preLoad;
+		}
+
 		@SuppressWarnings("unused")
 		public int add(String Element, String name, String[] param) {
 			List<Construct> construct = null;
@@ -387,7 +392,7 @@ public class PreLoad {
 					return countElements;
 				case "CoreUnit":
 					countElements++;
-					elements[countElements] = new DUElement(countElements, name, new Core(countElements, Integer.valueOf(param[3]), Integer.valueOf(param[0]),  param[1], Double.parseDouble(param[2]), 1, 1, verboseJava) );   	 
+					elements[countElements] = new DUElement(countElements, name, new Core(preload, countElements, Integer.valueOf(param[3]), Integer.valueOf(param[0]),  param[1], Double.parseDouble(param[2]), 1, 1, verboseJava) );   	 
 					defaultPosition(countElements);
 					return countElements;
 				case "GyroUnit":
@@ -410,7 +415,8 @@ public class PreLoad {
 				hudParam.y = Integer.valueOf(param[2]);
 				hudParam.sizeX = Integer.valueOf(param[3]);
 				hudParam.sizeY = Integer.valueOf(param[4]);
-			     return "";
+				editableScriptList.add("./src/pictures/hudbg_enc64.txt");
+			    return "";
 			case "setupTimer":
                 //    return JavaLoader:set('setupTimer', {elementId, timerName, script})
                  elements[Integer.valueOf(param[0])].element.CreateTimer((Unit)elements[Integer.valueOf(param[0])].element , param[1], param[2]);

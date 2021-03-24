@@ -59,7 +59,8 @@ function SplitScreen4:Display(svg)
   self.screen3.addContent(0,0, self.viewbox3..svg..'</g></svg>')
   self.screen4.addContent(0,0, self.viewbox4..svg..'</g></svg>')   
 end
---
+
+-- init
 ss4 = SplitScreen4:new{screen1, screen2, screen3, screen4, screenX = 306, screenY = 153, scale = 2}
 
 -- some svg stuff
@@ -68,7 +69,7 @@ picture = svgBackground..logo
 
 function svgBall(x,y,ballRayon)
   local str = [[
-<svg width="1025" height="606">
+<svg width="1024" height="614">
 <defs> 
    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%"> 
    <stop offset="0%" style="stop-color:rgb(200,200,255);stop-opacity:1" />  

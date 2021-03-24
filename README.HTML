@@ -74,7 +74,7 @@
         font-size: 16px;
         margin: 1px;
    }
-   .smllnk { font-size: 14px;}
+   .smllnk { font-size: 16px;}
    .btn {
      display: block;
      color: #AAAAFF;
@@ -111,8 +111,6 @@
     .comment {color: green;}
     .string {color: blue;}
 </style>
-
-
 <body>
 <a name="top"></a>
 
@@ -122,7 +120,7 @@
 <div style="position: absolute; left: 125px; top: 155px; color: gray;">{DU:API}</div>
 <h1>Download</h1>
 DU lua Sandbox<br><br>
-Version 0.7<br><br>
+Version 0.7 (alpha)<br><br>
 projet open source<br>
 sous license GNUv3<br><br> 
 compatible Windows 7-10<br>
@@ -143,11 +141,12 @@ compatible Windows 7-10<br>
   <div style="text-align: left;">
   <a class="btn" href="#present" class="btn">Présentation</a>
   <a class="btn" href="#install" class="btn">Installation</a>
-  <a class="btn" href="#standalone">Utilisation en mode stand alone</a>  
+  <a class="btn" href="#standalone">Utilisation en mode stand alone</a>
+  <a class="btn" href="#eclipse">Utilisation dans eclipse LDT</a>  
   <a class="btn" href="#screenshots">Capture d'écrans</a> 
   <a class="btn" href="#preload">Preload file: configuration</a>
   <a class="btn" href="#function">Fonctions du preload</a>
-  <a class="btn" href="#screenshots">sample screenshots</a> 
+  <a class="btn" href="#screenshots">screenshots</a> 
   Outils
   <ul>
   <li><a class="btnfunc" href="#abort">abort</a></li>
@@ -163,6 +162,7 @@ compatible Windows 7-10<br>
   <ul>
   <li><a class="btnfunc" href="#addChannel">addChannel</a></li>
   <li><a class="btnfunc" href="#setupDatabase">setupDatabase</a></li>
+  <li><a class="btnfunc" href="#setHUD">setHUD</a></li>
   <li><a class="btnfunc" href="#setupTimer">setupTimer</a></li>
   </ul>
   Elements
@@ -189,6 +189,7 @@ compatible Windows 7-10<br>
   <a class="btn" href="#export">Exporter un script</a>
   <a class="btn" href="#construct">Dummy constructs</a>
   <a class="btn" href="#h2">BD SQL interne (H2)</a>
+  <a class="btn" href="#bug">Bugs connu</a>
   <a class="btn" href="#todo">A faire (todo)</a>
   <a class="btn" href="#credit">Crédits</a>
   </div>
@@ -201,18 +202,25 @@ compatible Windows 7-10<br>
 <h2>DU Lua Sandbox API</h2>
 <p>
 <br>
-Ce document est un tutoriel pour l'outil de dévelopement DU offline sandbox API.<br/>  
+Ce document est un tutoriel pour l'outil de dévelopement DU lua sandbox.  
+Il s'agit en fait d'un api permettant le dévelopement d'application LUA dans l'univers du jeux Dual universe.<br/>  
+<br/>
 <br/>
 J'ai crée cet API en 2 parties.<br/>
 <br/>
 1 - Une api LUA  contenant (presque) toute les classes de DU. (duElementAPI)<br/> 
-2 - Une api JAVA permettant d'émuler une sandbox LUA/Dual universe en temps réel. (duJavaAPI)<br/>
+2 - Une api JAVA contenant une sandbox LUA dual universe. (duJavaAPI)<br/>
 <br/>
-La sandbox permet d'émuler la quasi totalitée des éléments du jeu, des écrans utilisant le html5,  ainsi que la base de donnée interne (database.getPlayer, database.getConstruct, databse.getElement).<br/>
+La sandbox permet d'émuler la quasi totalitée des éléments du jeu, des écrans utilisant le html5 (incluant le svg) allant jusqu'au la base de donnée interne (database.getPlayer, database.getConstruct, databse.getElement). Il imite le fonctionnement en temp reel de plusieurs éléments du jeu.<br/>
 <br/>
-Il est simple et versatil.  La configuration ce fait à partir de fichier lua nommé Preload (voir la section preload de ce document).<br/>    
+Il est simple à utiliser.  La configuration ce fait à partir de fichier lua nommé Preload (voir la section preload de ce document).<br/>    
 <br/>
-Le code est en open source.  Il est accèssible via <a href="https://github.com/nmare418/DU-Lua-Sandbox-API" target=_blank class="smllnk">ce github</a><br/> 
+Le code est en open source.  Il est accèssible via <a class="smllnk" href="https://github.com/nmare418/DU-Lua-Sandbox-API" target=_blank class="smllnk">ce github</a><br/> 
+<br/>
+Ne sous estimez pas l'interface utilisateur de cette version.  J'utilise personnellement cet outil de façon régulière depuis déjà plus d'un ans 
+(voir les <a href="#screenshots">captures d'écran</a>).  
+<br/>
+Le GUI sera refait dans une version future.
 <br/>
 <br/>
 <b> A qui s'adresse cet outil.</b><br/>
@@ -220,14 +228,13 @@ Le code est en open source.  Il est accèssible via <a href="https://github.com/n
 L'api à été concu pour travailler sur des écrans de dual universe (L'élément in game).<br/> 
 <br/>
 Il à été conçu pour travailler en mode "projet".  La versatilitée du fichier de chargement (preload) permet de  créer des librairies de fonctions
-et de faire du code réutilisable.  Les scripts sont automatiquement intégré lors de l'exports.  La sandbox à particulièrement été conçu pour concevoir des applications ou même des jeux.  
+et de faire du code réutilisable.  Les scripts sont automatiquement intégré lors de l'exports.  La sandbox à particulièrement été conçu pour concevoir des applications ingame ou même des jeux.  
 L'élément databank est déja implémenté à 100%.<br/>
 <br/>
-Il n'est pas encore assez avancé pour être efficace au niveau des system de vol, mais il le sera probablement sur le long (si j'ai un peu d'aide).<br/> 
+Il n'est pas encore assez avancé pour être efficace au niveau des systèmes de vol, mais il le sera probablement sur le long (avec de l'aide).
 <br/>
-L'objectif à long terme est que son utilisation soit un incontournable pour la création de d'applications in Game, pour les script de drones, d'automatisation et toute sortes de projets.<br/>
- <br/>
-Et possiblement, un outil pour les theorycrafters.<br/>
+<br/>
+<br/>
 </p>
 <a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
 <br/>
@@ -254,18 +261,69 @@ pour l'ancer la sandbox. Cliquez sur \DUOfflineSandbox\dusandbox.exe<br/><br>
 La boite a outil de l'application permet de relancer le script en appuyant sur "Reload (F9)" ou de charger un nouveau script par la bar de lancement. "RUN (F5)"<br/>
 <br/>
 <br/>
+<a name="eclipse"></a>
+<h1>Utilisation dans Eclispe LDT (mode interpreteur)</h1>
+<br>
+La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.eclipse.org/ldt/" target="_blank">Eclipse LDT</a>.  
+<br>
+     
+<ul class="nlist">
+  
+  <li class="nlist">
+     Créez un nouveau projet avec comme source, le répertoire d'installation de l'api.
+  </li>
+  <li class="nlist">
+     Créez un lunch configuration pour chaques fichiers de preload. (menu Run->Run configuration) 
+     <br><br>
+     <center><img src="./DOC/runconfiguration.png" width="500px" alt="Run Configurations"></center>
+  </li>
+  <li class="nlist">
+     accédez à la liste des interpreters. (menu Run->Run configuration->bouton Manage interpreters)
+     <br><br>
+     <center><img src="./DOC/interpreter1.png" width="650px" alt="préférences">
+     </center>
+  </li>
+  <li class="nlist"> Ajouter la sandbox dans la liste d'interpreters. (menu Run->Run configuration->bouton Manage interpreters->Add 
+    <br><br>
+    <center><img src="./DOC/addinterpreter.png" width="650px" alt="add interpreters"></center>
+  </li>
+</ul>
+<br>
+<br>
+<br>créez un lunch configuration pour chaques fichiers de preload.  Cliquez sur le tabb du fichier preload puis cliquez sur RUN (ctrl-F11) pour lancer le projet.</b><br>
+<br>
+<br>
+<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<br/>
+<br/>
+<br/>
 <a name="screenshots"></a>
 <br>
 <h1>Capture d'écrans</h1>
-databanks fonctionnelle<br>
-<img src="./DOC/screenshot1.jpg" width="60%" onclick="window.open('./DOC/screenshot1.jpg', '_blank');"/><br><br>
-Système d'inventaire<br>
-<img src="./DOC/screenshot2.jpg" width="60%" onclick="window.open('./DOC/screenshot2.jpg', '_blank');"/><br><br>
-Création d'interface utilisateur avec souris fonctionnelle.
-<img src="./DOC/screenshot3.jpg" width="60%" onclick="window.open('./DOC/screenshot3.jpg', '_blank');"/><br><br>
-Timers et update qui permet d'animer des svg en temp reel. 
-<img src="./DOC/screenshot4.jpg" width="60%" onclick="window.open('./DOC/screenshot4.jpg', '_blank');"/><br><br>
-
+<table border="0" style="background-color: black; color: white;">
+<tr>
+  <td>
+     databanks fonctionnelle<br/>
+     <img src="./DOC/screenshot1.jpg" width="80%" onclick="window.open('./DOC/screenshot1.jpg', '_blank');"/><br><br>
+     Système d'inventaire<br/>
+     <img src="./DOC/screenshot2.jpg" width="80%" onclick="window.open('./DOC/screenshot2.jpg', '_blank');"/><br><br>
+     Création d'interface utilisateur avec souris fonctionnelle.<br/>
+     <img src="./DOC/screenshot3.jpg" width="80%" onclick="window.open('./DOC/screenshot3.jpg', '_blank');"/><br><br>
+     Timers et update qui permet d'animer des svg en temp reel. <br/>
+     <img src="./DOC/screenshot4.jpg" width="80%" onclick="window.open('./DOC/screenshot4.jpg', '_blank');"/><br><br>
+  </td>
+  <td>
+     Hud fonctionnelle<br>
+     <img src="./DOC/screenshot5.jpg" width="80%" onclick="window.open('./DOC/screenshot5.jpg', '_blank');"/><br><br>
+     Paufiner votre code grace des fonctions de débuguage<br>
+     <img src="./DOC/screenshot6.jpg" width="80%" onclick="window.open('./DOC/screenshot6.jpg', '_blank');"/><br><br>
+     Imitation du codex lua de dual universe<br/>
+     <img src="./DOC/screenshot7.jpg" width="80%" onclick="window.open('./DOC/screenshot7.jpg', '_blank');"/><br><br>
+     des exemples de code<br/>
+     <img src="./DOC/screenshot8.jpg" width="80%" onclick="window.open('./DOC/screenshot8.jpg', '_blank');"/><br><br>
+  </td>
+</tr>
+</table>
 <br/>
 <br/>
 <a name="preload"></a>
@@ -279,9 +337,8 @@ Le preload charge les fichiers LUA pour les évènements (start, tick, stop...) re
 <br>
 Toute les fonctions du LUA sont disponnible. Y compris les fonctions de lecture/ecriture du système de fichier et les fonction lua "dofile" et load.<br> 
 <br>
-L'outil vous permet de conserver vos librairies réutilisable dans des fichiers distinctif qui peuvent être chargé dans le preload.<br>
-<br> 
-<b>A la fin du preload,  seul les configurations aquise et les éléments ajoutés sont conservés.  La session LUA est remise à zéro puis la sandbox est lancée (avec l'environement du jeu).</b><br>
+<b>A la fin du preload,  seul les configurations aquise et les éléments ajoutés sont conservés.  La session LUA est remise à zéro 
+puis la sandbox est lancée (avec l'environnement du jeu).</b><br>
 <br>
 Evidemment, les fonctions utilitaires lié au chargement du preload ne sont pas utilisable dans l'environnement de jeu.<br>
 <br>
@@ -599,6 +656,48 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
     </center>
 </div>
 <br>
+<a name="setHUD"></a>
+<div class="library">
+    <div class="function">setHUD(<span class="value">script</span>, <span class="value">x</span>, <span class="value">y</span>, <span class="value">width</span>, <span class="value">height</span>)</div>
+    <div class="function-desc">Initialise un écran hud.  Permet de lier le script pour l'évènement update.</div>     
+    <center>
+        <table width="95%" cellspacing=0 cellpaddWing=0 >
+        <thead>
+        <tr>
+          <th>Argument</th>  
+          <th style="text-align: center;">Type</th>  
+          <th style="text-align: left;">Description</th>  
+        </tr>
+        </thead>
+        <tr>
+          <td class="tdarg">script</td>  
+          <td class="tddesc"><center><span class="value">string</span></center></td>  
+          <td class="tddesc">Script de l'évènement update.  optionnel.</td>  
+        </tr>
+        <tr>
+          <td class="tdarg">x</td>  
+          <td class="tddesc"><center><span class="value">int</span></center></td>  
+          <td class="tddesc">Position x de l'écran hud. optionnel.</td>  
+        </tr>
+        <tr>
+          <td class="tdarg">y</td>  
+          <td class="tddesc"><center><span class="value">int</span></center></td>  
+          <td class="tddesc">Position y de l'écran hud. optionnel.</td>  
+        </tr>
+        <tr>
+          <td class="tdarg">width</td>  
+          <td class="tddesc"><center><span class="value">int</span></center></td>  
+          <td class="tddesc">largeur. optionnel.</td>  
+        </tr>
+        <tr>
+          <td class="tdarg">height</td>  
+          <td class="tddesc"><center><span class="value">int</span></center></td>  
+          <td class="tddesc">Hauteur. optionnel.</td>  
+        </tr>
+        </table>
+    </center>
+</div>
+<br/>
 <a name="setupTimer"></a>
 <div class="library">
     <div class="function">setupTimer(<span class="value">id</span>, <span class="value">nom</span>, <span class="value">script</span> )</div>
@@ -1322,10 +1421,6 @@ Bientôt, vous pourrez copier directement, la string JSON dans Dual universe.  (C
 <br>
 <br>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
-<br>
-<br>
-<br>
 <a name="construct"></a>
 <h1>Dummy constructs</h1>
 <br><br>
@@ -1411,6 +1506,24 @@ Notes:
 <br>
 <br>
 <br>
+<a name="bug"></a>
+<h1>Bugs</h1><br/>
+<br>
+Le gui va être complètement revampé dans le futur alors certain glitch ne valent pas la peine de s'attarder.
+<br><br>
+<br>
+<UL>
+<LI>Après déiconifier un écran, l'affichage glitch si on déplace le frame.  
+</UL>
+Le bug est causé par l'objet web utilisé.  Les widgets avec du html, doivent être réinitialisé après la dé-iconification. 
+<br><br>
+La correction du problème sera dans une prochaine patch. 
+<br>
+<br>
+<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<br>
+<br>
+<br>
 <a name="todo"></a>
 <h1>A faire (todo)</h1><br/>
 <br>
@@ -1418,23 +1531,23 @@ Liste des objectifs à cour et moyen terme (par prioritée): <br>
 <br>
 <UL>
 <LI>Nav. Les events du clavier.  
-<LI>Il manque plusieurs event dans l'export JSON. (Support json est encore impartiel)
-<LI>Ajoutez de nouveau éléments (dont l'industry) et certain éléments sont à corriger (radar).
+<LI>Amméliorer l'export JSON. (Support json est encore impartiel)
+<LI>Ajoutez de nouveau éléments (dont l'industry).
 <LI>Corriger le radar.
+<LI>Mettre à jour l'élément conteneur (Liste d'objet). Phase analyse.
 <LI>Meilleur gestion des erreurs.
 <LI>Rendre l'accès à la bd H2 disponnible pendant la phase PRELOAD.
-<LI>Ajout d'un systmème de configuration. 
+<LI>Ajout d'un système de configuration. 
+<LI>Revamper l'interface utilisateur.
 </UL>
 
 Liste des objectifs à long terme: <br>
 <br>
 <UL>
+<LI>Utilisation de plusieurs UNIT. Chaques unit doit avoir sont instance lua. 
 <LI>Un editeur lua interne.
-<LI>Implémentation d'OpenGL.
 <LI>Système d'addon en LUA donnant accès aux fonctions de l'API Java ainsi qu'a divers outil.
-<LI>Les addons doivent pouvoir upgrader les fonctionnalitées des éléments existant. (exemple, pouvoir configurer des éléments en XS, S, M, L, XL)
-<LI>fonctions systemResolution3 et systemResolution2 (implémenté mais retoune de faux résultats).
-<LI>fonctions manquante des gyros, navigator et cores (implémenté mais retoune de faux résultats).
+<LI>Implémentation d'OpenGL?
 <LI>Support Linux, tests.
 </UL>
 

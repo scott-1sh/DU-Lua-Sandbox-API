@@ -31,7 +31,7 @@ end
 
 -- text = text..'Core (self): '..database.getPlayer(3)['name']
 text = text..'<br/><br/>Player id 3 [name]: '..database.getPlayer(3)['name']
-text = text..'<br/><br/>Radar1 getRange: '..radar1.getRange()
+-- ztext = text..'<br/><br/>Radar1 getRange: '..radar1.getRange()
 text = text..'<br/><br/>db1: '..db1.getNbKeys()..' record(s)'
 
 screen1.addContent(0,0,'<b>default_load.lua</b><br/>'..text)

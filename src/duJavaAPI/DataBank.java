@@ -27,6 +27,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -133,16 +135,20 @@ public class DataBank extends BaseElement {
 
 
 	private void ThrowDatabankError(SQLException e, String location, String command) {
+		String pattern = "[:](.*)$";
+		Pattern r = Pattern.compile(pattern);
 
 		System.out.println("[JAVA] Error in DataBank"+name+" ("+location+") command: "+command);
 		System.out.println("[JAVA] error code:"+e.getErrorCode()+" : " +e.getMessage());
 
-		String gmsg = "\nDATABASE ERROR:\n";
-		if(e.getMessage().length() > 500) {
-			gmsg += e.getMessage().substring(e.getMessage().length()-500);  
-		} else {
-			gmsg += e.getMessage();
-		}
+		String gmsg = "\nDatabank "+name+" Error\n\n";
+	    
+		// get last line of getMessage
+		Matcher m = r.matcher(e.getMessage().replace("\n", ""));
+	    if (m.find()) {
+		  gmsg += "line "+m.group(1)+"\n\n";
+	    }
+	    
 		System.out.println(gmsg);
 		execWindow.StopServices(sandbox.elements);
 		execWindow.frame.setTitle(execWindow.frame.getTitle()+" - dead!");
@@ -162,12 +168,12 @@ public class DataBank extends BaseElement {
 			rs = st.executeQuery("SELECT sum(length(string)) + sum(nvl2(int, 4,  0)) + sum(nvl2(float, 4, 0)) FROM "+name);
 			rs.first();
 			AddtoStatPanel("data size: ", rs.getString(1) + " Bytes" );
-			
+
 			// memory used
 			rs = st.executeQuery("call MEMORY_USED()");
 			rs.first();
 			AddtoStatPanel("Internal: ", rs.getString(1) + " Bytes");
-			
+
 			// records
             rs = st.executeQuery("select count(key) from "+name);
             rs.first();
@@ -260,9 +266,21 @@ public class DataBank extends BaseElement {
 				    st.executeUpdate("MERGE INTO "+name+" KEY(key) VALUES ('"+param[1].replace( "'", "''")+"' , '"+param[2].replace( "'", "''")+"', NULL, NULL);");					
 					break;
 				case "setIntValue":
+					try { // Warning if a float is inserted
+						Integer.parseInt(param[2]);
+					} catch (NumberFormatException e){
+						System.out.println("Warning! "+param[0]+" - key: \""+param[1]+"\" value: \""+param[2]+"\" invalid integer will return null in game environment.");
+						param[2] = null;
+				    }
 				    st.executeUpdate("MERGE INTO "+name+" KEY(key) VALUES ('"+param[1].replace( "'", "''")+"' , NULL, "+param[2]+", NULL);");					
 					break;
 				case "setFloatValue":
+					try { // Warning if a float is inserted
+						Float.parseFloat(param[2]);
+					} catch (NumberFormatException e){
+						System.out.println("Warning! "+param[0]+" - key: \""+param[1]+"\" value: \""+param[2]+"\" invalid float will return null in game environment.");
+						param[2] = null;
+				    }
 				    st.executeUpdate("MERGE INTO "+name+" KEY(key) VALUES ('"+param[1].replace( "'", "''")+"' , NULL, NULL, "+param[2]+");");					
 					break;
 				case "closeDB":

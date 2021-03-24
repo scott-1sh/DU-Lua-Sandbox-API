@@ -36,15 +36,15 @@ obj = Unit(UnitStart, UnitStop)
 setupTimer(obj, 'loop', UnitTick)
 
 obj = ScreenUnit('screen1', 306, 153)
-moveElement(obj, 200, 5)
+moveElement(obj, 210, 5)
 
 obj = ScreenUnit('screen2', 306, 153)
-moveElement(obj, 508, 5)
+moveElement(obj, 518, 5)
 
 obj = ScreenUnit('screen3', 306, 153)
-moveElement(obj, 200, 160)
+moveElement(obj, 210, 160)
 
 obj = ScreenUnit('screen4', 306, 153)
-moveElement(obj, 508, 160)
+moveElement(obj, 518, 160)
 
 

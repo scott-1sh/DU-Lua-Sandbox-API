@@ -24,6 +24,10 @@
 -- Notes: There no timezone detection for players in DU.  Thats why timestamp give inacurate values.    
 -- connect to a zone detector. Only need one execution per visit. You can connect multiple zone detector with a or sinal.
 
+-- use dbVisitor.clear() to clear the database (dont forget to remove after =/)
+-- dbVisitor.clear()
+
+
 htmlPlayers = [[
 <html>
 <header>
@@ -63,7 +67,7 @@ htmlStats = [[
 <style>
    body { background-color: #000077;}
    th {  color: #FFFFFF; font-size: 4vw; border: .4vw outset #0000FF; }
-   table{ margin-top: 10vw; margin-left: 5vw; font-family: Verdana; font-size: 4vw; background-color: #000044;}
+   table{ margin-top: 9.8vw; margin-left: 2.5vw; font-family: Verdana; font-size: 4vw; background-color: #000044;}
    .head { text-align: left; padding: .5vw; color: #FFFF00; font-size: 2.5vw;}
    td { font-size: 4vw; text-align: center; background-color: #0000AA; color: #FFFFFF; border: .5vw inset #0000FF; }
    .ago { font-size: 2.4vw; color: #9999FF;}
@@ -175,6 +179,11 @@ end
 if not dbVisitor.hasKey('[index]') then
   dbVisitor.clear()
   dbVisitor.setStringValue('[index]',",")
+    dbVisitor.setFloatValue('[MaintenanceDate]', system.getTime()-86401)
+  dbVisitor.setIntValue('[Visitor]', 0)
+  dbVisitor.setIntValue('[LastDayVisitor]', 0)
+  dbVisitor.setIntValue('[TotalVisitor]', 0)
+
 end
 
 -- oldschool timestamp!
@@ -250,35 +259,28 @@ screen2.addContent(0,0, string.format(htmlPlayers, '(11-20)', rowScreen2))
 --#########
 --# stats #
 --#########
--- maintenance stats exist? 
-if dbVisitor.hasKey('[MaintenanceDate]') then
-  dbVisitor.setStringValue('[MaintenanceDate]', timeStamp-100000)
-  dbVisitor.setStringValue('[Visitor]', 1)
-  dbVisitor.setStringValue('[LastDayVisitor]', 1)
-  dbVisitor.setStringValue('[TotalVisitor]', 1)
-end
-
 
 -- maintenance time?
-if timeStamp-tonumber(dbVisitor.getStringValue('[MaintenanceDate]') or 0) >86400 then
-  dbVisitor.setStringValue('[LastDayVisitor]', dbVisitor.getStringValue('[Visitor]'))
-  dbVisitor.setStringValue('[MaintenanceDate]', timeStamp)
-  dbVisitor.setStringValue('[Visitor]', 1)
+if timeStamp-dbVisitor.getFloatValue('[MaintenanceDate]') >86400 then
+  dbVisitor.setIntValue('[LastDayVisitor]', dbVisitor.getIntValue('[Visitor]'))
+  dbVisitor.setFloatValue('[MaintenanceDate]', timeStamp)
+  dbVisitor.setIntValue('[Visitor]', 0)
+  newVisit = 1
 end
 
 -- add a visit
 if newVisit then
-  dbVisitor.setStringValue('[Visitor]', tonumber(dbVisitor.getStringValue('[Visitor]')) + 1)
-  dbVisitor.setStringValue('[TotalVisitor]', tonumber(dbVisitor.getStringValue('[TotalVisitor]')) + 1)  
+  dbVisitor.setIntValue('[Visitor]', dbVisitor.getIntValue('[Visitor]') + 1)
+  dbVisitor.setIntValue('[TotalVisitor]', tonumber(dbVisitor.getIntValue('[TotalVisitor]')) + 1)  
 end
 
 --#################
 --# display stats #
 --#################
-local lastMaintenance = dbVisitor.getStringValue('[MaintenanceDate]') 
-local todayVisitors = dbVisitor.getStringValue('[Visitor]')
-local yesterdayVisitors = dbVisitor.getStringValue('[LastDayVisitor]')
-local totalVisitors = dbVisitor.getStringValue('[TotalVisitor]')
+local lastMaintenance = dbVisitor.getFloatValue('[MaintenanceDate]') 
+local todayVisitors = dbVisitor.getIntValue('[Visitor]')
+local yesterdayVisitors = dbVisitor.getIntValue('[LastDayVisitor]')
+local totalVisitors = dbVisitor.getIntValue('[TotalVisitor]')
 
 local txtOut = 'Last maintenance: <span class="value">'..formatTimeLast(timeStamp-lastMaintenance)..'</span><span class=\"ago\">ago</span><br/>'
 txtOut = txtOut..'<br/>Visitors today: <span class="value">'..todayVisitors..'</span>'

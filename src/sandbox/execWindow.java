@@ -75,7 +75,7 @@ public class execWindow extends JFrame {
 	public static execLUA sandbox;
     static JDesktopPane desktop = null;
     public static boolean verboseJava = false;
-    public boolean verboseLua = false;
+    public static boolean verboseLua = false;
 	static String preloadFile;
 	public static JMenuBar mb;
 	static JMenu fileMenu, editMenu, exportMenu, helpMenu;
@@ -88,7 +88,10 @@ public class execWindow extends JFrame {
 	public static HUD hud;
 
 	public static void StopServices(DUElement[] elements) {
-	   		
+
+	  // stop hud timer 
+		if(hud.timer != null) { hud.timer.stop();}
+
 	   // stop world construct timer
 	   if(sandbox.timer != null) sandbox.timer.stop();	
 		
@@ -105,14 +108,21 @@ public class execWindow extends JFrame {
 		   }
 	      
 	      if(elem.element.luaScriptStop != null) {
-	    	  if(verboseJava) System.out.println("[JAVA] Lunch of "+elem.name+":stop() Event" );
+	    	  if(verboseJava) System.out.println("[JAVA] Triggering "+elem.name+":stop() Event" );
 	    	  sandbox.RUN("self="+elem.element.name+" "+elem.element.luaScriptStop, elem.name+":stop()" );
 	      }
-	      
+
 	      if(elem.GetType().equals("duJavaAPI.DataBank")) {
 			   if(verboseJava) System.out.println("[JAVA] closing DB "+elem.name);
 			   String[] cmd1 = {"closeDB"};
 			   elem.element.update(cmd1);
+		   }
+
+	      // close radars timers
+	      if(elem.GetType().equals("duJavaAPI.Radar")) {
+			   if(verboseJava) System.out.println("[JAVA] stopping radar "+elem.name);
+			   String[] cmd1 = {"stopRadar"};
+			   elem.element.get(cmd1);
 		   }
 	      
 	      // dead status
@@ -223,11 +233,11 @@ public class execWindow extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						 File filetmp = new File(filename); Desktop dk = Desktop.getDesktop(); //
-						/*
-						 * dk.edit(filetmp); dk.open(filetmp); dk.
-						 */	
-						Runtime.getRuntime().exec("cmd /c start \"\" " + filetmp.getAbsolutePath() + "\"");
+						System.out.println("Opening "+filename+" in your default editor");  
+						File filetmp = new File(filename);
+						Desktop dk = Desktop.getDesktop(); 
+						dk.open(filetmp); 
+													 
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
@@ -422,8 +432,11 @@ public class execWindow extends JFrame {
 
 	// Show HUD	
 	hud = new HUD(preload.hudParam.Script, preload.hudParam.x, preload.hudParam.y, preload.hudParam.sizeX, preload.hudParam.sizeY, verboseJava);
-    hud.buildFrame(frame.getBounds());
-	desktop.add(hud.frame);
+	if(!preload.hudParam.defaulthud) {
+	  hud.buildFrame(frame.getBounds());
+	  desktop.add(hud.frame); 
+	}
+    
 	
 	// setup a new LUA environment 
 	sandbox = new execLUA(this, preload.elements, preload.worldConstruct, preload.worldPlayer, preload.MasterPlayerId, verboseLua);
@@ -440,11 +453,11 @@ public class execWindow extends JFrame {
 		   elem.element.LoadScreen("<html><body>[init]</body></html>");
 		
 		   // create the UI frame
-		   JInternalFrame jframe = new execFrame(elem.element.name).getFrame();
-			jframe.setBounds(elem.element.panel.getBounds());
+		   JInternalFrame jframe = new execFrame(elem.element.name, elem.element).getFrame();
+		   jframe.setBounds(elem.element.panel.getBounds());
 		   jframe.getContentPane().add(elem.element.panel); 
-	      jframe.setVisible(true);	
-		
+	       jframe.setVisible(true);	
+	      
 		   desktop.add(jframe, BorderLayout.WEST);
 		   
 		   // add a LUA instance to all elements 
@@ -457,15 +470,15 @@ public class execWindow extends JFrame {
 		   // setup Units
 		   if(elem.GetType().equals("duJavaAPI.Unit")) {
 			   // add stats
-               int scriptSize = sandbox.luaScriptToText(preload.elements).length();	
+               int scriptSize = sandbox.scriptMemoryUsed(preload.elements); // sandbox.luaScriptToText(preload.elements).length();	
                elem.element.AddtoStatPanel("memory:", scriptSize+"/20000");
                // stats for masterplayer
                if(sandbox.worldPlayer.size() > 0) {
-            	   elem.element.AddtoStatPanel("Master: ", preload.MasterPlayerId+"-"+ sandbox.worldPlayer.get(preload.MasterPlayerId).name);
+            	   elem.element.AddtoStatPanel("Master: ", preload.MasterPlayerId+" - "+ sandbox.worldPlayer.get(preload.MasterPlayerId).name);
                } else {
             	   preload.MasterPlayerId = 0;
             	   elem.element.AddtoStatPanel("Master: ", "0 - N/A");
-            	   if(verboseJava) System.out.println("[JAVA] <i>Warning! No internal database for players and constructs.  Use setupDatabase in the PRELOAD phase to setup an iternal database.</i> ");
+          	       if(verboseJava) System.out.println("[JAVA] Warning <i>No internal database for players and constructs.  Use setupDatabase in the PRELOAD phase to setup an iternal database</i>");
                }
                
 			   // Add a sandbox instance to Units timers
@@ -486,6 +499,15 @@ public class execWindow extends JFrame {
 			if(elem.element.luaScriptStart != null) sandbox.RUN("self="+elem.element.name+" "+elem.element.luaScriptStart, elem.name+":start()" );		    
  	    }		 
     }
+	
+	// start update scripts
+	// hud update
+	if(preload.hudParam.Script != null) {
+		// start update timer
+		hud.StartUpdateTimer(preload.hudParam.Script, sandbox);
+	} 
+	
+	
   }
 }
 

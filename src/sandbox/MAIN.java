@@ -31,7 +31,7 @@ import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 
 public class MAIN {
     public static execWindow execWin;
-    public static float version = (float)0.680;
+    public static float version = (float)0.700;
 	private static PreLoad pre;
 	public static String preloadFile = "";
 	public static winConsole wConsole;
@@ -52,9 +52,6 @@ public class MAIN {
 						preloadFile = args[0];
 					} 
 
-					// arguments lits
-					List<String> list = Arrays.asList(args);
-
 				    // start preload engine.
 				    pre = new PreLoad(preloadFile);
 					
@@ -62,6 +59,26 @@ public class MAIN {
 			}
 		});
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		NativeInterface.open();
 
 		EventQueue.invokeLater(new Runnable() {

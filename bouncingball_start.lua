@@ -53,4 +53,5 @@ y = 17
 dirx = 15  
 diry = 15  
 
--- background = screen1.addContent(0,0,string.format(htmlBackground,"" ,htmlBall(x,y,ballRayon)))
+-- background = screen1.addContent(0,0, string.format(htmlBackground, htmlMouseInfo, htmlBall(x, y, ballRayon)))
+

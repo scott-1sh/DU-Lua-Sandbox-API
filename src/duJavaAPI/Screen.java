@@ -37,7 +37,6 @@ import sandbox.execWindow;
 public class Screen extends BaseElement {
     public int sizeX;
     public int sizeY;
-    public JWebBrowser web = null;
     public String html = "";
     private String cr = "\r\n";
 
@@ -60,7 +59,7 @@ public class Screen extends BaseElement {
     		"  background-color: rgba(0,0,0,0);" + 
     		"  z-index: 2;" + 
     		"}\r\n" + 
-    		"</style>\r\n</head><body></body></html>\r\n";
+    		"</style>\r\n</head><body><div style=\"color: #FFFFFF; background-color: #000000; width: 100%; height: 100%; \"> </div></body></html>\r\n";
     		
     // public Screen(int pid, String pname, int px, int py, String phtml) {this(pid, pname, px, py, 1014, 620, phtml);}    
 	public Screen(int pid, String pname, int px, int py, int psizeX, int psizeY, boolean pverboseJava) {
@@ -95,7 +94,7 @@ public class Screen extends BaseElement {
 	// Initialize a screen
 	@Override
     public void LoadScreen(String phtml) {		
-		 web = new JWebBrowser(JWebBrowser.destroyOnFinalization());
+		 web = new JWebBrowser(JWebBrowser.destroyOnFinalization()); 
 		// NSComponentOptions.constrainVisibility(),NSComponentOptions.destroyOnFinalization()
         web.setStatusBarVisible(false);
 		web.setMenuBarVisible(false);
@@ -104,7 +103,7 @@ public class Screen extends BaseElement {
 		web.setButtonBarVisible(false);
 		web.setBarsVisible(false);
 		web.setAutoscrolls(false);
-		// web.setDoubleBuffered(true);
+		web.setDoubleBuffered(true);
 		web.setBackground(Color.black);
  
 		

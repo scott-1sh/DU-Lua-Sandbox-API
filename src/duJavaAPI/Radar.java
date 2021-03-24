@@ -47,24 +47,12 @@ public class Radar extends BaseElement {
     int range = 10000;
  	int sizeX = 200;
     int sizeY = 200;
-	Timer timer = null;    
+	public Timer timer = null;    
     String baseHtml = "<!DOCTYPE html>\r\n" + 
     		"<html>\r\n" + 
     		"<head>\r\n" + 
     		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n" + 
-    		"<style>\r\n" + 
-    		"#overlay {\r\n" + 
-    		"  position: fixed;" + 
-    		"  display: block;" + 
-    		"  width: 100%;" + 
-    		"  height: 100%;" + 
-    		"  top: 0;" + 
-    		"  left: 0;" + 
-    		"  right: 0;" + 
-    		"  bottom: 0;" + 
-    		"  background-color: rgba(0,0,0,0);" +  //  background-color: rgba(0,0,0,0.5);\r\n" + 
-    		"  z-index: 2;" + 
-    		"} </style></head><body style=\"overflow-y:hidden;overflow-x:hidden; background-color: rgba(0,190,0,1);\"></body></html>";
+    		"</head><body style=\"overflow: hidden; background-color: rgba(0,190,0,1);\"></body></html>";
 /* version 400px
  *     private String radarSVG = "<svg x=\"0px\" y=\"0px\" width=\"400px\" height=\"400px\" style=\"background-color: rgba(0,190,0,1);\">\r\n" +
     		"<g x=\"0px\" y=\"0px\" width=\"400px\" height=\"400px\" >\r\n" +
@@ -82,7 +70,7 @@ public class Radar extends BaseElement {
     		String.format("   <text x=\"295\" y=\"385\" font-family=\"Verdana\" font-size=\"10\">Range: %skm</text>",(range/1000)) +
     	    "</g>%s</svg>"; */
     private String radarSVG = "<svg x=\"0px\" y=\"0px\" width=\"200px\" height=\"200px\" style=\"background-color: rgba(0,190,0,1);\">\r\n" +
-    		"<g x=\"0px\" y=\"0px\" width=\"100px\" height=\"200px\" >\r\n" +
+    		"<g x=\"0px\" y=\"0px\" width=\"200px\" height=\"200px\" >\r\n" +
     		"   <line x1=\"0\"  y1=\"94\" x2=\"188\" y2=\"94\" stroke-dasharray=\"1, 1\" stroke=\"#000000\"  />" +
     		"   <line x1=\"94\"  y1=\"0\" x2=\"94\"   y2=\"188\" stroke-dasharray=\"1, 1\" stroke=\"#000000\" />" +
     		"	<circle fill=\"none\" stroke=\"#000000\" stroke-width=\"0.5\" cx=\"94\" cy=\"94\" r=\"2\"/>\r\n" + 
@@ -115,7 +103,8 @@ public class Radar extends BaseElement {
 		panel = new JPanel();		
 		panel.setLayout(null);
 		panel.setBounds(px, py, sizeX+6, sizeY+24);
-		panel.setBorder(LineBorder.createBlackLineBorder());		
+		panel.setBorder(LineBorder.createBlackLineBorder());
+		panel.setAutoscrolls(false);
 		panel.setBackground(Color.black);
 /*
 		// label
@@ -254,7 +243,7 @@ public class Radar extends BaseElement {
 	   String sign;
 	   String args;
 	   String slotKey;
-	   
+/*	   
 	   // start()
 	   if(luaScriptStart.length()>0) {
 		   sign = "start()";
@@ -278,7 +267,7 @@ public class Radar extends BaseElement {
 	       slotKey = Integer.toString(id);
 	       listScript.add(new String[]{scriptExit, args, sign, slotKey }); 
 	   }
-	   	   
+*/	   	   
 	   return listScript;
 	}
 	
@@ -335,8 +324,12 @@ public class Radar extends BaseElement {
 				case "getConstructAcceleration":
 					 id = Integer.valueOf(param[1])-1;
 				     return sandbox.worldConstruct.get(id).speed;			
+				case "stopRadar":
+					 timer.stop();
+					 timer = null;
+				     return "";			
 				}
-	
+	            
 			return "";	    
 	    } catch(Exception e){
 	    	if(verboseJava) System.out.println("[JAVA] Error in commande:"+pcommand);
