@@ -1,6 +1,6 @@
 --[[    
     visitor_start.lua 
-    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU lua sandbox API".
 
@@ -15,16 +15,16 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 ]]
 
 -- Visitor script
 -- Keep 20 last visitors.  
--- Collect visitors stats and daily visits.
--- Notes: There no timezone detection for players in DU.  Thats why timestamp give inacurate values.    
+-- Collect visitors name, time and daily visits. 
+-- Notes: There no timezone detection for players in DU.  Thats why timestamp give inacurate values (timestamp follow the timezone).    
 -- connect to a zone detector. Only need one execution per visit. You can connect multiple zone detector with a or sinal.
 
--- use dbVisitor.clear() to clear the database (dont forget to remove after =/)
+-- use dbVisitor.clear() to clear the database 
 -- dbVisitor.clear()
 
 
@@ -34,7 +34,7 @@ htmlPlayers = [[
 <style>
    body { background-color: #000099;}
    th {  color: #FFFFFF; font-size: 3.2vw; border: .4vw outset #0000FF; }
-   table{ font-family: Verdana; font-size: 3.1vw; background-color: #000077;}
+   table{ font-family: Verdana; font-size: 3.5vw; background-color: #000077;}
    .head { text-align: left; padding: .5vw; color: #FFFF00; font-size: 3vw;}
    td { background-color: #0000AA; color: #FFFFFF; border-left: .25vw solid #000099; border-bottom: .25vw solid #000099; }
    .ago { font-size: 2.4vw;  color: #9999FF;}
@@ -114,7 +114,7 @@ function split(str, pat)
    return t
 end
 
--- return in "time left" format
+-- "time ago" format
 function formatTimeLast(t)    
 	local txt = ''
 	local d = math.floor(t/86400)
@@ -166,7 +166,7 @@ end
 
 -- pairs to string
 function tablelength(T)
-  local count = 0
+  local count 	= 0
   for _ in pairs(T) do count = count + 1 end
   return count
 end
@@ -178,12 +178,11 @@ end
 -- reset if not exist
 if not dbVisitor.hasKey('[index]') then
   dbVisitor.clear()
-  dbVisitor.setStringValue('[index]',",")
-    dbVisitor.setFloatValue('[MaintenanceDate]', system.getTime()-86401)
+  dbVisitor.setStringValue('[index]', ",")
+  dbVisitor.setFloatValue('[MaintenanceDate]', system.getTime()-86401)
   dbVisitor.setIntValue('[Visitor]', 0)
   dbVisitor.setIntValue('[LastDayVisitor]', 0)
   dbVisitor.setIntValue('[TotalVisitor]', 0)
-
 end
 
 -- oldschool timestamp!
@@ -237,7 +236,7 @@ local line = 1;
 for i, userInfo in pairs(playerList) do
     if not( userInfo['name'] == nil or userInfo['name'] == '' or userInfo['name'] == 'unreachable')  then	
 		row = "<tr>"
-		row = row.."<td><center>"..line.."</center></td>"
+		row = row.."<td align=\"center\">"..line.."</td>"
 		row = row.."<td style=\"color: #FFFF00;\"><b >"..userInfo['name'].."</b></td>"
 		row = row.."<td> "..formatTimeLast(timeStamp-userInfo['time']).."<span class=\"ago\">ago</span></td>"
 		row = row.."</tr>"

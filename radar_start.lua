@@ -1,23 +1,25 @@
---[[
-    radar_start.lua 
-    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+--[[    
+    radar_start.lua
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
-    This file is part of "DU offline sandbox API".
+    This file is part of "DU lua sandbox API".
 
-    "DU offline sandbox API" is free software: you can redistribute it and/or modify
+    "DU lua sandbox API" is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    "DU offline sandbox API" is distributed in the hope that it will be useful,
+    "DU lua sandbox API" is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 ]]
-
+-- Warning... radars only get positions with ship having transponders...
+-- Radars work only on seats	
+	
 htmlBackground1 = [[
 <svg width="1024" height="612">
   <rect width="1024" height="612" style="fill:rgb(0,0,55);stroke-width:10;stroke:rgb(100,100,175)" />
@@ -53,7 +55,7 @@ htmlTable = [[
 <TABLE style="width: 900px;">
 <thead>
   <tr>
-    <th>id</th><th>Name</th><th>owner</th><th>size</th><th>pos</td><th>Type</th>
+    <th>id</th><th>Name</th><th>size</th><th>Type</th>
   </tr>
 </thead>
 <tbody>
@@ -62,6 +64,7 @@ htmlTable = [[
 </TABLE>
 ]]
 
+screen1.activate()
 screen1.addContent(0,0,htmlBackground1)
 
 -- setup a timer/tick event

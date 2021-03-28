@@ -10,6 +10,7 @@ showOnScreen(1)
 verboseLua(1)
 verboseJava(1)
 
+setName('Default test script and launcher')
 
 -- Unit
 UnitStart = loadScript('default_start.lua')

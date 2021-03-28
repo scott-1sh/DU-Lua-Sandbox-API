@@ -1,21 +1,21 @@
 /*    
     MenuActionListener.java 
-    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU lua sandbox API".
 
-    "DU offline sandbox API" is free software: you can redistribute it and/or modify
+    "DU lua sandbox API" is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    "DU offline sandbox API" is distributed in the hope that it will be useful,
+    "DU lua sandbox API" is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 */
 package sandbox;
 
@@ -30,6 +30,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -121,13 +123,25 @@ class MenuActionListener implements ActionListener {
 
 	  }
 
+	  
+	  private void openbrowser(String url) {
+	  if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+		    try {
+				Desktop.getDesktop().browse(new URI(url));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();	
+			}
+		}
+	  }
+	  
 	  private void openfile(String pFile) {
 		try {
 		  Desktop desktop = null;
 		  if (Desktop.isDesktopSupported()) {
 		     desktop = Desktop.getDesktop();
-		  }
-		
+		  }		
 		  desktop.open(new File(pFile));
 		} catch (IOException ioe) { ioe.printStackTrace(); }
 	  } 
@@ -231,7 +245,7 @@ class MenuActionListener implements ActionListener {
 				   script += "-----------------------------------------\n";
 				   script += "-- Element name: "+elem.name+"\n";
 				   script += "-- Element: "+elem.GetType() +"\n";
-				   script += "-- Event: "+sHandler[1]+" \n";
+				   script += "-- Event: "+sHandler[2]+" \n";
 				   script += "-----------------------------------------\n";
 				   script += sHandler[0] + "\n\n";			  
             	   
@@ -243,7 +257,7 @@ class MenuActionListener implements ActionListener {
 	  
 
 	  // load new app from filesystem dialog. 
-	  public void LoadFrom(boolean stop) {
+	  public void LoadFromFileSystem() {
 		  JFileChooser fileChooser = new JFileChooser(preloadFile);
 		  fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		  fileChooser.setDialogTitle("Load from file system");
@@ -256,8 +270,9 @@ class MenuActionListener implements ActionListener {
 		      File selectedFile = fileChooser.getSelectedFile();
 //		      System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 		      execWindow.preloadFile = selectedFile.getAbsolutePath();
+          	  System.out.println("loading "+execWindow.preloadFile);           	
 			  execWindow.StartApplication(execWindow.preloadFile);
-			  if(stop) execWindow.StopApplication(this.elements);
+			  // execWindow.StopApplication(this.elements);
  
 		  }
 	  }
@@ -265,16 +280,20 @@ class MenuActionListener implements ActionListener {
 	  public void actionPerformed(ActionEvent e) {		  
 
 	    // System.out.println("Selected: " + e.getActionCommand());
-	  	  
+		  
 	    switch (e.getActionCommand()) {
 			case "Exit":
 				System.exit(0);
 		        return;
 			case "Load from file system":
-				LoadFrom(true);				
+				LoadFromFileSystem();
 				return;
 			case "Load in a new window":
-				LoadFrom(false);
+				try {
+					Process p = new ProcessBuilder(MAIN.executable, this.preloadFile).start();
+				} catch (IOException e3) {
+					e3.printStackTrace();
+				}
 				return;
 			case "Reload (F9)":
 				execWindow.StartApplication(this.preloadFile);
@@ -300,8 +319,30 @@ class MenuActionListener implements ActionListener {
 			    } 
 			    catch (Exception e1) { e1.printStackTrace(); }
 				return;
+			case "DU official":
+				openbrowser("https://www.dualuniverse.game/");
+				return;				
 			case "About":
-
+				// openbrowser("http://www.dusandbox.org#credit");
+				String txt = "<div style=\"color: #FFFFFF;\"><hr><h1>Credits</h1><br>Created by Stephane Boivin<br>"+
+				 			 "Development Java/Lua by Stephane Boivin aka Nmare418 (Discord:  Nmare418#6397)<br><br>"+
+				             "Illustrations by Valerie Dandois (<a href=\"https://valeriedandois.wixsite.com/valdandois\">https://valeriedandois.wixsite.com/valdandois</a>)<br><br><br>"+
+				             "<b>Browser HTML (used for screens):</b>  DJNativeSwing par Christopher Deckers <br>  <a href=\"http://djproject.sourceforge.net/ns/index.html\" target=\"_blank\">http://djproject.sourceforge.net/ns/index.html</a><br><br>"+
+				             "<b>Interpreter LUA:</b>  LuaJ par James Roseborough, Ian Farmer <br> <a href=\"http://luaj.org\" target=\"_blank\">luaj.org</a><br><br>"+
+				             "<b>Database:</b> H2  par Thomas Mueller, HSQLDB Group <br> <a href=\"http://www.h2database.com\" target=\"_blank\">www.h2database.com</a><br><br>"+
+				             "<b>Json JAVA:</b> json-simple  par  Yidong Fang <br> <a href=\"https://github.com/fangyidong/json-simple\" target=\"_blank\">https://github.com/fangyidong/json-simple</a><br><br>"+
+				             "<b>Json LUA:</b> jsonv par rxi <br> <a href=\"https://github.com/rxi/json.lua\" target=\"_blank\">https://github.com/rxi/json.lua</a><br><br><hr></div>";
+				System.out.println(txt);
+				return;
+			case "Sandbox API Online":
+				openbrowser("http://www.dusandbox.org");
+				return;
+			case "DU Codex":
+				openbrowser("https://dual.sh/codex/");
+				return;
+			case "Version":
+				System.out.println("DU Lua Sandbox version "+MAIN.version);
+				return;
 	    }
 
 	  }

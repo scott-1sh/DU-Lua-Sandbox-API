@@ -1,26 +1,26 @@
 --[[    
     mapview_load.lua 
-    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
-    This file is part of "DU offline sandbox API".
+    This file is part of "DU lua sandbox API".
 
-    "DU offline sandbox API" is free software: you can redistribute it and/or modify
+    "DU lua sandbox API" is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    "DU offline sandbox API" is distributed in the hope that it will be useful,
+    "DU lua sandbox API" is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 ]]
 
 showOnScreen(1) 
 verboseLua(1)
-verboseJava(0)
+verboseJava(1)
 
 -- Unit
 UnitStart = loadScript('mapview_start.lua')
@@ -54,12 +54,14 @@ constructList[8] = {id = 8, owner = 6, name = 'Base 4', ctype='static',  pos = {
 constructList[9] = {id = 9, owner = 0, name = 'Base 5', ctype='static',  pos = {2300,4000,0}, size = {44,34,45}, speed = {0,0,0}, mass = 2101.323 }
 constructList[10] = {id = 10, owner = 0, name = 'Base 6', ctype='static',  pos = {4000,-400,0}, size = {44,34,45}, speed = {0,0,0}, mass = 2101.323 }
 
+-- playerlist, constructlist, main player
+setupDatabase(playerList, constructList, owner)  
+  
 local scriptEnter = "print('Construct '..id..' ['..self.getConstructName(id)..'] entered the zone')"
 local scriptExit = "print('Construct '..id..' ['..self.getConstructName(id)..'] left the zone')"
 
-setupDatabase(playerList, constructList, 1)
+obj = RadarUnit('radar1', 10000, scriptEnter, scriptExit)
 
-obj = RadarUnit('radar1', 10000, constructList, scriptEnter, scriptExit)
 
 -- Screen
 obj = ScreenUnit('screen1', 1024, 612)

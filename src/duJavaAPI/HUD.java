@@ -1,21 +1,21 @@
 /*    
 HUD.java 
-Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
+    
+    This file is part of "DU lua sandbox API".
 
-This file is part of "DU offline sandbox API".
+    "DU lua sandbox API" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-"DU offline sandbox API" is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    "DU lua sandbox API" is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-"DU offline sandbox API" is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 */
 package duJavaAPI;
 
@@ -27,6 +27,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -157,7 +159,17 @@ public void buildFrame(Rectangle deskSize) {
             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),
         BorderLayout.CENTER);
     frame.pack();
-    
+/*
+    frame.addComponentListener(new ComponentAdapter() 
+    {  
+            public void componentResized(ComponentEvent evt) {                
+                panel.setBounds(frame.getBounds());
+                web.setBounds(frame.getBounds());
+                frame.pack();
+                web.setHTMLContent(html);            }
+    });
+*/    
+   
 
     frame.setVisible(true);
 }

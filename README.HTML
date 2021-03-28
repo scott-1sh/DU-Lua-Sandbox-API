@@ -8,7 +8,7 @@
   li.nlist { margin-top: 15px; }
   table { font-size: 15px;
           border-style: ridge;
-          background-color: #BFBFBF; }
+          background-color: #FFFFFF; }
   .tdcode { font-family: "Lucida Console", Courier, monospace;
             background-color: #FFFFFF;
             padding: 5px;
@@ -217,10 +217,6 @@ Il est simple à utiliser.  La configuration ce fait à partir de fichier lua nomm
 <br/>
 Le code est en open source.  Il est accèssible via <a class="smllnk" href="https://github.com/nmare418/DU-Lua-Sandbox-API" target=_blank class="smllnk">ce github</a><br/> 
 <br/>
-Ne sous estimez pas l'interface utilisateur de cette version.  J'utilise personnellement cet outil de façon régulière depuis déjà plus d'un ans 
-(voir les <a href="#screenshots">captures d'écran</a>).  
-<br/>
-Le GUI sera refait dans une version future.
 <br/>
 <br/>
 <b> A qui s'adresse cet outil.</b><br/>
@@ -299,13 +295,13 @@ La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.ec
 <br/>
 <a name="screenshots"></a>
 <br>
-<h1>Capture d'écrans</h1>
+<h1>Captures d'écrans</h1>
 <table border="0" style="background-color: black; color: white;">
 <tr>
   <td>
      databanks fonctionnelle<br/>
      <img src="./DOC/screenshot1.jpg" width="80%" onclick="window.open('./DOC/screenshot1.jpg', '_blank');"/><br><br>
-     Système d'inventaire<br/>
+     exemple de système d'inventaire<br/>
      <img src="./DOC/screenshot2.jpg" width="80%" onclick="window.open('./DOC/screenshot2.jpg', '_blank');"/><br><br>
      Création d'interface utilisateur avec souris fonctionnelle.<br/>
      <img src="./DOC/screenshot3.jpg" width="80%" onclick="window.open('./DOC/screenshot3.jpg', '_blank');"/><br><br>
@@ -329,7 +325,7 @@ La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.ec
 <a name="preload"></a>
 <h1>PRELOAD</h1><br>
 <br>
-Le preload est un fichiers de configuration en LUA.  Il configure l'environnement et ajoute les éléments (door, unit, databank....)<br>
+Le preload est un fichiers de configuration en LUA.  Il configure l'environnement et ajoute les éléments à la sandbox (door, unit, databank....)<br>
 <br>
 Par standard, le fichier de preload est nomé [nomprojet]_load.lua.   Il est utilisé pour démarrer votre projet.<br>  
 <br>
@@ -800,7 +796,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         </thead>
         <tr>
           <td class="tdarg">name</td>  
-          <td class="tddesc"><center><span class="value">id</span></center></td>  
+          <td class="tddesc"><center><span class="value">string</span></center></td>  
           <td class="tddesc">nom de l'élément.</td>  
         </tr>
         </table>
@@ -836,17 +832,17 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         </thead>
         <tr>
           <td class="tdarg">size</td>  
-          <td class="tddesc"><center><span class="value">id</span></center></td>  
+          <td class="tddesc"><center><span class="value">int</span></center></td>  
           <td class="tddesc">Taille du core par facteur de 16. (xs = 16)</td>  
         </tr>
         <tr>
           <td class="tdarg">constructType</td>  
-          <td class="tddesc"><center><span class="value">id</span></center></td>  
+          <td class="tddesc"><center><span class="value">string</span></center></td>  
           <td class="tddesc">dynamic ou static</td>  
         </tr>
         <tr>
           <td class="tdarg">g</td>  
-          <td class="tddesc"><center><span class="value">id</span></center></td>  
+          <td class="tddesc"><center><span class="value">float</span></center></td>  
           <td class="tddesc">La gravitée local.</td>  
         </tr>
         <tr>
@@ -1389,8 +1385,10 @@ Des examples de code source sont disponnible dans le répertoire de l'application
   <li>databank_load.lua: utilisation d'une databank.</li>
   <li>debug_load.lua: quelques fonctions de debuguage.</li>
   <li>emitter_load.lua: utilisation d'un emitter.</li>
-  <li>mapview_load.lua: Radar de typee mapview (vue de haut)</li>
-  <li>flymart2_load.lua: Un exemple de calculateur d'inventaire.</li>
+  <li>Hud_load.lua: utilisation d'un hud.</li>
+  <li>radar_load.lua: utilisation d'un radar.</li>
+  <li>mapview_load.lua: Radar de type mapview (vue de haut)</li>
+  <li>flymartFuelStation_load.lua: Un exemple de système d'inventaire.</li>
   <li>visitor_load.lua: Un log de visiteur.  A activer avec un detector.</li>
   <li>splitscreenx4_load.lua: Un test d'animation sur un affichage à 4 écran.</li>
   <li>tricks_and_goodies.lua: Des trucs utile, trouvé un peu partout..</li>
@@ -1509,16 +1507,13 @@ Notes:
 <a name="bug"></a>
 <h1>Bugs</h1><br/>
 <br>
-Le gui va être complètement revampé dans le futur alors certain glitch ne valent pas la peine de s'attarder.
-<br><br>
 <br>
 <UL>
 <LI>Après déiconifier un écran, l'affichage glitch si on déplace le frame.  
 </UL>
 Le bug est causé par l'objet web utilisé.  Les widgets avec du html, doivent être réinitialisé après la dé-iconification. 
 <br><br>
-La correction du problème sera dans une prochaine patch. 
-<br>
+
 <br>
 <a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
 <br>
@@ -1538,7 +1533,6 @@ Liste des objectifs à cour et moyen terme (par prioritée): <br>
 <LI>Meilleur gestion des erreurs.
 <LI>Rendre l'accès à la bd H2 disponnible pendant la phase PRELOAD.
 <LI>Ajout d'un système de configuration. 
-<LI>Revamper l'interface utilisateur.
 </UL>
 
 Liste des objectifs à long terme: <br>

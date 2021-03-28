@@ -1,21 +1,21 @@
 /*    
     execWindow.java 
-    Copyright (C) 2020 Stephane Boivin (Discord: Nmare418#6397)
+    Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
-    This file is part of "DU offline sandbox API".
+    This file is part of "DU lua sandbox API".
 
-    "DU offline sandbox API" is free software: you can redistribute it and/or modify
+    "DU lua sandbox API" is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    "DU offline sandbox API" is distributed in the hope that it will be useful,
+    "DU lua sandbox API" is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with "DU offline sandbox API".  If not, see <https://www.gnu.org/licenses/>.
+    along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package sandbox;
@@ -77,6 +77,7 @@ public class execWindow extends JFrame {
     public static boolean verboseJava = false;
     public static boolean verboseLua = false;
 	static String preloadFile;
+	static String scriptName = "default";
 	public static JMenuBar mb;
 	static JMenu fileMenu, editMenu, exportMenu, helpMenu;
 	static int screenId = 0;
@@ -270,6 +271,18 @@ public class execWindow extends JFrame {
     	helpMenu.setMnemonic(KeyEvent.VK_H);
     	helpMenu.setForeground(Color.white);
     	helpMenu.setFont(new Font("SansSerif Plain",Font.BOLD, 16));
+    	JMenuItem mItem_duweb = new JMenuItem("DU official");
+    	mItem_duweb.addActionListener(actionMenu);
+        helpMenu.add(mItem_duweb);
+    	JMenuItem mItem_apidoc = new JMenuItem("Sandbox API Online");
+    	mItem_apidoc.addActionListener(actionMenu);
+        helpMenu.add(mItem_apidoc);
+    	JMenuItem mItem_Codex = new JMenuItem("DU Codex");
+    	mItem_Codex.addActionListener(actionMenu);
+        helpMenu.add(mItem_Codex);
+    	JMenuItem mItem_Version = new JMenuItem("Version");
+    	mItem_Version.addActionListener(actionMenu);
+        helpMenu.add(mItem_Version);
     	JMenuItem mItem_About = new JMenuItem("About");
     	mItem_About.addActionListener(actionMenu);
         helpMenu.add(mItem_About);
@@ -311,7 +324,6 @@ public class execWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
             	System.out.println("loading "+preloadFile);           	
             	StartApplication(preloadFile);
-            	StopApplication(sandbox.elements);
             }
         });
         am.put("Run", new AbstractAction() {
@@ -320,7 +332,6 @@ public class execWindow extends JFrame {
             	String preload =  (String)runToolBox.getSelectedItem().toString();
             	System.out.println("loading "+preload);           	
             	StartApplication(preload);
-            	StopApplication(sandbox.elements);
             }
         });
 
@@ -401,6 +412,8 @@ public class execWindow extends JFrame {
 	verboseJava =preload.verboseJava;
 	screenId = preload.showOnScreen; 
 	editableScriptList = preload.editableScriptList;
+	scriptName = preload.scriptName;
+	if(scriptName == null) scriptName = ppreloadFile; 
 	
 	desktop = new JDesktopPane();
 	desktop.setBackground(Color.gray);
@@ -408,7 +421,7 @@ public class execWindow extends JFrame {
 	frame = new JFrame();
 	showOnScreen(execWindow.screenId);	
 
-	frame.setTitle("DU lua Sandbox "+MAIN.version+" - "+preloadFile);
+	frame.setTitle("DU lua Sandbox "+MAIN.version+" - "+scriptName);
 	frame.setIconImage(new ImageIcon("src/pictures/LogoDUAPI_PNG.png").getImage());  
 	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);  
 	frame.getContentPane().addMouseWheelListener(new wMouseWheelListener(this)); 
