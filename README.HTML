@@ -1,4 +1,5 @@
 <html>
+<title>DU Lua sandbox (API)</title>
 <style>
   body { background-color: #000; font-family: Arial, Helvetica, sans-serif; }
   div { font-family: Arial, Helvetica, sans-serif; }
@@ -63,6 +64,7 @@
               padding: 25px;}
  .downloadframe {  
               position: absolute; 
+			  width:250px;
               left: 995px;  
               top: 176px; 
               color: #FFFFFF;
@@ -111,6 +113,7 @@
     .comment {color: green;}
     .string {color: blue;}
 </style>
+
 <body>
 <a name="top"></a>
 
@@ -128,8 +131,19 @@ compatible Windows 7-10<br>
 <a href="#">(exe bientôt disponnible)</a>
 <br><br>
 <a href="https://github.com/nmare418/DU-Lua-Sandbox-API" target=_blank>GitHub</a>
+<br><br>
+<br><br>
+<h2>Donation</h2>
+Pour encourager l'auteur ou contribuer aux graphiques, cliquez le lien ci-dessous. Merci!
+<br><br>
+<form action="https://www.paypal.com/donate" method="post" target="_top">
+<input type="hidden" name="hosted_button_id" value="DM4DYBP5TDJJE" />
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+<img alt="" border="0" src="https://www.paypal.com/en_CA/i/scr/pixel.gif" width="1" height="1" />
+</form>
 </center>
 </div>
+
 <div id="title" class="titleframe">
 <CENTER>
 <b>DU lua sandbox</b> <BR>
@@ -202,57 +216,57 @@ compatible Windows 7-10<br>
 <h2>DU Lua Sandbox API</h2>
 <p>
 <br>
-Ce document est un tutoriel pour l'outil de dévelopement DU lua sandbox.  
-Il s'agit en fait d'un api permettant le dévelopement d'application LUA dans l'univers du jeux Dual universe.<br/>  
+Ce document est un tutoriel pour l'outil de développement DU lua sandbox.  
+Il s'agit en fait d'un api permettant le développement d'applications LUA dans l'univers du jeu Dual universe.<br/>  
 <br/>
 <br/>
 J'ai crée cet API en 2 parties.<br/>
 <br/>
-1 - Une api LUA  contenant (presque) toute les classes de DU. (duElementAPI)<br/> 
-2 - Une api JAVA contenant une sandbox LUA dual universe. (duJavaAPI)<br/>
+1 - une api LUA  contenant (presque) toutes les classes de DU. (duElementAPI)<br/> 
+2 - une api JAVA contenant une sandbox LUA dual universe. (duJavaAPI)<br/>
 <br/>
-La sandbox permet d'émuler la quasi totalitée des éléments du jeu, des écrans utilisant le html5 (incluant le svg) allant jusqu'au la base de donnée interne (database.getPlayer, database.getConstruct, databse.getElement). Il imite le fonctionnement en temp reel de plusieurs éléments du jeu.<br/>
+La sandbox permet d'émuler la quasi-totalité des éléments du jeu, des écrans utilisant le html5 (incluant le svg) allant jusqu'à la base de donnée interne (database.getPlayer, database.getConstruct, databse.getElement). Il imite le fonctionnement en temp reel de plusieurs éléments du jeu.<br/>
 <br/>
 Il est simple à utiliser.  La configuration ce fait à partir de fichier lua nommé Preload (voir la section preload de ce document).<br/>    
 <br/>
-Le code est en open source.  Il est accèssible via <a class="smllnk" href="https://github.com/nmare418/DU-Lua-Sandbox-API" target=_blank class="smllnk">ce github</a><br/> 
+Le code est en open source.  Il est accessible via <a class="smllnk" href="https://github.com/nmare418/DU-Lua-Sandbox-API" target=_blank class="smllnk">ce github</a><br/> 
 <br/>
 <br/>
 <br/>
 <b> A qui s'adresse cet outil.</b><br/>
 <br/>
-L'api à été concu pour travailler sur des écrans de dual universe (L'élément in game).<br/> 
+L'api à été conçu pour travailler sur des écrans de dual universe (L'élément in game).<br/> 
 <br/>
-Il à été conçu pour travailler en mode "projet".  La versatilitée du fichier de chargement (preload) permet de  créer des librairies de fonctions
-et de faire du code réutilisable.  Les scripts sont automatiquement intégré lors de l'exports.  La sandbox à particulièrement été conçu pour concevoir des applications ingame ou même des jeux.  
-L'élément databank est déja implémenté à 100%.<br/>
+Il a été conçu pour travailler en mode "projet" et permet de bénéficier d'un système de fichier. La versatilité du fichier de chargement (preload) permet de  créer des librairies de fonctions
+et de faire du code réutilisable.  Les scripts sont automatiquement intégrés lors de l'export (texte ou json).  La sandbox à particulièrement été conçu pour concevoir des applications ingame ou même des jeux.  
+L'élément databank est déjà implémenté à 100%.<br/>
 <br/>
 Il n'est pas encore assez avancé pour être efficace au niveau des systèmes de vol, mais il le sera probablement sur le long (avec de l'aide).
 <br/>
 <br/>
 <br/>
 </p>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br/>
 <br/>
 <br/>
 <a name="install"></a>
 <h1>Installation</h1>
 <br/>
-Décompressez le contenu du fichier DUOfflineSandbox.zip à l'emplacement de votre choix. le répertoire ./src et son contenu contient l'api et il est requis.<br/>   
+Décompressez le contenu du fichier DULuaSandbox.zip à l'emplacement de votre choix. le répertoire ./src et son contenu est requis à l'exécution de la sandbox. 
 <br/><br/>
 <br>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br/>
 <br/>
 <br/>
 <a name="standalone"></a>
-<h1>Utilisation en mode stand alone</h1><br/>
+<h1>Utilisation en mode standalone</h1><br/>
 
 <br/>
 <br/>
-pour l'ancer la sandbox. Cliquez sur \DUOfflineSandbox\dusandbox.exe<br/><br>
+pour lancer la sandbox. Cliquez sur dusandbox.exe<br/><br>
 
 La boite a outil de l'application permet de relancer le script en appuyant sur "Reload (F9)" ou de charger un nouveau script par la bar de lancement. "RUN (F5)"<br/>
 <br/>
@@ -260,7 +274,7 @@ La boite a outil de l'application permet de relancer le script en appuyant sur "
 <a name="eclipse"></a>
 <h1>Utilisation dans Eclispe LDT (mode interpreteur)</h1>
 <br>
-La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.eclipse.org/ldt/" target="_blank">Eclipse LDT</a>.  
+La sandbox peut être utilisé comme interpréteur LUA dans <a href="https://www.eclipse.org/ldt/" target="_blank">Eclipse LDT</a>.  
 <br>
      
 <ul class="nlist">
@@ -286,10 +300,10 @@ La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.ec
 </ul>
 <br>
 <br>
-<br>créez un lunch configuration pour chaques fichiers de preload.  Cliquez sur le tabb du fichier preload puis cliquez sur RUN (ctrl-F11) pour lancer le projet.</b><br>
+<br>créez un lunch configuration pour chaque fichiers de preload.  Cliquez sur le tabb du fichier preload puis cliquez sur RUN (ctrl-F11) pour lancer le projet.</b><br>
 <br>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br/>
 <br/>
 <br/>
@@ -299,13 +313,13 @@ La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.ec
 <table border="0" style="background-color: black; color: white;">
 <tr>
   <td>
-     databanks fonctionnelle<br/>
+     Databanks fonctionnelle<br/>
      <img src="./DOC/screenshot1.jpg" width="80%" onclick="window.open('./DOC/screenshot1.jpg', '_blank');"/><br><br>
-     exemple de système d'inventaire<br/>
+     Exemple de système d'inventaire<br/>
      <img src="./DOC/screenshot2.jpg" width="80%" onclick="window.open('./DOC/screenshot2.jpg', '_blank');"/><br><br>
      Création d'interface utilisateur avec souris fonctionnelle.<br/>
      <img src="./DOC/screenshot3.jpg" width="80%" onclick="window.open('./DOC/screenshot3.jpg', '_blank');"/><br><br>
-     Timers et update qui permet d'animer des svg en temp reel. <br/>
+     Timers et update qui permet d'animer des svg en temps réel. <br/>
      <img src="./DOC/screenshot4.jpg" width="80%" onclick="window.open('./DOC/screenshot4.jpg', '_blank');"/><br><br>
   </td>
   <td>
@@ -315,7 +329,7 @@ La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.ec
      <img src="./DOC/screenshot6.jpg" width="80%" onclick="window.open('./DOC/screenshot6.jpg', '_blank');"/><br><br>
      Imitation du codex lua de dual universe<br/>
      <img src="./DOC/screenshot7.jpg" width="80%" onclick="window.open('./DOC/screenshot7.jpg', '_blank');"/><br><br>
-     des exemples de code<br/>
+     Des exemples de code<br/>
      <img src="./DOC/screenshot8.jpg" width="80%" onclick="window.open('./DOC/screenshot8.jpg', '_blank');"/><br><br>
   </td>
 </tr>
@@ -325,20 +339,20 @@ La sandbox peut être utilisé comme interpreteur LUA dans <a href="https://www.ec
 <a name="preload"></a>
 <h1>PRELOAD</h1><br>
 <br>
-Le preload est un fichiers de configuration en LUA.  Il configure l'environnement et ajoute les éléments à la sandbox (door, unit, databank....)<br>
+Le preload est un fichier de configuration en LUA.  Il configure l'environnement et ajoute les éléments à la sandbox (door, unit, databank....)<br>
 <br>
-Par standard, le fichier de preload est nomé [nomprojet]_load.lua.   Il est utilisé pour démarrer votre projet.<br>  
+Par standard, le fichier de preload est nommé [nomprojet]_load.lua.   Il est utilisé pour démarrer votre projet.<br>  
 <br>
 Le preload charge les fichiers LUA pour les évènements (start, tick, stop...) relié aux scripts. Il sert aussi pour configurer la sandbox et rajouter des joueurs et constructs.<br>
 <br>
-Toute les fonctions du LUA sont disponnible. Y compris les fonctions de lecture/ecriture du système de fichier et les fonction lua "dofile" et load.<br> 
+Toutes les fonctions du LUA sont disponible. Y compris les fonctions de lecture/ecriture du système de fichier et les fonction lua "dofile" et load.<br> 
 <br>
-<b>A la fin du preload,  seul les configurations aquise et les éléments ajoutés sont conservés.  La session LUA est remise à zéro 
+<b>À la fin du preload,  seul les configurations acquise et les éléments ajoutés sont conservés.  La session LUA est remise à zéro 
 puis la sandbox est lancée (avec l'environnement du jeu).</b><br>
 <br>
-Evidemment, les fonctions utilitaires lié au chargement du preload ne sont pas utilisable dans l'environnement de jeu.<br>
+Évidemment, les fonctions utilitaires liées au chargement du preload ne sont pas utilisable dans l'environnement de jeu.<br>
 <br>
-Notez qu'il y a une librairie json disponnible dans la session du preload. (https://github.com/rxi/json.lua)<br>    
+Notez qu'il y a une librairie json disponible dans la session du preload. (https://github.com/rxi/json.lua)<br>    
 <br>
 <br>
 
@@ -364,14 +378,14 @@ obj = ScreenUnit(<span class="string">'screen1'</span>, <span class="value">1024
 moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<br>
 </div>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br><br>
 <a name="function"></a>
 <h1>Fonctions du preload</h1> 
 <br>
 
 
-<br><a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<br><a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br><br><br><b style="color: #A0A0FF">Outils</b>
 <hr>
 <a name="showOnScreen"></a>
@@ -449,7 +463,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="loadScript"></a>
 <div class="library">
     <div class="function">texte = loadScript(<span class="value">fichier</span>)</div>
-    <div class="function-desc">Charge un fichier text. Que ce soit un script lua ou une image svg. 
+    <div class="function-desc">Charge un fichier texte. Que ce soit un script lua ou une image svg. 
 	Le fichier est aussi ajouté à la liste des fichiers éditable accessible par le menu Edit.</div>
      
     <center>
@@ -477,7 +491,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         </thead>
         <tr>
           <td class="tdarg" width="10%">texte</td>  
-          <td class="tddesc">fichier text chargé.</td>  
+          <td class="tddesc">fichier texte chargé.</td>  
         </tr>
         </table> 
     </center>
@@ -532,7 +546,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="moveElement"></a>
 <div class="library">
     <div class="function">moveElement(<span class="value">id</span>, <span class="value">x</span>, <span class="value">y</span>)</div>
-    <div class="function-desc">Déplace le widget de l'élément [id] à l'emplacement x/y. Par défaut les éléments sont placé de haut en bas en partant de la gauche.</div>     
+    <div class="function-desc">Déplace le widget de l'élément [id] à l'emplacement x/y. Par défaut les éléments sont placés de haut en bas en partant de la gauche.</div>     
     <center>
         <table width="95%" cellspacing=0 cellpadding=0 >
         <thead>
@@ -582,7 +596,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         </table>
     </center>
 </div>
-<br><a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<br><a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 
 <br><br><br><b style="color: #A0A0FF">Configuration</b>
 <hr>
@@ -655,7 +669,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="setHUD"></a>
 <div class="library">
     <div class="function">setHUD(<span class="value">script</span>, <span class="value">x</span>, <span class="value">y</span>, <span class="value">width</span>, <span class="value">height</span>)</div>
-    <div class="function-desc">Initialise un écran hud.  Permet de lier le script pour l'évènement update.</div>     
+    <div class="function-desc">Initialise un écran hud.  Permet de lier le script pour l'événement update.</div>     
     <center>
         <table width="95%" cellspacing=0 cellpaddWing=0 >
         <thead>
@@ -668,7 +682,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         <tr>
           <td class="tdarg">script</td>  
           <td class="tddesc"><center><span class="value">string</span></center></td>  
-          <td class="tddesc">Script de l'évènement update.  optionnel.</td>  
+          <td class="tddesc">Script de l'événement update.  optionnel.</td>  
         </tr>
         <tr>
           <td class="tdarg">x</td>  
@@ -716,7 +730,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         <tr>
           <td class="tdarg">nom</td>  
           <td class="tddesc"><center><span class="value">string</span></center></td>  
-          <td class="tddesc">Nom du timer à utliser pour la fonction setTimer</td>  
+          <td class="tddesc">Nom du timer à utiliser pour la fonction setTimer</td>  
         </tr>
         <tr>
           <td class="tdarg">script</td>  
@@ -726,7 +740,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
         </table>
     </center>
 </div>
-<br><a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<br><a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 
 
 <br><br><br><b style="color: #A0A0FF">Éléments</b>
@@ -1160,7 +1174,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="RadarUnit"></a>
 <div class="library">
     <div class="function">id = RadarUnit(<span class="value">name</span>, <span class="value">range</span>, <span class="value">scriptEnter</span>, <span class="value">scriptExit</span>)</div>
-    <div class="function-desc">Initialise un élément Radar. Nécéssite l'initialisation de la base de donnée interne pour les dummy targets (voir <a href="#setupDatabase">SetupDatabase</a>). voir l'example radar_load.lua pour plus de détailles. </div>
+    <div class="function-desc">Initialise un élément Radar. Nécessite l'initialisation de la base de donnée interne pour les dummy targets (voir <a href="#setupDatabase">SetupDatabase</a>). voir l'exemple radar_load.lua pour plus de détail. </div>
      
     <center>
         <table width="95%" cellspacing=0 cellpadding=0 >
@@ -1211,7 +1225,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="ReceiverUnit"></a>
 <div class="library">
     <div class="function">id = ReceiverUnit(<span class="value">name</span>)</div>
-    <div class="function-desc">Initialise un élément Receiver. Nécéssite l'utilisation de <a href="#addChannel">addChannel(id, channel, script)</a> pour assigner les scripts aux channels. (voir emitter_load.lua) </div>
+    <div class="function-desc">Initialise un élément Receiver. Nécessite l'utilisation de <a href="#addChannel">addChannel(id, channel, script)</a> pour assigner les scripts aux channels. (voir emitter_load.lua) </div>
      
     <center>
         <table width="95%" cellspacing=0 cellpadding=0 >
@@ -1247,7 +1261,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="ScreenUnit"></a>
 <div class="library">
     <div class="function">id = ScreenUnit(<span class="value">name</span>, <span class="value">sizeX</span>, <span class="value">sizeY</span>)</div>
-    <div class="function-desc">Initialise un élément Screen. La taille des écran est normalement de 1024x614.  Vous pouvez cependant utiliser les annotations vw et vh pour réduire la taille de l'écran.</div>
+    <div class="function-desc">Initialise un élément Screen. La taille des écrans est normalement de 1024x614.  Vous pouvez cependant utiliser les annotations vw et vh pour réduire la taille de l'écran.</div>
      
     <center>
         <table width="95%" cellspacing=0 cellpadding=0 >
@@ -1329,7 +1343,7 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
 <a name="Unit"></a>
 <div class="library">
     <div class="function">id = Unit(<span class="value">scriptStart</span>, <span class="value">scriptStop</span>)</div>
-    <div class="function-desc">Initialise un unit (programming board). fonctionne avec <a href="#setupTimer">setupTimer(unitId, timerName, script)</a> pour l'assignement des scripts aux timers.</div>
+    <div class="function-desc">Initialise un unit (programming board). Fonctionne avec <a href="#setupTimer">setupTimer(unitId, timerName, script)</a> pour l'assignement des scripts aux timers.</div>
      
     <center>
         <table width="95%" cellspacing=0 cellpadding=0 >
@@ -1367,19 +1381,19 @@ moveElement(obj, <span class="value">300</span>, <span class="value">5</span>)<b
     </center>
 </div>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br>
 <br>
 <br>
 
 <a name="samples"></a>
-<h1>Examples</h1><br/>
+<h1>Exemples</h1><br/>
 <br/>
-Des examples de code source sont disponnible dans le répertoire de l'application.
+Des exemples de code source sont disponible dans le répertoire de l'application.
 <br/><br/>
 <ul>
-  <li>helloworld_load.lua: Un simpe helloworld.</li>
-  <li>helloworld2_load.lua: Un simpe helloworld. un peu plus complexe.</li>
+  <li>helloworld_load.lua: Un simple helloworld.</li>
+  <li>helloworld2_load.lua: Un simple helloworld. un peu plus complexe.</li>
   <li>bouncingball_load.lua: Un test d'animation utilisant du svg.</li>
   <li>buttonManager_load.lua: un button manager simple d'utilisation.</li>
   <li>databank_load.lua: utilisation d'une databank.</li>
@@ -1390,13 +1404,13 @@ Des examples de code source sont disponnible dans le répertoire de l'application
   <li>mapview_load.lua: Radar de type mapview (vue de haut)</li>
   <li>flymartFuelStation_load.lua: Un exemple de système d'inventaire.</li>
   <li>visitor_load.lua: Un log de visiteur.  A activer avec un detector.</li>
-  <li>splitscreenx4_load.lua: Un test d'animation sur un affichage à 4 écran.</li>
+  <li>splitscreenx4_load.lua: Un test d'animation sur un affichage à 4 écrans.</li>
   <li>tricks_and_goodies.lua: Des trucs utile, trouvé un peu partout..</li>
   
 </ul>
 
 <br/>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br>
 <br>
 <br>
@@ -1405,17 +1419,17 @@ Des examples de code source sont disponnible dans le répertoire de l'application
 <br>
 Les commandes d'exports de la toolboar, permet d'accéder à une version du script LUA pouvant facilement être copié vers l'éditeur de Dual Universe.<br>  
 <br>
-L'export compile toute les fichiers .lua du projet (librairies, évènements...) en un seul fichier.<br>
+L'export compile toute les fichiers .lua du projet (librairies, événements...) en un seul fichier.<br>
 <br>
 La fonction d'exports de l'api permet d'accéder au code source de l'API LUA.   Il peut parfois vous permettre de débuguer vos scripts et 
 peut permettre de comprendre le fonctionnement interne de l'API.<br>
 <br>
 <br>
 Vous pouvez aussi exporter en JSON. L'implémentation n'est pas encore complète (C'est dans le haut de la liste de prioritée).  
-Bientôt, vous pourrez copier directement, la string JSON dans Dual universe.  (C'est déjà possible avec plusieurs des examples fourni (incluant visitor_load et flymart2).)  
+Bientôt, vous pourrez copier directement, la string JSON dans Dual universe.  (C'est déjà possible avec plusieurs des exemples fourni (incluant visitor_load et flymart2).)  
 
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br>
 <br>
 <br>
@@ -1472,18 +1486,18 @@ les arrays suivent une structure assez simple.<br>
 </div>
 <br>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br>
 <br>
 <br>
 <a name="h2"></a>
 <h1>BD SQL interne (H2)</h1>
 <br><br>
-Les dataBanks utilisent un système de base de donnée interne.  Il est semblable à des base de donnée relationnel (mysql, oracle, sql server...), mais , mais tiens en mémoire. <br>
+Les dataBanks utilisent un système de base de donnée interne.  Il est semblable à des base de donnée relationnelle (mysql, oracle, sql server...), mais , mais tiens en mémoire. <br>
 <br>
 Cet outil vous permet de maintenir des bases de données. De copier des tables, copier des données et d'effacer directement le contenue des databanks.  Il peut permettre d'exporter des données.<br>
 <br>
-Notez que, le nom de l'élément est aussi le nom de la base de donnée dans H2.  Si vous nommez les dataBanks avec le même nom dans 2 projets différents, 
+Notez que le nom de l'élément est aussi le nom de la base de donnée dans H2.  Si vous nommez les dataBanks avec le même nom dans 2 projets différents, 
 ils utiliseront la même source de donnée dans la base de donnée H2.<br>
 <br>
 Documentation de H2 <a href="https://www.h2database.com/html/main.html" target="_blank">H2 Database Engine</a><br>
@@ -1500,7 +1514,7 @@ Notes:
 </ul>
 <br>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br>
 <br>
 <br>
@@ -1511,35 +1525,35 @@ Notes:
 <UL>
 <LI>Après déiconifier un écran, l'affichage glitch si on déplace le frame.  
 </UL>
-Le bug est causé par l'objet web utilisé.  Les widgets avec du html, doivent être réinitialisé après la dé-iconification. 
+Le bug est causé par l'objet web utilisé.  Les widgets avec du html, doivent être réinitialisés après la dé-iconification. Le bug sera bientôt corrigé  
 <br><br>
 
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 <br>
 <br>
 <br>
 <a name="todo"></a>
 <h1>A faire (todo)</h1><br/>
 <br>
-Liste des objectifs à cour et moyen terme (par prioritée): <br>
+Liste des objectifs à cour et moyen terme (par priorité): <br>
 <br>
 <UL>
 <LI>Nav. Les events du clavier.  
-<LI>Amméliorer l'export JSON. (Support json est encore impartiel)
-<LI>Ajoutez de nouveau éléments (dont l'industry).
+<LI>Améliorer l'export JSON. (Support json est encore impartiel)
+<LI>Ajoutez de nouveaux éléments (dont l'industry).
 <LI>Corriger le radar.
 <LI>Mettre à jour l'élément conteneur (Liste d'objet). Phase analyse.
-<LI>Meilleur gestion des erreurs.
-<LI>Rendre l'accès à la bd H2 disponnible pendant la phase PRELOAD.
+<LI>Meilleure gestion des erreurs.
+<LI>Rendre l'accès à la bd H2 disponible pendant la phase PRELOAD.
 <LI>Ajout d'un système de configuration. 
 </UL>
 
 Liste des objectifs à long terme: <br>
 <br>
 <UL>
-<LI>Utilisation de plusieurs UNIT. Chaques unit doit avoir sont instance lua. 
-<LI>Un editeur lua interne.
+<LI>Utilisation de plusieurs UNIT. Chaque unit doit avoir sont instance lua. 
+<LI>Un éditeur lua interne.
 <LI>Système d'addon en LUA donnant accès aux fonctions de l'API Java ainsi qu'a divers outil.
 <LI>Implémentation d'OpenGL?
 <LI>Support Linux, tests.
@@ -1547,7 +1561,7 @@ Liste des objectifs à long terme: <br>
 
 <br>
 <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 
 <a name="credit"></a>
 <h1>Crédits</h1><br/>
@@ -1571,7 +1585,7 @@ Illustrations par l'artiste Valérie Dandois (<a href="https://valeriedandois.wix
 <br>
 <br>
  <br>
-<a class="top" style="float: right;" href="#top">retourner à l'index</a><br>
+<a class="top" style="float: right;" href="#top">Retourner à l'index</a><br>
 
 
   

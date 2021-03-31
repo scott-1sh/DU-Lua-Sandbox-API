@@ -326,7 +326,7 @@ class MenuActionListener implements ActionListener {
 				// openbrowser("http://www.dusandbox.org#credit");
 				String txt = "<div style=\"color: #FFFFFF;\"><hr><h1>Credits</h1><br>Created by Stephane Boivin<br>"+
 				 			 "Development Java/Lua by Stephane Boivin aka Nmare418 (Discord:  Nmare418#6397)<br><br>"+
-				             "Illustrations by Valerie Dandois (<a href=\"https://valeriedandois.wixsite.com/valdandois\">https://valeriedandois.wixsite.com/valdandois</a>)<br><br><br>"+
+				             "Illustrated by Valerie Dandois (<a href=\"https://valeriedandois.wixsite.com/valdandois\">https://valeriedandois.wixsite.com/valdandois</a>)<br><br><br>"+
 				             "<b>Browser HTML (used for screens):</b>  DJNativeSwing par Christopher Deckers <br>  <a href=\"http://djproject.sourceforge.net/ns/index.html\" target=\"_blank\">http://djproject.sourceforge.net/ns/index.html</a><br><br>"+
 				             "<b>Interpreter LUA:</b>  LuaJ par James Roseborough, Ian Farmer <br> <a href=\"http://luaj.org\" target=\"_blank\">luaj.org</a><br><br>"+
 				             "<b>Database:</b> H2  par Thomas Mueller, HSQLDB Group <br> <a href=\"http://www.h2database.com\" target=\"_blank\">www.h2database.com</a><br><br>"+

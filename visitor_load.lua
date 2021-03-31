@@ -44,28 +44,29 @@ obj = ScreenUnit('screen3', 512, 306)
 
 
 playerList = {} -- also used as owners list
-playerList[1] = {id = 1, name = 'Nmare418', worldPos = {131,-33,36}}
-playerList[2] = {id = 2, name = 'Julie', worldPos = {0,0,0}}
-playerList[3] = {id = 3, name = 'Roger', worldPos = {123,-23,64}}
-playerList[4] = {id = 4, name = 'Robert', worldPos = {113,-623,46}}
-playerList[5] = {id = 5, name = 'Marie', worldPos = {114,-633,56}}
-playerList[6] = {id = 6, name = 'Claude', worldPos = {124,-63,26}}
-playerList[7] = {id = 7, name = 'Sandra', worldPos = {125,-33,66}} 
-playerList[8] = {id = 8, name = 'Bob', worldPos = {125,-33,66}} 
-playerList[9] = {id = 9, name = 'Jean', worldPos = {113,-623,46}}
-playerList[10] = {id = 10, name = 'Alice', worldPos = {114,-633,56}}
-playerList[11] = {id = 11, name = 'Eric', worldPos = {124,-63,26}}
-playerList[12] = {id = 12, name = 'Jhon', worldPos = {125,-33,66}} 
-playerList[13] = {id = 13, name = 'Alphonse', worldPos = {125,-33,66}} 
-playerList[14] = {id = 14, name = 'Rick', worldPos = {125,-33,66}} 
-playerList[15] = {id = 15, name = 'Marie-claude', worldPos = {125,-33,66}} 
-playerList[16] = {id = 16, name = 'Mario', worldPos = {125,-33,66}} 
-playerList[17] = {id = 17, name = 'Donald', worldPos = {125,-33,66}} 
-playerList[18] = {id = 18, name = 'Xavier', worldPos = {125,-33,66}} 
-playerList[19] = {id = 19, name = 'Line', worldPos = {125,-33,66}} 
-playerList[20] = {id = 20, name = 'Maude', worldPos = {125,-33,66}} 
-playerList[21] = {id = 21, name = 'Bart', worldPos = {125,-33,66}} 
-playerList[22] = {id = 22, name = 'Lisa', worldPos = {125,-33,66}} 
+playerList[1] = {id = 0, name = 'unreachable', worldPos = {0,0,0}}
+playerList[2] = {id = 1, name = 'Nmare418', worldPos = {131,-33,36}}
+playerList[3] = {id = 2, name = 'Julie', worldPos = {0,0,0}}
+playerList[4] = {id = 3, name = 'Roger', worldPos = {123,-23,64}}
+playerList[5] = {id = 4, name = 'Robert', worldPos = {113,-623,46}}
+playerList[6] = {id = 5, name = 'Marie', worldPos = {114,-633,56}}
+playerList[7] = {id = 6, name = 'Claude', worldPos = {124,-63,26}}
+playerList[8] = {id = 7, name = 'Sandra', worldPos = {125,-33,66}} 
+playerList[9] = {id = 8, name = 'Bob', worldPos = {125,-33,66}} 
+playerList[10] = {id = 9, name = 'Jean', worldPos = {113,-623,46}}
+playerList[11] = {id = 10, name = 'Alice', worldPos = {114,-633,56}}
+playerList[12] = {id = 11, name = 'Eric', worldPos = {124,-63,26}}
+playerList[13] = {id = 12, name = 'Jhon', worldPos = {125,-33,66}} 
+playerList[14] = {id = 13, name = 'Alphonse', worldPos = {125,-33,66}} 
+playerList[15] = {id = 14, name = 'Rick', worldPos = {125,-33,66}} 
+playerList[16] = {id = 15, name = 'Marie-claude', worldPos = {125,-33,66}} 
+playerList[17] = {id = 16, name = 'Mario', worldPos = {125,-33,66}} 
+playerList[18] = {id = 17, name = 'Donald', worldPos = {125,-33,66}} 
+playerList[19] = {id = 18, name = 'Xavier', worldPos = {125,-33,66}} 
+playerList[20] = {id = 19, name = 'Line', worldPos = {125,-33,66}} 
+playerList[21] = {id = 20, name = 'Maude', worldPos = {125,-33,66}} 
+playerList[22] = {id = 21, name = 'Bart', worldPos = {125,-33,66}} 
+playerList[23] = {id = 22, name = 'Lisa', worldPos = {125,-33,66}} 
 
 
 constructList = {}

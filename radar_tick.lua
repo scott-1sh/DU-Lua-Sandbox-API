@@ -25,13 +25,14 @@ local cells = " "
 
 for i, id in ipairs( radar1.getEntries() ) do
  
-  cells = cells.."<tr><td align=center>"..id.."</td><td>"..radar1.getConstructName(id).."</td><td>"..radar1.getConstructSize(id)[1].."</td><td align=center>"..radar1.getConstructType(id).."</td></tr>"
+  cells = cells.."<tr><td align=center>"..id.."</td>"
+  cells = cells.."<td>"..radar1.getConstructName(id).."</td>"
+  cells = cells.."<td align=center>"..radar1.getConstructSize(id)[1].."</td>"
+  cells = cells.."<td align=center>"..radar1.getConstructType(id).."</td></tr>"
 
 end
 
 local text = string.format(htmlTable, cells)
 
-htmlText = string.format(htmlContent, text)
-
-screen1.addContent(0,0,htmlBackground1)
-screen1.addContent(0,0,htmlText)
+screen1.addContent(0, 0, htmlBackground1)
+screen1.addContent(0, 0, string.format(htmlContent, text))

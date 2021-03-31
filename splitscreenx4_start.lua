@@ -17,6 +17,11 @@
     You should have received a copy of the GNU General Public License
     along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 ]]
+
+-- take 4 screen to display the content like a single screen
+-- Resize the screens for in game content.
+-- Sorry not tested alot ingame.
+
 screenX = 306
 screenY = 153
 scale = 2
@@ -62,6 +67,9 @@ end
 
 -- init
 ss4 = SplitScreen4:new{screen1, screen2, screen3, screen4, screenX = 306, screenY = 153, scale = 2}
+
+-- in game use 
+-- ss4 = SplitScreen4:new{screen1, screen2, screen3, screen4, screenX = 1024, screenY = 614, scale = 2}
 
 -- some svg stuff
 svgBackground ='<rect width="100vw" height="100vh" style="fill:rgb(0,0,255);stroke-width:10;stroke:rgb(255,255,0)" />'

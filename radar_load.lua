@@ -3,17 +3,17 @@
     Copyright (C) 2021 Stephane Boivin (Discord: Nmare418#6397)
     
     This file is part of "DU lua sandbox API".
-
+	
     "DU lua sandbox API" is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
+	
     "DU lua sandbox API" is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
+	
     You should have received a copy of the GNU General Public License
     along with "DU lua sandbox API".  If not, see <https://www.gnu.org/licenses/>.
 ]]
@@ -31,7 +31,8 @@ obj = Unit(UnitStart, UnitStop)
 setupTimer(obj, 'loop', UnitTick)
 
 playerList = {} -- also used for owners list
-playerList[1] = {id = 0, name = 'unreachable', worldPos = {0,0,0}}
+-- id 0 unreachable is required
+playerList[1] = {id = 0, name = 'unreachable', worldPos = {0,0,0}} 
 playerList[2] = {id = 1, name = 'Nmare418', worldPos = {131,-33,36}}
 playerList[3] = {id = 2, name = 'Roger', worldPos = {123,-23,64}}
 playerList[4] = {id = 3, name = 'Robert', worldPos = {113,-623,46}}
@@ -39,7 +40,7 @@ playerList[5] = {id = 4, name = 'Marie', worldPos = {114,-633,56}}
 playerList[6] = {id = 5, name = 'Claude', worldPos = {124,-63,26}}
 playerList[7] = {id = 6, name = 'Sandra', worldPos = {125,-33,66}} 
 playerList[8] = {id = 7, name = 'Albert', worldPos = {125,-33,66}} 
-local owner = 2
+local owner = 4
 
 constructList = {}
 constructList[1] = {id = 1, owner = 7, name = 'Base 1', ctype='static',  pos = {133,-6233,66}, size = {115,134,122}, speed = {0,0,0}, mass = 2101.323 }
@@ -65,7 +66,3 @@ obj = RadarUnit('radar1', 10000, scriptEnter, scriptExit)
 -- Screen
 obj = ScreenUnit('screen1', 1024, 612)
 moveElement(obj, 230, 5)
-
--- A json lib is included in the PRELOAD session (https://github.com/rxi/json.lua)
--- print(json.encode(constructList))
-

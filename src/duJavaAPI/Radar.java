@@ -121,7 +121,7 @@ public class Radar extends BaseElement {
 
 	@Override
     public void LoadScreen(String phtml) {		
-		web = new JWebBrowser();
+		web = new JWebBrowser(JWebBrowser.destroyOnFinalization());
         web.setStatusBarVisible(false);
 		web.setMenuBarVisible(false);
 		// web.setBorder(null);		
