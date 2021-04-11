@@ -287,9 +287,9 @@ public class Radar extends BaseElement {
 				case "getConstructName":
 	  				 id = Integer.valueOf(param[1])-1;
 				     return sandbox.worldConstruct.get(id).name;
-				case "getConstructOwner":
+/*				case "getConstructOwner":
 	 				 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).owner;
+				     return sandbox.worldConstruct.get(id).owner; */
 				case "getConstructSize":
 	 				 id = Integer.valueOf(param[1])-1;
 				     return sandbox.worldConstruct.get(id).size;				

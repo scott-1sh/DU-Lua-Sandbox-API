@@ -40,7 +40,7 @@ end
 
 function iDatabase:getConstruct(radar, id)
     local construct = {}
-    construct.owner = radar.getConstructOwner(id)
+    -- construct.owner = radar.getConstructOwner(id)
     construct.type = radar.getConstructType(id)
     construct.size = radar.getConstructSize(id)
     construct.worldPos = radar.getConstructWorldPos(id)

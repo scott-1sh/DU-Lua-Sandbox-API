@@ -199,6 +199,8 @@ playerList = IndexToPlayerList(index)
 masterPlayerId = unit.getMasterPlayerId()
 masterPlayerName = system.getPlayerName(masterPlayerId)
 
+print(masterPlayerName)
+
 -- new visit flag (for stats) 
 local newVisit = true 
 

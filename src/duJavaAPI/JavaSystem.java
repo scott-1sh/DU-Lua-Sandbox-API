@@ -118,7 +118,7 @@ public class JavaSystem {
 				case "getPlayerName":
 					try {
 						if(verboseJava && param[1] == null) System.out.println("[JAVA] Warning getPlayerName: null parameter");
-						String name = eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])-1).name;
+						String name = eWindow.sandbox.worldPlayer.get(Integer.valueOf(param[1])).name;
 	
 						return name;
 					} catch (Exception e) { // not found

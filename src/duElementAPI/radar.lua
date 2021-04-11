@@ -44,7 +44,6 @@ function createInterfaceRadar(id, name)
   obj.getRange = function() return obj.radar:getRange() end
   obj._setRange = function() return obj.radar:setRange() end
   obj.getEntries = function() return obj.radar:getEntries() end
-  obj.getConstructOwner = function(id) return obj.radar:getConstructOwner(id) end
   obj.getConstructSize = function(id) return obj.radar:getConstructSize(id) end
   obj.getConstructType = function(id) return obj.radar:getConstructType(id) end
   obj.getConstructWorldPos = function(id) return obj.radar:getConstructWorldPos(id) end
@@ -97,10 +96,6 @@ end
 
 function Radar:getEntries() 
   return JavaWindow:get(self.id, {"getEntries"})    
-end
-
-function Radar:getConstructOwner(id) 
-  return JavaWindow:get(self.id, {"getConstructOwner", id})    
 end
 
 function Radar:getConstructSize(id) 

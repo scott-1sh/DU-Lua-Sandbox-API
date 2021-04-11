@@ -1,1 +1,1 @@
-java -jar DUOfflineSandbox.jar %
+"jdk-15/bin/java.exe" -jar duSandbox.JAR %1 
