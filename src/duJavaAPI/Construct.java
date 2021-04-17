@@ -28,11 +28,12 @@ public class Construct {
 	public String name;
 	public String ctype;
 	public double mass;
+	public boolean transponder;
 
 	// events
     public boolean outOfRange = false;
 	
-	public Construct(int pid, double[] ppos, double[] psize, double[] pspeed, int powner, String pname, String pctype, double pmass) {
+	public Construct(int pid, double[] ppos, double[] psize, double[] pspeed, int powner, String pname, String pctype, double pmass, boolean ptransponder) {
 		this.id = pid;
 		this.pos = ppos;  
 		this.size = psize;
@@ -41,6 +42,7 @@ public class Construct {
 		this.name = pname;
 		this.ctype = pctype;
 		this.mass = pmass;
+		this.transponder = ptransponder;
 		this.outOfRange = false;
 	}
 

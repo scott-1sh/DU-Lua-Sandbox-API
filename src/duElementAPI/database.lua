@@ -50,6 +50,7 @@ function iDatabase:getConstruct(radar, id)
     construct.speed = radar.getConstructAcceleration(id)
     construct.acceleration = radar.getConstructAcceleration(id)
     construct.name = radar.getConstructName(id)
+    construct.hasMatchingTransponder = radar.hasMatchingTransponder(id)
     return construct
 end
 

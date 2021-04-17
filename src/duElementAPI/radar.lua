@@ -53,7 +53,7 @@ function createInterfaceRadar(id, name)
   obj.getConstructVelocity = function(id) return obj.radar:getConstructVelocity(id) end
   obj.getConstructAcceleration = function(id) return obj.radar:getConstructAcceleration(id) end
   obj.getConstructName = function(id) return obj.radar:getConstructName(id) end
-  obj.RUN = function(pscript) obj.radar:RUN(pscript) end;
+  obj.hasMatchingTransponder = function(id) return obj.radar:hasMatchingTransponder(id) end
   
   obj.hide = function() obj.generic:hide() end
   obj.show = function() obj.generic:show() end
@@ -132,4 +132,8 @@ end
 
 function Radar:getConstructName(id) 
   return JavaWindow:get(self.id, {"getConstructName", id})    
+end
+
+function Radar:hasMatchingTransponder(id)
+  return JavaWindow:get(self.id, {"hasMatchingTransponder", id})
 end

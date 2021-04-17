@@ -29,7 +29,8 @@ obj = Unit(startScript, '')
 updateScript =  loadScript('Hud_update.lua')
 
 -- Large hud
-setHUD(updateScript, 210, 1, 1100, 800)
+-- speed 25ms
+setHUD(updateScript, 45, 210, 1, 1100, 800)
 
 -- To setup a hud at the default position
 -- setHUD(updateScript) 

@@ -28,7 +28,12 @@ for i, id in ipairs( radar1.getEntries() ) do
   cells = cells.."<tr><td align=center>"..id.."</td>"
   cells = cells.."<td>"..radar1.getConstructName(id).."</td>"
   cells = cells.."<td align=center>"..radar1.getConstructSize(id)[1].."</td>"
-  cells = cells.."<td align=center>"..radar1.getConstructType(id).."</td></tr>"
+  cells = cells.."<td align=center>"..radar1.getConstructType(id).."</td>"
+  local trs = 'No';
+  if radar1.hasMatchingTransponder(id) then  
+    trs = 'Yes' 
+  end 
+  cells = cells.."<td align=center>"..trs.."</td></tr>"
 
 end
 

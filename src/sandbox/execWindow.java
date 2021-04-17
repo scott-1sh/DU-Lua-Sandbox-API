@@ -298,8 +298,8 @@ public class execWindow extends JFrame {
             }
         });
         for (File loadFile : files) {
-        	runToolBox.addItem(loadFile.getAbsoluteFile());
-        	// runToolBox.addItem(loadFile.getName());
+        	// runToolBox.addItem(loadFile.getAbsoluteFile());
+        	runToolBox.addItem(loadFile.getName());
         }
         // runToolBox.setForeground(Color.BLUE);
         // runToolBox.setBackground(Color.YELLOW);
@@ -440,11 +440,13 @@ public class execWindow extends JFrame {
     });
     
 	
+	// add a system out 
 	pConsole.buildFrame(frame.getBounds());
 	desktop.add(pConsole.frame);
+	
 
 	// Show HUD	
-	hud = new HUD(preload.hudParam.Script, preload.hudParam.x, preload.hudParam.y, preload.hudParam.sizeX, preload.hudParam.sizeY, verboseJava);
+	hud = new HUD(preload.hudParam.Script, preload.hudParam.speed, preload.hudParam.x, preload.hudParam.y, preload.hudParam.sizeX, preload.hudParam.sizeY, verboseJava);
 	if(!preload.hudParam.defaulthud) {
 	  hud.buildFrame(frame.getBounds());
 	  desktop.add(hud.frame); 
@@ -456,6 +458,16 @@ public class execWindow extends JFrame {
 
 	// create the menu bar (require a valid sandbox instance)
 	createMenuBar();
+
+	// Throw the preload error if terminated in error.
+	if(preload.errorCode != 0) {
+		System.out.println("Preload session terminated with errorCode: "+preload.errorCode);
+		System.out.println("dead");
+		frame.setVisible(true); 	
+		frame.getContentPane().setVisible(true);
+		execWindow.frame.setTitle(execWindow.frame.getTitle()+" - dead!");
+		return;
+	}
 
 	// insert elements in the lua and java environment
     for (DUElement elem : preload.elements ) {

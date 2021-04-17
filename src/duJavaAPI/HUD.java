@@ -57,7 +57,7 @@ import sandbox.execWindow;
 public class HUD {
 public int sizeX;
 public int sizeY;
-public int speed = 80;
+public int speed = 40;
 public String updateScript;
 private JWebBrowser web = null;
 public String html = "";
@@ -75,9 +75,10 @@ String baseHtml = "<html>\r\n" +
         "</head><body>" +
 		"</body></html>\r\n";
 		
-public HUD(String pupdateScript, int px, int py, int psizeX, int psizeY,  boolean pverboseJava) {
+public HUD(String pupdateScript, int pspeed, int px, int py, int psizeX, int psizeY,  boolean pverboseJava) {
     x = px;
 	y = py;
+	speed = pspeed;
 	sizeX = psizeX;
 	sizeY = psizeY;
 	updateScript = pupdateScript;

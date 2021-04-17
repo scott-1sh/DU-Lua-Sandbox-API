@@ -35,6 +35,7 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import sandbox.execLUA;
 import sandbox.execTimer;
 import sandbox.execWindow;
 
@@ -82,7 +83,7 @@ public class Radar extends BaseElement {
     		"   <text x=\"180\" y=\"93\" font-family=\"Verdana\" font-size=\"9\">x</text>" +
     		"   <text x=\"94\" y=\"7\" font-family=\"Verdana\" font-size=\"9\">y</text>" +
     		"   <text x=\"2\" y=\"7\" font-family=\"Verdana\" font-size=\"9\">Map view</text>" +
-    		String.format("   <text x=\"118\" y=\"188\" font-family=\"Arial\" font-size=\"9\">Range: %skm</text>",(range/1000)) +
+    		"   <text x=\"118\" y=\"188\" font-family=\"Arial\" font-size=\"9\">Range: %skm</text>" +
     	    "</g>%s</svg>";
 
     
@@ -168,7 +169,7 @@ public class Radar extends BaseElement {
 					  if(distance > range) { 					     
  						  if(!tmpConstruct.outOfRange) {
 						    if(verboseJava) System.out.println(String.format("[JAVA] ["+name+"]  Construct %s %s (%s) ZONE OUT", sandbox.worldConstruct.get(i).id, sandbox.worldConstruct.get(i).name, sandbox.worldConstruct.get(i).owner));
-						    sandbox.RUN("self="+name+" id="+tmpConstruct.id+" "+scriptExit, name+":leave(id)");
+						    if(tmpConstruct.transponder && scriptExit != null) sandbox.RUN("self="+name+" id="+tmpConstruct.id+" "+scriptExit, name+":leave(id)");
 						    tmpConstruct.outOfRange = true;
  						  }
 					  }
@@ -176,10 +177,10 @@ public class Radar extends BaseElement {
 					  // event ZONE IN
 					  if(tmpConstruct.outOfRange && distance < range) {
 					    if(verboseJava) System.out.println(String.format("[JAVA] ["+name+"] Construct %s %s (%s) ZONE IN",sandbox.worldConstruct.get(i).id, sandbox.worldConstruct.get(i).name, sandbox.worldConstruct.get(i).owner));
-					    sandbox.RUN("self="+name+" id="+tmpConstruct.id+" "+scriptEnter, name+":enter(id)");
+					    if(tmpConstruct.transponder && scriptEnter != null) sandbox.RUN("self="+name+" id="+tmpConstruct.id+" "+scriptEnter, name+":enter(id)");
 					    tmpConstruct.outOfRange = false;
 					  }
-					      				  
+
 					  // rebuild 
 					  sandbox.worldConstruct.set(i, tmpConstruct);
     			  }     			  
@@ -196,6 +197,10 @@ public class Radar extends BaseElement {
    	    double distance = 0; 
 		
         for(Construct b:sandbox.worldConstruct) {
+        	 
+        	 // need a transponder
+        	 if(!b.transponder) continue; 
+        	 
         	 // System.out.println("construct:"+b.name+"  owner-> "+b.owner );
         	 String color = "#FFFFFF";
      		 double xx = 0, yy = 0; 
@@ -228,7 +233,7 @@ public class Radar extends BaseElement {
         }
 		
 		// create an overlay         
-    	html = String.format(radarSVG, svgPoint);
+    	html = String.format(radarSVG, (range/1000), svgPoint);
     	html = "document.getElementsByTagName(\"BODY\")[0].innerHTML = \""+html.replace("\"", "\\\"")+"\";";	    	
     	html = html.replace( "\r", "");
     	html = html.replace( "\n", "");	    	    	
@@ -265,13 +270,13 @@ public class Radar extends BaseElement {
     public Object get(String[] param) {    	
 		String pcommand = param[0];
 		int id = 0;
-		
+		 LuaTable result = new LuaTable();		 
 		try {
 			switch (pcommand) {
 				case "getRange":					
 			         return range;
 				case "getEntries":
-					 LuaTable result = new LuaTable();
+
 			   	     double distance = 0;
 			   	     int iCnt = 0;
 					 for(int i = 0; i < sandbox.worldConstruct.size(); i++) {
@@ -292,29 +297,59 @@ public class Radar extends BaseElement {
 				     return sandbox.worldConstruct.get(id).owner; */
 				case "getConstructSize":
 	 				 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).size;				
+	 				result.set(1, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(id).size[0]));
+					result.set(2, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(id).size[1]));
+					result.set(3, CoerceJavaToLua.coerce(execLUA.worldConstruct.get(id).size[2]));
+					return result;
 				case "getConstructType":
 	 				 id = Integer.valueOf(param[1])-1;
 				     return sandbox.worldConstruct.get(id).ctype;				
 				case "getConstructWorldPos":
-	 				 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).pos;
+				     if(sandbox.worldConstruct.get(id).transponder) 
+				     { 
+				    	 id = Integer.valueOf(param[1])-1;
+				    	 return sandbox.worldConstruct.get(id).pos;
+				     } 
+				     return null;
 				case "getConstructWorldVelocity":
-					 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).speed;
+				     if(sandbox.worldConstruct.get(id).transponder) 
+				     { 
+				    	 id = Integer.valueOf(param[1])-1;
+				    	 return sandbox.worldConstruct.get(id).speed;
+				     } 
+				     return null;
 				case "getConstructWorldAcceleration":
-					 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).speed;
-				case "getConstructPos":
-					 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).pos;
+				     if(sandbox.worldConstruct.get(id).transponder) 
+				     { 
+				    	 id = Integer.valueOf(param[1])-1;
+				    	 return sandbox.worldConstruct.get(id).speed; 
+				     } 
+				     return null;
+				     case "getConstructPos":
+				     if(sandbox.worldConstruct.get(id).transponder) 
+				     { 
+				       id = Integer.valueOf(param[1])-1;
+				       return sandbox.worldConstruct.get(id).pos;
+				     } 
+				     return null;
 				case "getConstructVelocity":
-					 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).speed;
+				     if(sandbox.worldConstruct.get(id).transponder) 
+				     { 
+				    	 id = Integer.valueOf(param[1])-1;
+				    	 return sandbox.worldConstruct.get(id).speed;
+				     } 
+				     return null;
 				case "getConstructAcceleration":
+				     if(sandbox.worldConstruct.get(id).transponder) 
+				     { 
+				    	 id = Integer.valueOf(param[1])-1;
+				    	 return sandbox.worldConstruct.get(id).speed;			
+				     } 
+				     return null;
+				case "hasMatchingTransponder":
 					 id = Integer.valueOf(param[1])-1;
-				     return sandbox.worldConstruct.get(id).speed;			
-				case "stopRadar":
+				     return sandbox.worldConstruct.get(id).transponder;			
+				case "stopRadar": // for internal use or debug purpose.
 					 if(timer != null) timer.stop();
 					 timer = null;
 				     return "";			

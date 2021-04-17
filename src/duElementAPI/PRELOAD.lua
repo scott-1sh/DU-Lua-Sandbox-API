@@ -24,8 +24,8 @@ function setName(name)
   JavaLoader:set('setName', {name})
 end
 
-function setHUD(updateScript, x, y, sizeX, sizeY)
-  JavaLoader:set('setHUD', {updateScript, x or 0, y or 0, sizeX or 0, sizeY or 0})
+function setHUD(updateScript, speed, x, y, sizeX, sizeY)
+  JavaLoader:set('setHUD', {updateScript, speed or 40, x or 0, y or 0, sizeX or 0, sizeY or 0})
 end
 
 function showOnScreen(screen) 

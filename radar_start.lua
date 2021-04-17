@@ -55,7 +55,7 @@ htmlTable = [[
 <TABLE style="width: 900px;">
 <thead>
   <tr>
-    <th>id</th><th>Name</th><th>size</th><th>Type</th>
+    <th>id</th><th>Name</th><th>size</th><th>Type</th><th>transponder</th>
   </tr>
 </thead>
 <tbody>

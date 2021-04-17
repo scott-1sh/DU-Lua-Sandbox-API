@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.IOException;
@@ -31,6 +32,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -82,12 +85,12 @@ public class PreLoad {
 	public int MasterPlayerId = 0;
 	public static List<String> editableScriptList = new ArrayList<String>();
 	public HudPreload hudParam = new HudPreload();
+	public int errorCode = 0;
 	
 	// hud	
 	class HudPreload {
-		public HudPreload() { 
-			defaulthud = true; } 
 		public boolean defaulthud = true;
+		public int speed;
 		public String Script = "";
 		public int x;
 		public int y;
@@ -95,8 +98,7 @@ public class PreLoad {
 		public int sizeY;
 	}
 	
-	private static String loadScript(String scriptFile) {	
-		
+	private static String loadScript(String scriptFile) {			
 		try {
 			
 		  // add file to the editable script list 	
@@ -121,9 +123,8 @@ public class PreLoad {
  
 	public PreLoad(String pscriptFile) {			
 		
-		JPanel contentPane;
 		frame = new JFrame();
-		contentPane = new JPanel();
+		scriptName = null;
 
         // lua output to winConsole
         globals.STDOUT = new PrintStream (MAIN.wConsole);
@@ -156,7 +157,19 @@ public class PreLoad {
  	      chunk = globals.load(scriptLoad);    
           chunk.call();
 		} catch (Exception e) {
-			System.out.println("\nPRELOAD LUA ERROR: \n"+e.getMessage());
+			String pattern = "[:](.*)$";
+			Pattern r = Pattern.compile(pattern);
+			String gmsg = "\nPRELOAD LUA ERROR: \n\n";
+		    
+			// get last line of getMessage
+			Matcher m = r.matcher(e.getMessage().replace("\n", ""));
+		    if (m.find( )) {
+			  gmsg += "line "+m.group(1)+"\n\n";
+		    }
+		    
+		    System.out.println(gmsg);
+		    errorCode = 2;	
+		   
 		}
 		
 	}
@@ -185,8 +198,11 @@ public class PreLoad {
 				speed[0] = (double)tmp.get(0); speed[1] = (double)tmp.get(1); speed[2] =(double) tmp.get(2);
 
 				double mass = (double)((Object)details.get("mass")  );   
-				
-				construct.add(new Construct(i+1, pos, size, speed , (int)Math.floor((double) details.get("owner")), (String)details.get("name"), (String)details.get("ctype"), mass  ));  
+				boolean transponder = false;				
+				if( details.get("transponder") != null) {
+				   transponder = (boolean)((Object)details.get("transponder"));
+				} 
+				construct.add(new Construct(i+1, pos, size, speed , (int)Math.floor((double) details.get("owner")), (String)details.get("name"), (String)details.get("ctype"), mass, transponder));  
 			}	
 			
 		} catch(ParseException e){ 	
@@ -320,148 +336,184 @@ public class PreLoad {
 		public int add(String Element, String name, String[] param) {
 			List<Construct> construct = null;
 			
-			switch (Element) {
-				case "Unit":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, "unit", new Unit(countElements, 5, 5, "unit", param[0], param[1], verboseJava));
-					defaultPosition(countElements);
-					return countElements;
-				case "Navigator":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, "Navigator", new Navigator(countElements, 5, 5, verboseJava));
-					defaultPosition(countElements);
-					return countElements;
-				case "ScreenUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new Screen(countElements, name, 140, 10, Integer.valueOf(param[0]), Integer.valueOf(param[1]), verboseJava));   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "RadarUnit":
-					countElements++;
-				    elements[countElements] = new DUElement(countElements, name, new Radar(countElements, name, 1175, 5, Integer.valueOf(param[0]), param[1], param[2],verboseJava));
-					defaultPosition(countElements);
-					return countElements;
-				case "ButtonUnit":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, name, new Button(countElements, name, param[0], 5, 350, param[1], verboseJava));
-					defaultPosition(countElements);
-					return countElements;
-				case "DoorUnit":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "Door", name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "ForceFieldUnit":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "ForceField", name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "LandingGearUnit":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "LandingGear", name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "LightUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "Light", name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "SwitchUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "Switch", name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "ContainerUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new Container(countElements, name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "DataBankUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new DataBank(countElements, name, 1, 1, verboseJava) );
-					defaultPosition(countElements);
-					return countElements;
-				case "EmitterUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new Emitter(countElements, name, 1, 1, 100, verboseJava) );
-					defaultPosition(countElements);
-					return countElements;
-				case "ReceiverUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new Receiver(countElements, name, 1, 1, 100, verboseJava) );
-					defaultPosition(countElements);
-					return countElements;
-				case "CoreUnit":
-					countElements++;
-					elements[countElements] = new DUElement(countElements, name, new Core(preload, countElements, Integer.valueOf(param[3]), Integer.valueOf(param[0]),  param[1], Double.parseDouble(param[2]), 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
-				case "GyroUnit":
-					countElements++;	
-					elements[countElements] = new DUElement(countElements, name, new GyroUnit(countElements, name, 1, 1, verboseJava) );   	 
-					defaultPosition(countElements);
-					return countElements;
+			
+			try {
+				switch (Element) {
+					case "Unit":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, "unit", new Unit(countElements, 5, 5, "unit", param[0], param[1], verboseJava));
+						defaultPosition(countElements);
+						return countElements;
+					case "Navigator":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, "Navigator", new Navigator(countElements, 5, 5, verboseJava));
+						defaultPosition(countElements);
+						return countElements;
+					case "ScreenUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new Screen(countElements, name, 140, 10, Integer.valueOf(param[0]), Integer.valueOf(param[1]), verboseJava));   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "RadarUnit":
+						countElements++;
+						String script1 = "", script2 = "";
+						if(param.length > 1) script1 = param[1];
+						if(param.length > 2) script2 = param[2];
+					    elements[countElements] = new DUElement(countElements, name, new Radar(countElements, name, 1175, 5, Integer.valueOf(param[0]), script1, script2,verboseJava));
+						defaultPosition(countElements);
+						return countElements;
+					case "ButtonUnit":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, name, new Button(countElements, name, param[0], 5, 350, param[1], verboseJava));
+						defaultPosition(countElements);
+						return countElements;
+					case "DoorUnit":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "Door", name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "ForceFieldUnit":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "ForceField", name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "LandingGearUnit":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "LandingGear", name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "LightUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "Light", name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "SwitchUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new ToggleUnit(countElements, "Switch", name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "ContainerUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new Container(countElements, name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "DataBankUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new DataBank(countElements, name, 1, 1, verboseJava) );
+						defaultPosition(countElements);
+						return countElements;
+					case "EmitterUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new Emitter(countElements, name, 1, 1, 100, verboseJava) );
+						defaultPosition(countElements);
+						return countElements;
+					case "ReceiverUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new Receiver(countElements, name, 1, 1, 100, verboseJava) );
+						defaultPosition(countElements);
+						return countElements;
+					case "CoreUnit":
+						countElements++;
+						elements[countElements] = new DUElement(countElements, name, new Core(preload, countElements, Integer.valueOf(param[3]), Integer.valueOf(param[0]),  param[1], Double.parseDouble(param[2]), 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+					case "GyroUnit":
+						countElements++;	
+						elements[countElements] = new DUElement(countElements, name, new GyroUnit(countElements, name, 1, 1, verboseJava) );   	 
+						defaultPosition(countElements);
+						return countElements;
+				}
+			} catch (Exception e) {
+				System.out.println("[JAVA] Error in PRELOAD caused by "+name);
+				
+				String gmsg = "\nPreload "+name+" Error\n\n";
+
+				// show params
+				System.out.println("element:"+Element);
+				for(int i = 0; i< param.length; i++){
+					System.out.println("param"+i+":"+param[i]);
+				}
+				
+				System.out.println(e.getMessage());
+				errorCode = 1;			
 			}
+			
 			return -1;
 		}
 		
 		@SuppressWarnings("unused")
 		public String set(String command, String[] param) {
 
-			switch (command) {
-			case "setName":
-				scriptName = param[0];
-				return "";
-			case "setHUD": // crée un écran nomé HUD
-				hudParam.Script = param[0];
-				hudParam.defaulthud = false; 
-				hudParam.x = Integer.valueOf(param[1]);
-				hudParam.y = Integer.valueOf(param[2]);
-				hudParam.sizeX = Integer.valueOf(param[3]);
-				hudParam.sizeY = Integer.valueOf(param[4]);
-				editableScriptList.add("./src/pictures/hudbg_enc64.txt");
-			    return "";
-			case "setupTimer":
-                //    return JavaLoader:set('setupTimer', {elementId, timerName, script})
-                 elements[Integer.valueOf(param[0])].element.CreateTimer((Unit)elements[Integer.valueOf(param[0])].element , param[1], param[2]);
-				 return "";
-			case "addChannel":
-				 elements[Integer.valueOf(param[0])].element.Script.put(param[1], param[2]); 
-	             return "";
-			case "showOnScreen":				
-				showOnScreen = Integer.valueOf(param[0]);
-	             return "";
-			case "verboseLua":
-				 verboseLua = Integer.valueOf(param[0]) > 0;
-				 return "";
-			case "verboseJava":
-				 verboseJava = Integer.valueOf(param[0]) > 0;
-				 return "";
-			case "die":
-				 System.exit(-1);
-				 return "";
-			case "abort":
-				 JOptionPane.showMessageDialog(frame, param[0]);
-				 System.exit(-1);
-				 return "";
-			case "pause":
-				 try { Thread.sleep(Integer.valueOf(param[0])); } catch (InterruptedException e) { e.printStackTrace(); }				 
-				 return "";
-			case "moveElement":
-				int tmpId = Integer.valueOf(param[0]);
-				elements[tmpId].element.x = Integer.valueOf(param[1]);
-				elements[tmpId].element.y = Integer.valueOf(param[2]);
-				elements[tmpId].element.panel.setLocation(elements[tmpId].element.x, elements[tmpId].element.y);
-				 // records moved position.
-				elements[tmpId].X = elements[tmpId].element.x; 
-				elements[tmpId].Y = elements[tmpId].element.y;				
-				return "";
-			case "database":
-				// db = new Database();
-                worldPlayer = loadPlayerFromJSON(param[0]);
-				worldConstruct = loadConstructFromJSON(param[1]);
-				MasterPlayerId = Integer.valueOf(param[2]);
-				return "";
+			try {
+				switch (command) {
+				case "setName":
+					scriptName = param[0];
+					return "";
+				case "setHUD": // crée un écran nomé HUD
+					hudParam.Script = param[0];
+					hudParam.defaulthud = false; 
+					hudParam.speed = Integer.valueOf(param[1]); 
+					hudParam.x = Integer.valueOf(param[2]);
+					hudParam.y = Integer.valueOf(param[3]);
+					hudParam.sizeX = Integer.valueOf(param[4]);
+					hudParam.sizeY = Integer.valueOf(param[5]);
+					editableScriptList.add("./src/pictures/hudbg_enc64.txt");
+				    return "";
+				case "setupTimer":
+				    //    return JavaLoader:set('setupTimer', {elementId, timerName, script})
+				     elements[Integer.valueOf(param[0])].element.CreateTimer((Unit)elements[Integer.valueOf(param[0])].element , param[1], param[2]);
+					 return "";
+				case "addChannel":
+					 elements[Integer.valueOf(param[0])].element.Script.put(param[1], param[2]); 
+				     return "";
+				case "showOnScreen":				
+					showOnScreen = Integer.valueOf(param[0]);
+				     return "";
+				case "verboseLua":
+					 verboseLua = Integer.valueOf(param[0]) > 0;
+					 return "";
+				case "verboseJava":
+					 verboseJava = Integer.valueOf(param[0]) > 0;
+					 return "";
+				case "die":
+					 System.exit(-1);
+					 return "";
+				case "abort":
+					 JOptionPane.showMessageDialog(frame, param[0]);
+					 System.exit(-1);
+					 return "";
+				case "pause":
+					 try { Thread.sleep(Integer.valueOf(param[0])); } catch (InterruptedException e) { e.printStackTrace(); }				 
+					 return "";
+				case "moveElement":
+					int tmpId = Integer.valueOf(param[0]);
+					elements[tmpId].element.x = Integer.valueOf(param[1]);
+					elements[tmpId].element.y = Integer.valueOf(param[2]);
+					elements[tmpId].element.panel.setLocation(elements[tmpId].element.x, elements[tmpId].element.y);
+					 // records moved position.
+					elements[tmpId].X = elements[tmpId].element.x; 
+					elements[tmpId].Y = elements[tmpId].element.y;				
+					return "";
+				case "database":
+					// db = new Database();
+				    worldPlayer = loadPlayerFromJSON(param[0]);
+					worldConstruct = loadConstructFromJSON(param[1]);
+					MasterPlayerId = Integer.valueOf(param[2]);
+					return "";
+				}
+			} catch (Exception e) {
+				System.out.println("[JAVA] Error in PRELOAD caused by command "+param[0]);
+				
+				String gmsg = "\nPreload function Error\n\n";
+
+				// show params
+				System.out.println("commmand:"+param[0]);
+				for(int i = 0; i<= param.length; i++){
+					System.out.println("param"+i+":"+param[i]);
+				}
+				
+				System.out.println(e.getMessage());
+				errorCode = 3;			
 			}
 
 		  return command;
